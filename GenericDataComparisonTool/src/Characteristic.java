@@ -42,7 +42,8 @@ public class Characteristic {
 	
 	public String convertToString()
 	{
-		return "<attribute>" + attribute + "</attribute>" +
+		return "<characteristic>" + 
+				"<attribute>" + attribute + "</attribute>" +
 				"<value>" + value + "</value>" +
 				"<minimumValue>" + minimumValue + "</minimumValue>" +
 				"<maximumValue>" + maximumValue + "</maximumValue>" + 
@@ -51,7 +52,8 @@ public class Characteristic {
 				"<weightValue>" + scoreWeightValue + "</weightValue>" +
 				"<firstQuartile>" + firstQuartile + "</firstQuartile>" + 
 				"<thirdQuartile>" + thirdQuartile + "</thirdQuartile>" +
-				"<betterValue>" + betterValue.toString() + "</betterValue>";
+				"<betterValue>" + betterValue.toString() + "</betterValue>" +
+				"</characteristic>";
 	}
 	
 	private double convertToDouble(String value)
