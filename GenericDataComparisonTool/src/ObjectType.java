@@ -5,6 +5,15 @@ import java.util.logging.Logger;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLEventFactory;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartDocument;
+import javax.xml.stream.events.StartElement;
+import javax.xml.stream.events.XMLEvent;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -19,7 +28,8 @@ import org.xml.sax.SAXException;
 public class ObjectType {
 	private String name;
 	private ArrayList<Characteristic> characteristics;
-	
+	private String dataFile;
+		
 	public ObjectType()
 	{
 		
@@ -56,70 +66,68 @@ public class ObjectType {
 			   "</data>";
 	}
 	
-	/* Will not use as this process is an expensive operation instead use saveToXmlFile */
-	public void saveToFile(String xmlObjectTypeData)
-	{	
-		try {			
-			String filePath = CreateDataFilePath();
-			File dataFile = new File(filePath);
-			FileWriter writer;
-			
-			if (dataFile.createNewFile())
-			{
-				writer = new FileWriter(dataFile);
-				writer.write(xmlObjectTypeData);
-				writer.close();
-			}
-			else {
-				writer = new FileWriter(dataFile, false);
-				writer.write(xmlObjectTypeData);
-				writer.close();
-			}
-			
-		} catch (IOException ex) {
-			Logger.getLogger(ObjectType.class.getName()).log(Level.SEVERE, "Unable to save data!", ex);
-		}
-	}
 	
-	public void saveToXmlFile(String xmlObjectTypeData)
-			throws SAXException, ParserConfigurationException, IOException 
-	{
-		String filePath = CreateDataFilePath();
+	public void saveDataFile() throws Exception {
+		XMLOutputFactory outputFactory = XMLOutputFactory.newInstance();
+		XMLEventWriter eventWriter = outputFactory.createXMLEventWriter(new FileOutputStream(this.dataFile));
 		
-		try {
-			//	Parse the data inputted
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document document = builder.parse(new InputSource(new StringReader(xmlObjectTypeData)));
-			
-			//	Write the parsed document to xml file
-			TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			
-			try {
+		XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+		XMLEvent end = eventFactory.createDTD("\n");
+		
+		StartDocument startDocument = eventFactory.createStartDocument();
+		eventWriter.add(startDocument);
+		
+		StartElement startDataElement = eventFactory.createStartElement("", "", "data");
+		eventWriter.add(startDataElement);
+		eventWriter.add(end);
+		
+		StartElement startTypeElement = eventFactory.createStartElement("", "", "type");
+		eventWriter.add(startTypeElement);
+		eventWriter.add(end);
+		
+		createNode(eventWriter, "name", this.name);
 				
-				Transformer transformer = transformerFactory.newTransformer();
-				DOMSource source = new DOMSource(document);
-				 
-				StreamResult result = new StreamResult(new File(filePath));
-				
-				try {
-					transformer.transform(source, result);
-				} catch (TransformerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-					
-			} catch (TransformerConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} catch (Exception ex) {
-			Logger.getLogger(ObjectType.class.getName()).log(Level.SEVERE, "Unable to save data!", ex);
+		StartElement startCharacteristicsElement = eventFactory.createStartElement("", "", "characteristics");
+		eventWriter.add(startCharacteristicsElement);
+		eventWriter.add(end);
+		
+		
+		for (int x = 0; x < this.characteristics.size(); x++)
+		{
+			StartElement startItemCharacteristicElement = eventFactory.createStartElement("", "", "characteristic");
+			eventWriter.add(startItemCharacteristicElement);
+			eventWriter.add(end);
+			
+			Characteristic item = this.characteristics.get(x);
+			
+			createNode(eventWriter, "attribute", item.getAttribute()); 
+			//createNode(eventWriter, "value", item.getValue());
+			/*createNode(eventWriter, "minimumValue", this.characteristics.get(x).getMinimumValue()+"");			
+			createNode(eventWriter, "firstQuartile", this.characteristics.get(x).getFirstQuartile()+"");
+			createNode(eventWriter, "medianValue", this.characteristics.get(x).getMedianValue()+"");
+			createNode(eventWriter, "thirdQuartile", this.characteristics.get(x).getThirdQuartile()+"");
+			createNode(eventWriter, "maximumValue", this.characteristics.get(x).getMaximumValue()+"");
+			createNode(eventWriter, "averageValue", this.characteristics.get(x).getAverageValue()+"");
+			createNode(eventWriter, "weightValue", this.characteristics.get(x).getScoreWeightValue()+"");*/
+			//createNode(eventWriter, "betterValue", item.getBetterValue().toString());
+			
+			eventWriter.add(eventFactory.createEndElement("", "", "characteristic"));
+			eventWriter.add(end);
 		}
 		
+		eventWriter.add(eventFactory.createEndElement("", "", "characteristics"));
+		eventWriter.add(end);
+		
+		eventWriter.add(eventFactory.createEndElement("", "", "type"));
+		eventWriter.add(end);
+		
+		eventWriter.add(eventFactory.createEndElement("", "", "data"));
+		eventWriter.add(end);
+		
+		eventWriter.add(eventFactory.createEndDocument());
+		eventWriter.close();
 		
 	}
-	
 	public ObjectType GetObjectTypeByName(String objectTypeName)
 	{
 		String fileDirectory = "C:\\genericdatacomparison\\";
@@ -192,5 +200,32 @@ public class ObjectType {
 	public void setCharacteristics(ArrayList<Characteristic> characteristics)
 	{
 		this.characteristics = characteristics;
+	}
+	
+	public String getDataFile()
+	{
+		return this.dataFile;
+	}
+	
+	public void setDataFile(String file)
+	{
+		this.dataFile = file;
+	}
+	
+	private void createNode(XMLEventWriter eventWriter, String name, String value) throws XMLStreamException {
+		XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+		XMLEvent end = eventFactory.createDTD("\n");
+		XMLEvent tab = eventFactory.createDTD("\t");
+		
+		StartElement startElement = eventFactory.createStartElement("", "", name);
+		eventWriter.add(tab);
+		eventWriter.add(startElement);
+		
+		Characters characters = eventFactory.createCharacters(value);
+		eventWriter.add(characters);
+		
+		EndElement endElement = eventFactory.createEndElement("", "", name);
+		eventWriter.add(endElement);
+		eventWriter.add(end);
 	}
 }
