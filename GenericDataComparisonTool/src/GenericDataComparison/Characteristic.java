@@ -1,5 +1,11 @@
+package GenericDataComparison;
+import javax.json.JsonObject;
+import javax.json.JsonValue;
+
+import org.json.simple.JSONObject;
 
 public class Characteristic {
+	private long id;
 	private String attribute;
 	private double minimumValue;
 	private double maximumValue;
@@ -10,6 +16,17 @@ public class Characteristic {
 	private double thirdQuartile;
 	private String value;
 	private BetterValue betterValue;
+	
+	static final String _attributeNode = "attribute";
+	static final String _valueNode = "value";
+	static final String _minimumValueNode = "minimumValue";
+	static final String _firstQuartileNode = "firstQuartile";
+	static final String _medianValueNode = "medianValue";
+	static final String _thirdQuartileNode = "thirdQuartile";
+	static final String _maximumValueNode = "maximumValue";
+	static final String _averageValueNode = "averageValue";
+	static final String _weightValueNode = "weightValue";
+	static final String _betterValueNode = "betterValue";
 	
 	public Characteristic() {
 		
@@ -27,27 +44,43 @@ public class Characteristic {
 		this.firstQuartile = firstQrtile;
 		this.thirdQuartile = thirdQrtile;
 		this.betterValue = betterValue;
-	}	
-	
-	private double convertToDouble(String value)
-	{	
-		if (value != null && !value.isEmpty())
-			return Double.parseDouble(value);
-		else
-			return 0;
 	}
 	
-	private BetterValue convertToBetterValue(String value)
-	{
-		if (value != null && !value.isEmpty())
-		{
-			if (value.equals("LOWEST"))
-				return BetterValue.LOWEST;
-			else
-				return BetterValue.HIGHEST;
+	public Characteristic(JSONObject data)
+	{	
+		this.setAttribute(data.get(_attributeNode).toString());
+		this.setValue(data.get(_valueNode).toString());
+		this.setMinimumValue(Double.parseDouble(data.get(_minimumValueNode).toString()));
+		this.setFirstQuartile(Double.parseDouble(data.get(_firstQuartileNode).toString()));
+		this.setMedianValue(Double.parseDouble(data.get(_medianValueNode).toString()));
+		this.setThirdQuartile(Double.parseDouble(data.get(_thirdQuartileNode).toString()));
+		this.setMaximumValue(Double.parseDouble(data.get(_maximumValueNode).toString()));
+		this.setAverageValue(Double.parseDouble(data.get(_averageValueNode).toString()));
+		this.setScoreWeightValue(Double.parseDouble(data.get(_weightValueNode).toString()));
+		
+		if (data.get(_betterValueNode).toString().equals("LOWEST")) {
+			this.setBetterValue(BetterValue.LOWEST);
+		}else {
+			this.setBetterValue(BetterValue.HIGHEST);
 		}
-		else
-			return BetterValue.LOWEST;
+	}	
+	
+	public JSONObject convertToJsonObject() {
+		JSONObject jsonCharacteristic = new JSONObject();
+		jsonCharacteristic.put(_attributeNode, this.getAttribute());
+		jsonCharacteristic.put(_valueNode, this.getValue());
+		jsonCharacteristic.put(_minimumValueNode, this.getMinimumValue());
+		jsonCharacteristic.put(_firstQuartileNode, this.getFirstQuartile());
+		jsonCharacteristic.put(_medianValueNode, this.getMedianValue());
+		jsonCharacteristic.put(_thirdQuartileNode, this.getThirdQuartile());
+		jsonCharacteristic.put(_maximumValueNode, this.getMaximumValue());
+		jsonCharacteristic.put(_averageValueNode, this.getAverageValue());
+		jsonCharacteristic.put(_betterValueNode, this.getBetterValue().toString());		
+		return jsonCharacteristic;
+	}
+	
+	public long getId() {
+		return this.id;
 	}
 	
 	public String getAttribute()
@@ -98,6 +131,10 @@ public class Characteristic {
 	public BetterValue getBetterValue()
 	{
 		return betterValue;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 	public void setAttribute(String attribute)
