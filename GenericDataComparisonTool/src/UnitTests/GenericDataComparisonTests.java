@@ -69,14 +69,14 @@ public class GenericDataComparisonTests extends TestCase {
 		Assert.assertEquals("Cars", objectTypeData.getName());
 	}
 	
-	/*public void test_addCharacteristics_Save() {
+	public void test_addCharacteristics_Save() {
 		String name = "Cars";
 		ArrayList<Characteristic> characteristics = CreateCharacteristics();
 		
 		manager.addCharacteristics(name, characteristics);
 		
 		Assert.assertEquals(true, true);
-	}*/
+	}
 	
 	
 }

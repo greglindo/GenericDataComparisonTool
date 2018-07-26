@@ -83,11 +83,15 @@ public class ObjectType {
 						
 			JSONArray jsonDataElementList = (JSONArray)jsonObject.get(_dataNode);
 			
+			JSONObject jsonObjectTypeNode = null;
+			JSONArray jsonCharacteristicList = new JSONArray();
+			JSONObject jsonObjectType = null;
+			int indexToAddObjectType = 0;
 			for (int x = 0; x < jsonDataElementList.size(); x++) {
-				JSONObject jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);
+				jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);
+				indexToAddObjectType = x;
 				
-				JSONObject jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);
-				JSONArray jsonCharacteristicList = new JSONArray();
+				jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);
 				
 				if (jsonObjectType.get(_nameNode).toString().equals(this.getName()))
 				{
@@ -97,13 +101,15 @@ public class ObjectType {
 					}
 					
 					jsonObjectType.put(_characteristicsNode, jsonCharacteristicList);
-					
-					jsonObjectTypeNode.put(_typeNode, jsonObjectType);
-					
-					jsonDataElementList.add(jsonObjectTypeNode);	
 				}
+				
 			}
-			jsonObject.put(_dataNode, jsonDataElementList);
+			jsonObjectTypeNode.put(_typeNode, jsonObjectType);
+			
+			jsonDataElementList.clear();
+			jsonDataElementList.add(jsonObjectTypeNode);	
+			
+			jsonObject.replace(_dataNode, jsonDataElementList);
 			
 			jsonFileManager.saveJsonDataToFile(jsonObject);
 			
