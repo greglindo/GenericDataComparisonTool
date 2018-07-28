@@ -37,10 +37,7 @@ public class GenericComparisonManager {
 	public void deleteObjectType(String name) {
 		objectType.deleteObjectType(name);
 	}
-	
-	//	Update an Object Type
-	
-	
+		
 	// 	Add Characteristics to Object Type
 	public void addCharacteristics(String objectTypeName, ArrayList<Characteristic> characteristics)
 	{
@@ -50,6 +47,19 @@ public class GenericComparisonManager {
 	}
 	
 	//	Delete Characteristic from Object Type
+	public void deleteCharacteristic(String objectTypeName, String attribute) {
+		
+	}
+	
+	//	Get all User Entries for Object Type name
+	public ArrayList<UserComparisonEntry> getUserComparisonEntriesByObjectTypeName(String objectTypeName) {
+		return userComparisonEntry.getAll(objectTypeName);
+	}
+	
+	//	Get User Entry by the Entry name
+	public UserComparisonEntry getUserComparisonEntryByEntryName(String objectTypeName, String name) {
+		return userComparisonEntry.getUserComparisonEntryByName(objectTypeName, name);
+	}	
 	
 	//	Add User Comparison Entry to Object Type
 	public void addUserComparisonEntry(String objectTypeName, String userEntryName) {
@@ -58,8 +68,10 @@ public class GenericComparisonManager {
 	}
 	
 	//	Delete User comparison entry from object Type
+	public void deleteUserComparisonEntry(String name) {
+		userComparisonEntry.deleteUserEntry(name);
+	}
 	
-	//	Update User Comparison entry to Object type
 	
 	//	Generate JFreeChart
 	public void generateChart(String name, ObjectType baseLineData, UserComparisonEntry userData, Boolean createLegend) {

@@ -6,7 +6,7 @@ public class ComparisonCharacteristic  {
 	private String name;
 	private String value;
 	
-	static final String _userCharacteristicNameNode = "name";
+	static final String _userCharacteristicNameNode = "characteristicName";
 	static final String _userCharacteristicValueNode = "value";
 	
 	public ComparisonCharacteristic() {

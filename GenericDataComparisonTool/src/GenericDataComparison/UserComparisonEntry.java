@@ -43,13 +43,13 @@ public class UserComparisonEntry {
 		this.setComparisonCharacteristics(userCharacteristics);
 	}
 	
-	public ArrayList<UserComparisonEntry> getAll(){
-		return this.parseJSONToUserComparisonEntries();
+	public ArrayList<UserComparisonEntry> getAll(String objectTypeName){
+		return this.parseJSONToUserComparisonEntries(objectTypeName);
 	}
 	
-	public UserComparisonEntry getUserComparisonEntryByName(String name) {
+	public UserComparisonEntry getUserComparisonEntryByName(String objectTypeName, String name) {
 		
-		for (UserComparisonEntry item : this.getAll()) {
+		for (UserComparisonEntry item : this.getAll(objectTypeName)) {
 			if (item.getName().equals(name)) {
 				return item;
 			}
@@ -121,11 +121,11 @@ public class UserComparisonEntry {
 		
 	}
 	
-	public void deleteUserEntry() {
+	public void deleteUserEntry(String name) {
 		
 	}
 	
-	private ArrayList<UserComparisonEntry> parseJSONToUserComparisonEntries(){
+	private ArrayList<UserComparisonEntry> parseJSONToUserComparisonEntries(String objectTypeName){
 		ArrayList<UserComparisonEntry> result = new ArrayList<UserComparisonEntry>();		
 		ArrayList<ComparisonCharacteristic> characteristics = null;
 		
@@ -134,35 +134,32 @@ public class UserComparisonEntry {
 		fileManager = new JsonFileManager();
 		
 		try {
-			JSONArray jsonObjects = fileManager.readFromFile();
+			JSONObject jsonResult = fileManager.getJSONObjectFromFile(objectTypeName);
+			
+			JSONArray jsonObjects = (JSONArray)jsonResult.get(_dataNode);
 			
 			for (int y = 0; y < jsonObjects.size(); y++) {
 				
 				JSONObject jsonObject = (JSONObject)jsonObjects.get(y);				
-				JSONArray jsonDataElementList = (JSONArray)jsonObject.get(_dataNode);
+				JSONObject jsonObjectType = (JSONObject)jsonObject.get(_typeNode);
+										
+				JSONObject jsonUserEntry = (JSONObject)jsonObjectType.get(_userComparisonEntry);
+				userEntry = new UserComparisonEntry();
 				
-				for (int x = 0; x < jsonDataElementList.size(); x++) {
-					JSONObject jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);					
-					JSONObject jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);					
-					JSONObject jsonUserEntry = (JSONObject)jsonObjectType.get(_userComparisonEntry);
-					
-					JSONArray jsonUserData = (JSONArray)jsonUserEntry.get(_userDataNode);
-					
-					userEntry = new UserComparisonEntry();
-					
-					userEntry.setName(jsonUserEntry.get(_userEntryNameNode).toString());
-					
+				userEntry.setName(jsonUserEntry.get(_userEntryNameNode).toString());
+				JSONArray jsonUserData = (JSONArray)jsonUserEntry.get(_userDataNode);
+				
+				for (int z = 0; z < jsonUserData.size(); z++) {
 					characteristics = new ArrayList<ComparisonCharacteristic>();
 					
-					for (int i = 0; i < jsonUserData.size(); i++) {
-						JSONObject jsonCharacteristic = (JSONObject)jsonUserData.get(i);
-						ComparisonCharacteristic characteristic = new ComparisonCharacteristic(jsonCharacteristic);
-						
-						characteristics.add(characteristic);
-					}
+					JSONObject jsonCharacteristic = (JSONObject)jsonUserData.get(z);
+					ComparisonCharacteristic characteristic = new ComparisonCharacteristic(jsonCharacteristic);
+					
+					characteristics.add(characteristic);
 					
 					userEntry.setComparisonCharacteristics(characteristics);
 				}
+				
 				result.add(userEntry);				
 			}
 		} catch (Exception e) {
