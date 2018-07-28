@@ -1,9 +1,10 @@
 package UnitTests;
+
 import GenericDataComparison.*;
+
+import java.io.File;
 import java.util.ArrayList;
-
 import org.junit.Assert;
-
 import junit.framework.TestCase;
 
 public class GenericDataComparisonTests extends TestCase {
@@ -26,8 +27,8 @@ public class GenericDataComparisonTests extends TestCase {
 	{
 		ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
 		
-		Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, "na", BetterValue.HIGHEST);
-		Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, "310", BetterValue.LOWEST);
+		Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
+		Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
 		newCharacteristics.add(characteristic1);
 		newCharacteristics.add(characteristic2);
 		
@@ -41,42 +42,43 @@ public class GenericDataComparisonTests extends TestCase {
 		return newObjectType;
 	}
 	
-	public void test_CreateObjectType_Save() {
-		//	Arrange
-		String objectTypeName = "Cars";
+	public void test_CreateCarObject()
+	{
+		manager.addObjectType(CreateObjectType());
 		
-		//	Act
-		manager.saveObjectType(objectTypeName);
-		Boolean fileCreated = fileManager.jsonFileCreated();
-		
-		//	Assert
-		Assert.assertEquals(true, fileCreated);
+		Assert.assertEquals(1, manager.getObjectTypes().size());
 	}
 	
-	public void test_ReadAllObjectTypes_Get() {
-		ArrayList<ObjectType> types = new ArrayList<ObjectType>();
+	public void test_SaveCarObject()
+	{
+		test_CreateCarObject();
+		manager.saveData();
 		
+		File file = new File(fileManager.getFileName());
+		Assert.assertEquals(true, file.exists());
+	}
+	
+	public void test_LoadCarObject()
+	{
+		test_SaveCarObject();
+		manager.loadData();
+		
+		Assert.assertEquals(1, manager.getObjectTypes().size());
+	}
+	
+	public void test_ReadAllObjectTypes_Get() 
+	{
+		test_LoadCarObject();
+		ArrayList<ObjectType> types = new ArrayList<ObjectType>();		
 		types = manager.getObjectTypes();
 		
 		Assert.assertTrue(types.size() > 0);
 	}
 	
 	public void test_GetObjectTypeByName_Get() {
-		String name = "Cars";
+		test_LoadCarObject();
+		objectTypeData = manager.getObjectTypeByName("cars");
 		
-		objectTypeData = manager.getObjectTypeByName(name);
-		
-		Assert.assertEquals("Cars", objectTypeData.getName());
-	}
-	
-	public void test_addCharacteristics_Save() {
-		String name = "Cars";
-		ArrayList<Characteristic> characteristics = CreateCharacteristics();
-		
-		manager.addCharacteristics(name, characteristics);
-		
-		Assert.assertEquals(true, true);
-	}
-	
-	
+		Assert.assertEquals("cars", objectTypeData.getName());
+	}	
 }

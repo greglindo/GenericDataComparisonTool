@@ -1,6 +1,6 @@
 package GenericDataComparison;
-import java.awt.EventQueue;
 
+import java.awt.EventQueue;
 import javax.swing.JFrame;
 
 public class Main {
