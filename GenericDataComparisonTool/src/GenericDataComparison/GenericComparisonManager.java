@@ -1,78 +1,133 @@
 package GenericDataComparison;
+
 import java.util.ArrayList;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 public class GenericComparisonManager {
-	private ObjectType objectType;
+	private ArrayList<ObjectType> objectTypes;
 	private UserComparisonEntry userComparisonEntry;
 	private ComparisonChart comparisonChart;
+	private JsonFileManager jsonFileManager;
+	
+	static final String _allDataNode = "GdcData";
+	static final String _userDataNode = "userData";
+	static final String _objectTypesNode = "objectTypes";
 	
 	public GenericComparisonManager() {
-		objectType = new ObjectType();
+		objectTypes = new ArrayList<ObjectType>();
 		userComparisonEntry = new UserComparisonEntry();
+		jsonFileManager = new JsonFileManager();
 	}
 	
-	//	Get all Object Types
 	public ArrayList<ObjectType> getObjectTypes(){
-		return objectType.getAllObjectTypes();
+		return objectTypes;
 	}
 	
-	//	Get Object Type by name
-	public ObjectType getObjectTypeByName(String name) {
-		return objectType.getObjectTypeByName(name);
+	public ObjectType getObjectTypeByName(String name)
+	{
+		for(ObjectType item : objectTypes)
+		{
+			if(item.getName().equals(name));
+			{
+				return item;
+			}
+		}
+		
+		return null;
 	}
 	
-	//	Save an Object Type
-	public void saveObjectType(String name) {
-		objectType.setName(name);
-		try {
-			objectType.saveObjectTypeName();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			//	Add message of failure to save object Type
+	public void addObjectType(ObjectType objType)
+	{
+		objectTypes.add(objType);
+	}
+	
+	public void deleteObjectTypes()
+	{
+		objectTypes.clear();
+	}
+	
+	public void deleteObjectTypeByName(String name)
+	{
+		for(ObjectType item : objectTypes)
+		{
+			if(item.getName() == name)
+			{
+				objectTypes.remove(item);
+				return;
+			}
 		}
 	}
 	
-	//	Delete an Object Type
-	public void deleteObjectType(String name) {
-		objectType.deleteObjectType(name);
-	}
-	
-	//	Update an Object Type
-	
-	
-	// 	Add Characteristics to Object Type
-	public void addCharacteristics(String objectTypeName, ArrayList<Characteristic> characteristics)
+	public void loadObjectTypes(JSONArray data)
 	{
-		objectType.setName(objectTypeName);
-		objectType.setCharacteristics(characteristics);
-		objectType.addCharacteristicsToObjectType();
+		for (int idx = 0 ; idx < data.size(); idx++) {
+	        JSONObject item = (JSONObject)data.get(idx);
+	        ObjectType objType = new ObjectType();
+	        objType.loadObjectType(item);
+	        this.objectTypes.add(objType);
+		}
 	}
 	
-	//	Delete Characteristic from Object Type
+	public JSONArray saveObjectTypes()
+	{
+		JSONArray jsonObjectTypeList = new JSONArray();
+		for(ObjectType item : objectTypes)
+		{
+			jsonObjectTypeList.add(item.saveObjectType());
+		}
+		
+		return jsonObjectTypeList;
+	}
 	
-	//	Add User Comparison Entry to Object Type
+	public void loadData()
+	{
+		JSONObject root = jsonFileManager.loadDataFromFile();
+		if(root == null)
+		{
+			return;
+		}
+		
+		JSONArray jsonAllData = (JSONArray)root.get(_allDataNode);
+		for (int idx = 0 ; idx < jsonAllData.size(); idx++) {
+	        JSONObject item = (JSONObject)jsonAllData.get(idx);
+	        
+	        // is this the object type array
+	        JSONArray objs = (JSONArray)item.get(_objectTypesNode);
+	        if(objs != null)
+	        {
+	        	this.deleteObjectTypes();
+	        	this.loadObjectTypes(objs);
+	        	continue;
+	        }
+	        
+	        // is this the user data array
+	        // TODO: same pattern as above but try to get array for user data
+		}
+	}
 	
-	//	Delete User comparison entry from object Type
+	public void saveData()
+	{
+		JSONArray allData = new JSONArray();
+		
+		JSONObject jsonObjectTypes = new JSONObject();
+		jsonObjectTypes.put(_objectTypesNode, saveObjectTypes());
+		allData.add(jsonObjectTypes);
+		
+		// save user data
+		
+		JSONObject root = new JSONObject();
+		root.put(_allDataNode, allData);
+		jsonFileManager.saveDataToFile(root);
+	}
 	
-	//	Update User Comparison entry to Object type
-	
-	//	Generate JFreeChart
 	public void generateChart(String name, ObjectType baseLineData, UserComparisonEntry userData, Boolean createLegend) {
 		comparisonChart = new ComparisonChart(name, baseLineData, userData, createLegend);
 		comparisonChart.generateChart();
 	}
 	
-	public ObjectType getObjectType() {
-		return this.objectType;
-	}
-	
 	public UserComparisonEntry getUserComparisonEntry() {
 		return this.userComparisonEntry;
-	}
-	
-	public void setObjectType(ObjectType objectType) {
-		this.objectType = objectType;
 	}
 	
 	public void setUserComparisonEntry(UserComparisonEntry userComparisonEntry) {

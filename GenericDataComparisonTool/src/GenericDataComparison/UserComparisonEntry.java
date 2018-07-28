@@ -1,7 +1,5 @@
 package GenericDataComparison;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 import java.util.ArrayList;
 
 public class UserComparisonEntry {

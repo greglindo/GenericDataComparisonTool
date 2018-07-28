@@ -2,7 +2,7 @@ package GenericDataComparison;
 
 public class ComparisonCharacteristic {
 	private String name;
-	private String value;
+	private double value;
 	
 	public ComparisonCharacteristic() {
 		
@@ -12,7 +12,7 @@ public class ComparisonCharacteristic {
 		return this.name;
 	}
 	
-	public String getValue() {
+	public double getValue() {
 		return this.value;
 	}
 	
@@ -20,7 +20,7 @@ public class ComparisonCharacteristic {
 		this.name = name;
 	}
 	
-	public void setValue(String value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
 }
