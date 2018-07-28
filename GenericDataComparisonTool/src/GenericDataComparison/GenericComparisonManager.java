@@ -52,6 +52,10 @@ public class GenericComparisonManager {
 	//	Delete Characteristic from Object Type
 	
 	//	Add User Comparison Entry to Object Type
+	public void addUserComparisonEntry(String objectTypeName, String userEntryName) {
+		userComparisonEntry.setName(userEntryName);
+		userComparisonEntry.save(objectTypeName);
+	}
 	
 	//	Delete User comparison entry from object Type
 	

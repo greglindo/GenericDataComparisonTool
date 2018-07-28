@@ -75,6 +75,7 @@ public class Characteristic {
 		jsonCharacteristic.put(_thirdQuartileNode, this.getThirdQuartile());
 		jsonCharacteristic.put(_maximumValueNode, this.getMaximumValue());
 		jsonCharacteristic.put(_averageValueNode, this.getAverageValue());
+		jsonCharacteristic.put(_weightValueNode, this.getScoreWeightValue());
 		jsonCharacteristic.put(_betterValueNode, this.getBetterValue().toString());		
 		return jsonCharacteristic;
 	}

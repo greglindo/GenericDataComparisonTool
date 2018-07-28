@@ -1,11 +1,35 @@
 package GenericDataComparison;
 
-public class ComparisonCharacteristic {
+import org.json.simple.JSONObject;
+
+public class ComparisonCharacteristic  {
 	private String name;
 	private String value;
 	
+	static final String _userCharacteristicNameNode = "name";
+	static final String _userCharacteristicValueNode = "value";
+	
 	public ComparisonCharacteristic() {
 		
+	}
+	
+	public ComparisonCharacteristic(String name, String value) {
+		this.setName(name);
+		this.setValue(value);
+	}
+	
+	public ComparisonCharacteristic(JSONObject data) {
+		if (data != null) {
+			this.setName(data.get(_userCharacteristicNameNode).toString());
+			this.setValue(data.get(_userCharacteristicValueNode).toString());
+		}
+	}
+	
+	public JSONObject convertToJSONObject() {
+		JSONObject jsonResult = new JSONObject();
+		jsonResult.put(_userCharacteristicNameNode, this.getName());
+		jsonResult.put(_userCharacteristicValueNode, this.getValue());
+		return jsonResult;
 	}
 	
 	public String getName() {

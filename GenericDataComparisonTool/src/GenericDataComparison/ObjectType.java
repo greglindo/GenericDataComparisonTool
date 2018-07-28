@@ -22,7 +22,7 @@ public class ObjectType {
 	private String name;	
 	private ArrayList<Characteristic> characteristics;	
 		
-	private JsonFileManager jsonFileManager;
+	private JsonFileManager fileManager;
 	
 	//	TODO: Extract these properties to its own class so it can be used elsewhere
 	static final String _idNode = "id";
@@ -39,6 +39,8 @@ public class ObjectType {
 	static final String _averageValueNode = "averageValue";
 	static final String _weightValueNode = "weightValue";
 	static final String _betterValueNode = "betterValue";
+	static final String _userCharacteristicNameNode = "name";
+	static final String _userCharacteristicValueNode = "value";
 	static final String _dataNode = "data";
 		
 	public ObjectType()
@@ -55,7 +57,7 @@ public class ObjectType {
 	
 	public ArrayList<ObjectType> getAllObjectTypes()
 	{	
-		return ParseJsonObjectToObjectType();		
+		return this.parseJsonObjectToObjectType();		
 	}
 	
 	public ObjectType getObjectTypeByName(String objectTypeName)
@@ -71,92 +73,76 @@ public class ObjectType {
 	}
 	
 	public void saveObjectTypeName() throws Exception {
-		jsonFileManager = new JsonFileManager();
-		jsonFileManager.CreateJsonFileStructure(this.getId(), this.getName());
+		fileManager = new JsonFileManager(this.getName());
+		fileManager.CreateJsonFileStructure(this.getId(), this.getName());
 	}
 	
 	public void addCharacteristicsToObjectType() {
-		jsonFileManager = new JsonFileManager();
+		fileManager = new JsonFileManager(this.getName());
 		
 		try {
-			JSONObject jsonObject = jsonFileManager.readFromFile();
+			JSONObject jsonObject = fileManager.getJSONObjectFromFile(this.getName());
 						
 			JSONArray jsonDataElementList = (JSONArray)jsonObject.get(_dataNode);
 			
 			JSONObject jsonObjectTypeNode = null;
 			JSONArray jsonCharacteristicList = new JSONArray();
 			JSONObject jsonObjectType = null;
-			int indexToAddObjectType = 0;
+			
 			for (int x = 0; x < jsonDataElementList.size(); x++) {
 				jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);
-				indexToAddObjectType = x;
 				
 				jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);
 				
 				if (jsonObjectType.get(_nameNode).toString().equals(this.getName()))
 				{
-					for (Characteristic item : this.getCharacteristics()) {
-						JSONObject jsonCharacteristic = item.convertToJsonObject();						
-						jsonCharacteristicList.add(jsonCharacteristic);
-					}
-					
-					jsonObjectType.put(_characteristicsNode, jsonCharacteristicList);
-				}
-				
+					jsonCharacteristicList = (JSONArray)jsonObjectType.get(_characteristicsNode);
+					jsonObjectType = this.addObjectType(jsonCharacteristicList);
+				}				
 			}
 			jsonObjectTypeNode.put(_typeNode, jsonObjectType);
 			
-			jsonDataElementList.clear();
 			jsonDataElementList.add(jsonObjectTypeNode);	
 			
-			jsonObject.replace(_dataNode, jsonDataElementList);
+			jsonObject.put(_dataNode, jsonDataElementList);			
 			
-			jsonFileManager.saveJsonDataToFile(jsonObject);
+			fileManager.clearFile();
+			fileManager.saveJsonDataToFile(jsonObject);
 			
 		} catch (Exception e) {
 			String error = e.getMessage();
 		}
 	}
 	
-	public void saveObjectType(ObjectType data) throws Exception {
+	public JSONObject addObjectType(JSONArray existingCharacteristics) throws Exception {
 		
-		jsonFileManager = new JsonFileManager();
-		
-		JSONObject jsonObject = new JSONObject();
-		JSONArray jsonObjectTypeList = new JSONArray();
+		JSONObject jsonObject = new JSONObject();		
 		JSONArray jsonCharacteristicList = new JSONArray();
 		
-		JSONObject jsonObjectType = new JSONObject();
-		JSONObject jsonCharacteristic = null;
-		
-		jsonObjectType.put(_idNode, data.getId());
-		jsonObjectType.put(_nameNode, data.getName());
-		
-		ArrayList<Characteristic> characteristics = data.getCharacteristics();
-		
-		if (characteristics.size() > 0) {
-			for (int x = 0; x < characteristics.size(); x++) {
-				jsonCharacteristic = new JSONObject();
-				jsonCharacteristic.put(_attributeNode, characteristics.get(x).getAttribute());
-				jsonCharacteristic.put(_valueNode, characteristics.get(x).getValue());
-				jsonCharacteristic.put(_minimumValueNode, characteristics.get(x).getMinimumValue());
-				jsonCharacteristic.put(_firstQuartileNode, characteristics.get(x).getFirstQuartile());
-				jsonCharacteristic.put(_medianValueNode, characteristics.get(x).getMedianValue());
-				jsonCharacteristic.put(_thirdQuartileNode, characteristics.get(x).getThirdQuartile());
-				jsonCharacteristic.put(_maximumValueNode, characteristics.get(x).getMaximumValue());
-				jsonCharacteristic.put(_averageValueNode, characteristics.get(x).getAverageValue());
-				jsonCharacteristic.put(_weightValueNode, characteristics.get(x).getScoreWeightValue());
-				jsonCharacteristic.put(_betterValueNode, characteristics.get(x).getBetterValue().toString());
-				jsonCharacteristicList.add(jsonCharacteristic);
-			}
-			jsonObjectType.put(_characteristicsNode, jsonCharacteristicList);
+		if (this != null) {
+			jsonObject.put(_idNode, this.getId());
+			jsonObject.put(_nameNode, this.getName());
+			
+			jsonCharacteristicList = mergeCharacteristics(existingCharacteristics);
+			jsonObject.put(_characteristicsNode, jsonCharacteristicList);	
 		}
 		
-		jsonObjectTypeList.add(jsonObjectType);
+		return jsonObject;	
+	}
+	
+	private JSONArray mergeCharacteristics(JSONArray existingCharacteristics) {
+		JSONArray characteristics = new JSONArray();
 		
-		jsonObject.put(_typeNode, jsonObjectTypeList);
+		if (existingCharacteristics != null) {
+			characteristics = existingCharacteristics;
+		}
 		
-		jsonFileManager.saveJsonDataToFile(jsonObject);		
+		for (Characteristic item : this.getCharacteristics()) {
+			JSONObject jsonCharacteristic = item.convertToJsonObject();						
+			characteristics.add(jsonCharacteristic);
+		}
+		
+		return characteristics;
 	}
 	
 	public void updateObjectType(ObjectType data) {
@@ -167,45 +153,50 @@ public class ObjectType {
 		
 	}
 	
-	private ArrayList<ObjectType> ParseJsonObjectToObjectType() {
+	private ArrayList<ObjectType> parseJsonObjectToObjectType() {
 		ArrayList<ObjectType> objectTypes = new ArrayList<ObjectType>();
 		ArrayList<Characteristic> characteristics = null;
 		ObjectType objectType = null;
 		Characteristic characteristic = null;
-		jsonFileManager = new JsonFileManager();
+		fileManager = new JsonFileManager();
 		
 		try {
 			
-			JSONObject jsonObject = jsonFileManager.readFromFile();
+			JSONArray jsonObjects = fileManager.readFromFile();
 			
-			JSONArray jsonDataElementList = (JSONArray)jsonObject.get(_dataNode);
+			for (int y = 0; y < jsonObjects.size(); y++) {
 			
-			for (int x = 0; x < jsonDataElementList.size(); x++) {
-				JSONObject jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);
+				JSONObject jsonObject = (JSONObject)jsonObjects.get(y);
 				
-				JSONObject jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);
-				JSONArray jsonCharacteristicList = new JSONArray();
+				JSONArray jsonDataElementList = (JSONArray)jsonObject.get(_dataNode);
 				
-				objectType = new ObjectType();
-				
-				objectType.setId(Long.parseLong(jsonObjectType.get(_idNode).toString()));
-				objectType.setName(jsonObjectType.get(_nameNode).toString());
-				
-				jsonCharacteristicList = (JSONArray)jsonObjectType.get(_characteristicsNode);
-				
-				characteristics = new ArrayList<Characteristic>();
-				
-				for (int i = 0; i < jsonCharacteristicList.size(); i++) {
-					JSONObject jsonCharacteristic = (JSONObject)jsonCharacteristicList.get(i);
-					characteristic = new Characteristic(jsonCharacteristic);
+				for (int x = 0; x < jsonDataElementList.size(); x++) {
+					JSONObject jsonObjectTypeNode = (JSONObject)jsonDataElementList.get(x);
 					
-					characteristics.add(characteristic);
+					JSONObject jsonObjectType = (JSONObject)jsonObjectTypeNode.get(_typeNode);
+					JSONArray jsonCharacteristicList = new JSONArray();
+					
+					objectType = new ObjectType();
+					
+					objectType.setId(Long.parseLong(jsonObjectType.get(_idNode).toString()));
+					objectType.setName(jsonObjectType.get(_nameNode).toString());
+					
+					jsonCharacteristicList = (JSONArray)jsonObjectType.get(_characteristicsNode);
+					
+					characteristics = new ArrayList<Characteristic>();
+					
+					for (int i = 0; i < jsonCharacteristicList.size(); i++) {
+						JSONObject jsonCharacteristic = (JSONObject)jsonCharacteristicList.get(i);
+						characteristic = new Characteristic(jsonCharacteristic);
+						
+						characteristics.add(characteristic);
+					}
+					
+					objectType.setCharacteristics(characteristics);
 				}
 				
-				objectType.setCharacteristics(characteristics);
+				objectTypes.add(objectType);
 			}
-			
-			objectTypes.add(objectType);
 			
 		} catch (Exception e) {
 			String error = e.getMessage();

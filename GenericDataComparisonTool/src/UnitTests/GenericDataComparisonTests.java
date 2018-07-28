@@ -41,13 +41,13 @@ public class GenericDataComparisonTests extends TestCase {
 		return newObjectType;
 	}
 	
-	public void test_CreateObjectType_Save() {
+	/*public void test_CreateObjectType_Save() {
 		//	Arrange
-		String objectTypeName = "Cars";
+		String objectTypeName = "Tree";
 		
 		//	Act
 		manager.saveObjectType(objectTypeName);
-		Boolean fileCreated = fileManager.jsonFileCreated();
+		Boolean fileCreated = fileManager.fileCreated();
 		
 		//	Assert
 		Assert.assertEquals(true, fileCreated);
@@ -62,18 +62,27 @@ public class GenericDataComparisonTests extends TestCase {
 	}
 	
 	public void test_GetObjectTypeByName_Get() {
-		String name = "Cars";
+		String name = "Tree";
 		
 		objectTypeData = manager.getObjectTypeByName(name);
 		
-		Assert.assertEquals("Cars", objectTypeData.getName());
+		Assert.assertEquals("Tree", objectTypeData.getName());
 	}
 	
 	public void test_addCharacteristics_Save() {
-		String name = "Cars";
+		String name = "Tree";
 		ArrayList<Characteristic> characteristics = CreateCharacteristics();
 		
 		manager.addCharacteristics(name, characteristics);
+		
+		Assert.assertEquals(true, true);
+	}*/
+	
+	public void test_addUserComparisonEntry_Save() {
+		String objectTypeName = "Tree";
+		String userEntryName = "My apple tree";
+		
+		manager.addUserComparisonEntry(objectTypeName, userEntryName);
 		
 		Assert.assertEquals(true, true);
 	}
