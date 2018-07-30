@@ -14,25 +14,68 @@ import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.Dimension;
 import javax.swing.border.LineBorder;
+
+import GenericDataComparison.BetterValue;
+
 import java.awt.Color;
 import javax.swing.ButtonGroup;
+import javax.swing.border.MatteBorder;
 
-public class AttributePanel extends JPanel {
+public class CharacteristicPanel extends JPanel {
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
     private final ButtonGroup buttonGroup = new ButtonGroup();
+    private final Characteristic  _char;
+	private JTextField txCharacteristicName;
+	private JTextField txMinimum;
+	private JTextField txFirstQuartile;
+	private JTextField txMedian;
+	private JTextField txThirdQuartile;
+	private JTextField txMaximum;
+	private JTextField txAvg;
+	private JTextField txWeight;
+	private JRadioButton rdHighest;
+	private JRadioButton rdLowest;
 
     
 
     
-    public AttributePanel() {
+    public CharacteristicPanel() {
 		super();
-		setBorder(new LineBorder(new Color(0, 0, 0)));
-		setPreferredSize(new Dimension(1172, 79));
+		_char = new Characteristic();
 		this.initialize();
-		// TODO Auto-generated constructor stub
+	}
+    
+   
+	public CharacteristicPanel(Characteristic _char) {
+		super();
+		this._char = _char;
+		this.bind();
+		this.initialize();
+	}
+
+
+	private void bind() {
+		txCharacteristicName.setText(_char.getName());
+		txMinimum.setText(_char.getMinimumValue()+"");
+		txFirstQuartile.setText(_char.getFirstQuartile()+"");
+		txMedian.setText(_char.getMedianValue()+"");
+		txThirdQuartile.setText(_char.getThirdQuartile()+"");
+		txMaximum.setText(_char.getMaximumValue()+"");
+		txAvg.setText(_char.getAverageValue()+"");
+		txWeight.setText(_char.getScoreWeightValue()+"");
+		if(_char.getBetterValue() == BetterValue.LOWEST) {
+			this.rdHighest.setSelected(false);
+	        this.rdLowest.setSelected(true);
+			
+		}
+		
+	}
+	
+	private void UpdateCharacteristics() {
+		
 	}
 
 
@@ -40,13 +83,18 @@ public class AttributePanel extends JPanel {
 
 
 	private void initialize(){
+		
+		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
+		setPreferredSize(new Dimension(1069, 56));
 
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 129, 60, 85, 60, 85, 0, 64, 55, 0};
 		this.setLayout(gridBagLayout);
 		GridBagConstraints c = new GridBagConstraints();
-        JRadioButton rdHighest = new JRadioButton("Highest is Best");
+		c.weightx = 1;
+		
+        rdHighest = new JRadioButton("Highest is Best");
         buttonGroup.add(rdHighest);
         JPanel _panel = new JPanel();
 
@@ -106,81 +154,105 @@ public class AttributePanel extends JPanel {
         gbc_lblNewLabel_7.gridx = 8;
         gbc_lblNewLabel_7.gridy = 0;
         add(lblNewLabel_7, gbc_lblNewLabel_7);
-        JRadioButton rdLowest_1 = new JRadioButton("Lowest is Best");
-        buttonGroup.add(rdLowest_1);
+        
+        
+        rdLowest = new JRadioButton("Lowest is Best");
+        buttonGroup.add(rdLowest);
         GridBagConstraints gbc_rdLowest_1 = new GridBagConstraints();
         gbc_rdLowest_1.insets = new Insets(0, 0, 5, 0);
         gbc_rdLowest_1.gridx = 9;
         gbc_rdLowest_1.gridy = 0;
-        this.add(rdLowest_1, gbc_rdLowest_1);
+        this.add(rdLowest, gbc_rdLowest_1);
         
         
-                JButton btnDelete = new JButton("Delete"); //TODO add trash can image
-                
-                	
+        JButton btnDelete = new JButton("Delete"); //TODO add trash can image
+        
+        	
 
-                GridBagConstraints gbc_btnDelete = new GridBagConstraints();
-                gbc_btnDelete.anchor = GridBagConstraints.WEST;
-                gbc_btnDelete.insets = new Insets(0, 0, 0, 5);
-                gbc_btnDelete.gridx = 0;
-                gbc_btnDelete.gridy = 1;
-                this.add(btnDelete, gbc_btnDelete);
+        GridBagConstraints gbc_btnDelete = new GridBagConstraints();
+        gbc_btnDelete.anchor = GridBagConstraints.WEST; 
+        gbc_btnDelete.insets = new Insets(0, 0, 0, 5);
+        gbc_btnDelete.gridx = 0;
+        gbc_btnDelete.gridy = 1;
+        this.add(btnDelete, gbc_btnDelete);
         
         
-        JTextField txCharacteristicName = new JTextField();
+        txCharacteristicName = new JTextField();
         txCharacteristicName.setColumns(20);
-        
-        
+        //txCharacteristicName.setMaximumSize(txCharacteristicName.getPreferredSize());
         GridBagConstraints gbc_txCharacteristicName = new GridBagConstraints();
+        gbc_txCharacteristicName.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txCharacteristicName.weightx = 0.5;
         gbc_txCharacteristicName.insets = new Insets(0, 0, 0, 5);
         gbc_txCharacteristicName.gridx = 1;
         gbc_txCharacteristicName.gridy = 1;
         this.add(txCharacteristicName, gbc_txCharacteristicName);
-        JTextField txMinimum = new JTextField();
+        
+        txMinimum = new JTextField();
         txMinimum.setColumns(10);
         GridBagConstraints gbc_txMinimum = new GridBagConstraints();
+        gbc_txMinimum.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txMinimum.weightx = 0.5;
         gbc_txMinimum.insets = new Insets(0, 0, 0, 5);
         gbc_txMinimum.gridx = 2;
         gbc_txMinimum.gridy = 1;
         this.add(txMinimum, gbc_txMinimum);
-        JTextField txFirstQuartile = new JTextField();
+        
+        txFirstQuartile = new JTextField();
         txFirstQuartile.setColumns(10);
         GridBagConstraints gbc_txFirstQuartile = new GridBagConstraints();
+        gbc_txFirstQuartile.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txFirstQuartile.weightx = 0.5;
         gbc_txFirstQuartile.insets = new Insets(0, 0, 0, 5);
         gbc_txFirstQuartile.gridx = 3;
         gbc_txFirstQuartile.gridy = 1;
         this.add(txFirstQuartile, gbc_txFirstQuartile);
-        JTextField txMedian = new JTextField();
+        
+        txMedian = new JTextField();
         txMedian.setColumns(10);
         GridBagConstraints gbc_txMedian = new GridBagConstraints();
+        gbc_txMedian.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txMedian.weightx = 0.5;
         gbc_txMedian.insets = new Insets(0, 0, 0, 5);
         gbc_txMedian.gridx = 4;
         gbc_txMedian.gridy = 1;
         this.add(txMedian, gbc_txMedian);
-        JTextField txThirdQuartile = new JTextField();
+        
+        txThirdQuartile = new JTextField();
         txThirdQuartile.setColumns(10);
         GridBagConstraints gbc_txThirdQuartile = new GridBagConstraints();
+        gbc_txThirdQuartile.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txThirdQuartile.weightx = 0.5;
         gbc_txThirdQuartile.insets = new Insets(0, 0, 0, 5);
         gbc_txThirdQuartile.gridx = 5;
         gbc_txThirdQuartile.gridy = 1;
         this.add(txThirdQuartile, gbc_txThirdQuartile);
-        JTextField txMaximum = new JTextField();
+        
+        txMaximum = new JTextField();
         txMaximum.setColumns(10);
         GridBagConstraints gbc_txMaximum = new GridBagConstraints();
+        gbc_txMaximum.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txMaximum.weightx = 0.5;
         gbc_txMaximum.insets = new Insets(0, 0, 0, 5);
         gbc_txMaximum.gridx = 6;
         gbc_txMaximum.gridy = 1;
         this.add(txMaximum, gbc_txMaximum);
-        JTextField txAvg = new JTextField();
+        
+        txAvg = new JTextField();
         txAvg.setColumns(10);
         GridBagConstraints gbc_txAvg = new GridBagConstraints();
+        gbc_txAvg.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txAvg.weightx = 0.5;
         gbc_txAvg.insets = new Insets(0, 0, 0, 5);
         gbc_txAvg.gridx = 7;
         gbc_txAvg.gridy = 1;
         this.add(txAvg, gbc_txAvg);
-        JTextField txWeight = new JTextField();
+        
+        txWeight = new JTextField();
         txWeight.setColumns(10);
         GridBagConstraints gbc_txWeight = new GridBagConstraints();
+        gbc_txWeight.fill = GridBagConstraints.HORIZONTAL;
+        gbc_txWeight.weightx = 0.5;
         gbc_txWeight.insets = new Insets(0, 0, 0, 5);
         gbc_txWeight.gridx = 8;
         gbc_txWeight.gridy = 1;
@@ -189,20 +261,17 @@ public class AttributePanel extends JPanel {
         gbc_rdHighest.gridx = 9;
         gbc_rdHighest.gridy = 1;
         this.add(rdHighest, gbc_rdHighest);
-
-
-//
-//        for(JComponent obj: _compArray){
-//        	this.add(obj);
-//        }
         
+        this.rdHighest.setSelected(true);
+        this.rdLowest.setSelected(false);
+        
+       
+
+
         
     }
     
-//    private void addControls(){
-//    	this.add(new JLabel("Name of new baseline object"));
-//
-//    }
+
 
 
 

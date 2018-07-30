@@ -2,8 +2,16 @@ package GenericDataComparison.UI;
 
 
 import javax.swing.*;
+
+import GenericDataComparison.Characteristic;
+import GenericDataComparison.ObjectType;
+
 import java.awt.*;
 import java.util.ArrayList;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class BaselineObjectWindow extends JFrame{
 
@@ -11,62 +19,86 @@ public class BaselineObjectWindow extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	//private JFrame ;
-    private JScrollPane _scrollPane;
     private JPanel _panel;
     private JLabel _header;
     private GenericDataComparison.UI.WindowType _windowType;
     private JPanel _compPanel;
+    private final ObjectType _baseObj;
+	private JButton btnAdd;
+	private JPanel _subPanel;
 
 
-    public BaselineObjectWindow(WindowType WindowType)
+    public BaselineObjectWindow()
     {
-        _windowType = WindowType;
+    	_baseObj = new ObjectType();
+        _windowType = WindowType.CREATE;
         initialize();
-        //_panel.removeAll();S
-        this.addHeader();
-        
-        
-                // add the panel to the scroll pane, and the scroll pane to the frame
-                
-                AttributePanel cPanel = new AttributePanel();
-                cPanel.setBounds(10, 212, 1172, 79);
-                _panel.add(cPanel);
-        //this.setVisible(true);
-
+       
     }
 
 
 
-    /**
+    public BaselineObjectWindow( ObjectType BaselineObject) throws HeadlessException {
+		super();
+		this._windowType = WindowType.EDIT;
+		this._baseObj = BaselineObject;
+		this.initialize();
+		this.addCharPanel(BaselineObject);
+	}
+
+
+
+	/**
      * Initialize the contents of the frame.
      */
     private void initialize()
     {
         // set up the main frame of the application
-        //_frame = new JFrame();
         this.setBounds(100, 100, 1242, 758);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-       // BorderPane border = new BorderPane();
-
-
 
 
         // create the panel that will hold our charts
         _panel = new JPanel();
         _panel.add(addHeader());
 
-        _scrollPane = new JScrollPane();
-        _panel.add(_scrollPane);
-       // _panel.add(cPanel);
-        //cPanel.setVisible(true);
         
-       // this.getContentPane().add(_scrollPane);
+
         this.getContentPane().add(_panel);
-        //_panel.setVisible(true);
+        
         _panel.setVisible(true);
-        _scrollPane.setVisible(true);
+        
+        JScrollPane scrollPane_1 = new JScrollPane();
+        scrollPane_1.setBounds(10, 144, 1172, 484);
+        _panel.add(scrollPane_1);
+        
+        _subPanel = new JPanel();
+        scrollPane_1.setViewportView(_subPanel);
+        GridLayout gl = new GridLayout(0, 1, 0, 0);
+        _subPanel.setLayout(gl);
+        _subPanel.add(new CharacteristicPanel(), "span");
+
+        
+        //Mouse click event
+        btnAdd = new JButton("Add");
+        btnAdd.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent arg0) {	
+        		addCharPanel();
+
+        	}
+
+
+        });
+
+        btnAdd.setBounds(21, 107, 89, 23);
+        _panel.add(btnAdd);
+        
+        JLabel lblAddNewCharacteristic = new JLabel("Add New Characteristic ");
+        lblAddNewCharacteristic.setBounds(122, 111, 190, 14);
+        _panel.add(lblAddNewCharacteristic);
+        
+        //this.pack();
 
 
 
@@ -80,16 +112,34 @@ public class BaselineObjectWindow extends JFrame{
         }
         _panel.setLayout(null);
         _header = new JLabel(headerText);
-        _header.setBounds(415, 56, 309, 39);
+        _header.setBounds(418, 26, 309, 39);
         _header.setFont(new Font("Serif", Font.PLAIN, 30));
-        //_panel.add(_header);
         
         return _header;
-        
-        //JPanel panel = new JPanel();
-        //panel.setBounds(178, 133, 708, 263);
-        //_panel.add(panel);
+
     }
+    
+    
+	private void addCharPanel() {
+		_subPanel.add(new CharacteristicPanel(), "span");
+		_subPanel.repaint();
+		_subPanel.revalidate();
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	private void addCharPanel(ObjectType BaselineObject) {
+		for(Characteristic _char: BaselineObject.getCharacteristics()) {
+			_subPanel.add(new CharacteristicPanel(_char), "span");
+			_subPanel.repaint();
+			_subPanel.revalidate();
+			// TODO Auto-generated method stub
+			
+		}
+		
+		
+	}
 }
 
 
