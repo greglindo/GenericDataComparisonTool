@@ -25,6 +25,13 @@ public class BaselineObjectWindow extends JFrame{
         initialize();
         //_panel.removeAll();S
         this.addHeader();
+        
+        
+                // add the panel to the scroll pane, and the scroll pane to the frame
+                
+                AttributePanel cPanel = new AttributePanel();
+                cPanel.setBounds(10, 212, 1172, 79);
+                _panel.add(cPanel);
         //this.setVisible(true);
 
     }
@@ -38,7 +45,7 @@ public class BaselineObjectWindow extends JFrame{
     {
         // set up the main frame of the application
         //_frame = new JFrame();
-        this.setBounds(100, 100, 1024, 768);
+        this.setBounds(100, 100, 1242, 758);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
        // BorderPane border = new BorderPane();
@@ -48,17 +55,17 @@ public class BaselineObjectWindow extends JFrame{
 
         // create the panel that will hold our charts
         _panel = new JPanel();
+        _panel.add(addHeader());
 
-
-        // add the panel to the scroll pane, and the scroll pane to the frame
-        
-        AttributePanel cPanel = new AttributePanel();
-
-        _scrollPane = new JScrollPane(cPanel);
+        _scrollPane = new JScrollPane();
+        _panel.add(_scrollPane);
        // _panel.add(cPanel);
         //cPanel.setVisible(true);
-        this.getContentPane().add(_scrollPane, BorderLayout.CENTER);
+        
+       // this.getContentPane().add(_scrollPane);
+        this.getContentPane().add(_panel);
         //_panel.setVisible(true);
+        _panel.setVisible(true);
         _scrollPane.setVisible(true);
 
 
@@ -66,20 +73,22 @@ public class BaselineObjectWindow extends JFrame{
     }
 
     //Adds header and specifies if the user is adding a new baseline object or modifying
-    private void addHeader(){
+    private JLabel addHeader(){
         String headerText = "Add New Baseline Object";
         if(_windowType == WindowType.EDIT){
             headerText.replace("Add New", "Modify");
         }
         _panel.setLayout(null);
         _header = new JLabel(headerText);
-        _header.setBounds(339, 52, 309, 39);
+        _header.setBounds(415, 56, 309, 39);
         _header.setFont(new Font("Serif", Font.PLAIN, 30));
-        _panel.add(_header);
+        //_panel.add(_header);
         
-        JPanel panel = new JPanel();
-        panel.setBounds(178, 133, 708, 263);
-        _panel.add(panel);
+        return _header;
+        
+        //JPanel panel = new JPanel();
+        //panel.setBounds(178, 133, 708, 263);
+        //_panel.add(panel);
     }
 }
 
