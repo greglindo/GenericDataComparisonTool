@@ -2,7 +2,7 @@ package GenericDataComparison;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
-
+import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.OutputPane;
 
 public class Main {
@@ -17,8 +17,10 @@ public class Main {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Main window = new Main();
-					window.frame.setVisible(true);
+					//Main window = new Main();
+					//window.frame.setVisible(true);
+					BaselineObjectWindow wd = new BaselineObjectWindow();
+					wd.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
