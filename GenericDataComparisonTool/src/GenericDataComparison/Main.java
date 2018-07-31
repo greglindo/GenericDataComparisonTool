@@ -3,9 +3,12 @@ package GenericDataComparison;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 
+import GenericDataComparison.UI.OutputPane;
+
 public class Main {
 
 	private JFrame frame;
+	private OutputPane oPane;
 
 	/**
 	 * Launch the application.
@@ -35,8 +38,11 @@ public class Main {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(100, 100, 1280, 1024);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		oPane = new OutputPane();
+		frame.add(oPane);
 	}
 
 }
