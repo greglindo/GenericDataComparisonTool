@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import javax.swing.border.LineBorder;
 
 import GenericDataComparison.BetterValue;
+import GenericDataComparison.Characteristic;
 
 import java.awt.Color;
 import javax.swing.ButtonGroup;
