@@ -2,30 +2,21 @@ package GenericDataComparison.UI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.LayoutManager;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.Dimension;
-import javax.swing.border.LineBorder;
-
 import GenericDataComparison.BetterValue;
 import GenericDataComparison.Characteristic;
-
 import java.awt.Color;
 import javax.swing.ButtonGroup;
 import javax.swing.border.MatteBorder;
 
-public class CharacteristicPanel extends JPanel {
-    /**
-	 * 
-	 */
+public class CharacteristicPanel extends JPanel 
+{
 	private static final long serialVersionUID = 1L;
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private final Characteristic  _char;
@@ -39,26 +30,24 @@ public class CharacteristicPanel extends JPanel {
 	private JTextField txWeight;
 	private JRadioButton rdHighest;
 	private JRadioButton rdLowest;
-
     
-
-    
-    public CharacteristicPanel() {
+    public CharacteristicPanel() 
+    {
 		super();
 		_char = new Characteristic();
 		this.initialize();
-	}
-    
+	}    
    
-	public CharacteristicPanel(Characteristic _char) {
+	public CharacteristicPanel(Characteristic _char) 
+	{
 		super();
 		this._char = _char;
 		this.bind();
 		this.initialize();
 	}
 
-
-	private void bind() {
+	private void bind() 
+	{
 		txCharacteristicName.setText(_char.getName());
 		txMinimum.setText(_char.getMinimumValue()+"");
 		txFirstQuartile.setText(_char.getFirstQuartile()+"");
@@ -67,27 +56,22 @@ public class CharacteristicPanel extends JPanel {
 		txMaximum.setText(_char.getMaximumValue()+"");
 		txAvg.setText(_char.getAverageValue()+"");
 		txWeight.setText(_char.getScoreWeightValue()+"");
-		if(_char.getBetterValue() == BetterValue.LOWEST) {
+		if(_char.getBetterValue() == BetterValue.LOWEST)
+		{
 			this.rdHighest.setSelected(false);
 	        this.rdLowest.setSelected(true);
 			
-		}
-		
+		}		
 	}
 	
 	private void UpdateCharacteristics() {
 		
 	}
-
-
-
-
-
-	private void initialize(){
-		
+	
+	private void initialize()
+	{		
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
 		setPreferredSize(new Dimension(1069, 56));
-
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 129, 60, 85, 60, 85, 0, 64, 55, 0};
@@ -154,8 +138,7 @@ public class CharacteristicPanel extends JPanel {
         gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
         gbc_lblNewLabel_7.gridx = 8;
         gbc_lblNewLabel_7.gridy = 0;
-        add(lblNewLabel_7, gbc_lblNewLabel_7);
-        
+        add(lblNewLabel_7, gbc_lblNewLabel_7);        
         
         rdLowest = new JRadioButton("Lowest is Best");
         buttonGroup.add(rdLowest);
@@ -164,19 +147,15 @@ public class CharacteristicPanel extends JPanel {
         gbc_rdLowest_1.gridx = 9;
         gbc_rdLowest_1.gridy = 0;
         this.add(rdLowest, gbc_rdLowest_1);
-        
-        
-        JButton btnDelete = new JButton("Delete"); //TODO add trash can image
-        
-        	
+                
+        JButton btnDelete = new JButton("Delete"); //TODO add trash can image        	
 
         GridBagConstraints gbc_btnDelete = new GridBagConstraints();
         gbc_btnDelete.anchor = GridBagConstraints.WEST; 
         gbc_btnDelete.insets = new Insets(0, 0, 0, 5);
         gbc_btnDelete.gridx = 0;
         gbc_btnDelete.gridy = 1;
-        this.add(btnDelete, gbc_btnDelete);
-        
+        this.add(btnDelete, gbc_btnDelete);        
         
         txCharacteristicName = new JTextField();
         txCharacteristicName.setColumns(20);
@@ -265,15 +244,5 @@ public class CharacteristicPanel extends JPanel {
         
         this.rdHighest.setSelected(true);
         this.rdLowest.setSelected(false);
-        
-       
-
-
-        
     }
-    
-
-
-
-
 }
