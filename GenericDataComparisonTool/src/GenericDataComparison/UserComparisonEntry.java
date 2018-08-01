@@ -1,16 +1,21 @@
 package GenericDataComparison;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
-public class UserComparisonEntry {
+public class UserComparisonEntry 
+{
+	private UUID objectID;
 	private String name;
 	private ArrayList<ComparisonCharacteristic> comparisonCharacteristics;
 	
-	public UserComparisonEntry() {
+	public UserComparisonEntry() 
+	{
 		
 	}
 	
-	public UserComparisonEntry getUserComparisonEntry(String name) {
+	public UserComparisonEntry getUserComparisonEntry(String name) 
+	{
 		return new UserComparisonEntry();
 	}
 	
@@ -19,11 +24,18 @@ public class UserComparisonEntry {
 		
 	}
 	
-	public void deleteUserEntry() {
+	public void deleteUserEntry() 
+	{
 		
 	}
 	
-	public String getName() {
+	public UUID getObjectID()
+	{
+		return objectID;
+	}
+	
+	public String getName() 
+	{
 		return this.name;				
 	}
 	
@@ -32,11 +44,18 @@ public class UserComparisonEntry {
 		return this.comparisonCharacteristics;
 	}
 	
-	public void setName(String name) {
+	public void setObjectID(UUID id)
+	{
+		objectID = id;
+	}
+	
+	public void setName(String name) 
+	{
 		this.name = name;
 	}
 	
-	public void setComparisonCharacteristics(ArrayList<ComparisonCharacteristic> comparisonCharacteristicsData) {
+	public void setComparisonCharacteristics(ArrayList<ComparisonCharacteristic> comparisonCharacteristicsData) 
+	{
 		this.comparisonCharacteristics = comparisonCharacteristicsData;
 	}
 }
