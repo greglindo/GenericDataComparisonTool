@@ -1,6 +1,8 @@
 package GenericDataComparison;
 
 import java.util.ArrayList;
+import java.util.UUID;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -29,6 +31,19 @@ public class GenericComparisonManager {
 		for(ObjectType item : objectTypes)
 		{
 			if(item.getName().equals(name));
+			{
+				return item;
+			}
+		}
+		
+		return null;
+	}
+	
+	public ObjectType getObjectTypeByID(UUID id)
+	{
+		for(ObjectType item : objectTypes)
+		{
+			if(item.getId().equals(id))
 			{
 				return item;
 			}
@@ -121,9 +136,8 @@ public class GenericComparisonManager {
 		jsonFileManager.saveDataToFile(root);
 	}
 	
-	public void generateChart(String name, ObjectType baseLineData, UserComparisonEntry userData, Boolean createLegend) {
-		comparisonChart = new ComparisonChart(name, baseLineData, userData, createLegend);
-		comparisonChart.generateChart();
+	public void generateOutput(ObjectType baselineData, UserComparisonEntry userData) {
+		//
 	}
 	
 	public UserComparisonEntry getUserComparisonEntry() {
