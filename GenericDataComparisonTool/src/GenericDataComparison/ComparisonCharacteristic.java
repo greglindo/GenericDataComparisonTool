@@ -2,41 +2,39 @@ package GenericDataComparison;
 
 import org.json.simple.JSONObject;
 
-public class ComparisonCharacteristic  {
+public class ComparisonCharacteristic {
 	private String name;
-	private String value;
+	private double value;
 	
-	static final String _userCharacteristicNameNode = "characteristicName";
-	static final String _userCharacteristicValueNode = "value";
+	static final String _comparisonName = "characteristicName";
+	static final String _comparisonValue = "characteristicValue";
 	
 	public ComparisonCharacteristic() {
 		
 	}
 	
-	public ComparisonCharacteristic(String name, String value) {
-		this.setName(name);
-		this.setValue(value);
+	public ComparisonCharacteristic(String name, double val) {
+		this.name = name;
+		this.value = val;
 	}
 	
-	public ComparisonCharacteristic(JSONObject data) {
-		if (data != null) {
-			this.setName(data.get(_userCharacteristicNameNode).toString());
-			this.setValue(data.get(_userCharacteristicValueNode).toString());
-		}
+	public void loadComparisonCharacteristic(JSONObject data) {
+		this.setName(data.get(_comparisonName).toString());
+		this.setValue(Double.parseDouble(data.get(_comparisonValue).toString()));
 	}
 	
-	public JSONObject convertToJSONObject() {
-		JSONObject jsonResult = new JSONObject();
-		jsonResult.put(_userCharacteristicNameNode, this.getName());
-		jsonResult.put(_userCharacteristicValueNode, this.getValue());
-		return jsonResult;
+	public JSONObject saveComparisonCharacteristic() {
+		JSONObject ComparisonCharacteristic = new JSONObject();
+		ComparisonCharacteristic.put(_comparisonName, this.getName());
+		ComparisonCharacteristic.put(_comparisonValue, this.getValue());
+		return ComparisonCharacteristic;
 	}
 	
 	public String getName() {
 		return this.name;
 	}
 	
-	public String getValue() {
+	public double getValue() {
 		return this.value;
 	}
 	
@@ -44,7 +42,7 @@ public class ComparisonCharacteristic  {
 		this.name = name;
 	}
 	
-	public void setValue(String value) {
+	public void setValue(double value) {
 		this.value = value;
 	}
 }
