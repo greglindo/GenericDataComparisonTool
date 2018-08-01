@@ -111,11 +111,11 @@ public class ComparisonChart {
 		this.createLegend = createLegend;
 	}
 	
-	private DefaultBoxAndWhiskerCategoryDataset createDataset(String characteristicName, double userValue) {
+	private DefaultBoxAndWhiskerCategoryDataset createDataset(ObjectType objectType, String characteristicName, double userValue) {
 		DefaultBoxAndWhiskerCategoryDataset dataset = new DefaultBoxAndWhiskerCategoryDataset();
 		
 		if (!characteristicName.isEmpty()) {
-			Characteristic characteristic = this.getObjectType().getCharacteristicByName(characteristicName);
+			Characteristic characteristic = objectType.getCharacteristicByName(characteristicName);
 			
 			if (characteristic != null) {
 				BoxAndWhiskerItem item = new BoxAndWhiskerItem(
@@ -134,12 +134,13 @@ public class ComparisonChart {
 		return dataset;
 	}
 	
-	private JFreeChart createBoxAndWhiskerChart(String characteristicName, double userValue, Boolean createLegend) {
+	private JFreeChart createBoxAndWhiskerChart(ObjectType objectType, String characteristicName, double userValue, Boolean createLegend) {
+		
 		JFreeChart chart = ChartFactory.createBoxAndWhiskerChart(
 				characteristicName, 
 				this.getyAxisName(), 
 				this.getXAxisName(), 
-				createDataset(characteristicName, userValue), 
+				createDataset(objectType, characteristicName, userValue), 
 				createLegend);
 		
 		int basicStrokeThickness = 2;
@@ -164,8 +165,8 @@ public class ComparisonChart {
 		return chart;
 	}
 	
-	public ChartPanel getChartPanelWithComparisonData(String characteristicName, double userValue, Boolean createLegend) {
-		ChartPanel chartPanel = new ChartPanel(createBoxAndWhiskerChart(characteristicName, userValue, createLegend));
+	public ChartPanel getChartPanelWithComparisonData(ObjectType objectType, String characteristicName, double userValue, Boolean createLegend) {
+		ChartPanel chartPanel = new ChartPanel(createBoxAndWhiskerChart(objectType, characteristicName, userValue, createLegend));
 		return chartPanel;
 	}
 }

@@ -208,10 +208,10 @@ public class GenericComparisonManager {
 		jsonFileManager.saveDataToFile(root);
 	}
 	
-	public ChartPanel generateBoxAndWhiskerChart(String characteristicName, double userValue, Boolean createLegend) {
+	public ChartPanel generateBoxAndWhiskerChart(ObjectType objectType, String characteristicName, double userValue, Boolean createLegend) {
 		comparisonChart = new ComparisonChart();
 		
-		return comparisonChart.getChartPanelWithComparisonData(characteristicName, userValue, createLegend);
+		return comparisonChart.getChartPanelWithComparisonData(objectType, characteristicName, userValue, createLegend);
 	}
 	
 	public ArrayList<UserComparisonEntry> getUserComparisonEntry() {
