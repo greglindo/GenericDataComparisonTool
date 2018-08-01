@@ -1,5 +1,6 @@
 package GenericDataComparison;
 
+import org.jfree.chart.ChartPanel;
 import java.util.ArrayList;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -207,9 +208,10 @@ public class GenericComparisonManager {
 		jsonFileManager.saveDataToFile(root);
 	}
 	
-	public void generateChart(String name, ObjectType baseLineData, UserComparisonEntry userData, Boolean createLegend) {
-		comparisonChart = new ComparisonChart(name, baseLineData, userData, createLegend);
-		comparisonChart.generateChart();
+	public ChartPanel generateBoxAndWhiskerChart(String characteristicName, double userValue, Boolean createLegend) {
+		comparisonChart = new ComparisonChart();
+		
+		return comparisonChart.getChartPanelWithComparisonData(characteristicName, userValue, createLegend);
 	}
 	
 	public ArrayList<UserComparisonEntry> getUserComparisonEntry() {
