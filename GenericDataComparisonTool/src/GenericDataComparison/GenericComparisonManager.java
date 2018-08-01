@@ -84,11 +84,11 @@ public class GenericComparisonManager {
 		return this.userComparisonEntries;
 	}
 	
-	public UserComparisonEntry getUserComparisonEntryByName(String name) {
+	public UserComparisonEntry getUserComparisonEntryByName(String objectTypeName, String name) {
 		
 		for(UserComparisonEntry item : this.userComparisonEntries)
 		{
-			if(item.getName().equals(name));
+			if(item.getObjectTypeName().equals(objectTypeName) && item.getName().equals(name));
 			{
 				return item;
 			}
@@ -216,7 +216,7 @@ public class GenericComparisonManager {
 		return this.userComparisonEntries;
 	}
 	
-	/*public void setUserComparisonEntry(ArrayList<UserComparisonEntry> userComparisonEntries) {
+	public void setUserComparisonEntry(ArrayList<UserComparisonEntry> userComparisonEntries) {
 		this.userComparisonEntries = userComparisonEntries;
-	}*/
+	}
 }

@@ -70,7 +70,7 @@ public class GenericDataComparisonTests extends TestCase {
 		return comparisonCharacteristics;
 	}
 	
-	public void test_CreateCarObject()
+	/*public void test_CreateCarObject()
 	{
 		manager.addObjectType(CreateObjectType());
 		
@@ -108,7 +108,7 @@ public class GenericDataComparisonTests extends TestCase {
 		objectTypeData = manager.getObjectTypeByName("cars");
 		
 		Assert.assertEquals("cars", objectTypeData.getName());
-	}
+	}*/
 	
 	public void test_saveUserComparisonEntry()
 	{
@@ -118,5 +118,29 @@ public class GenericDataComparisonTests extends TestCase {
 		
 		File file = new File(fileManager.getFileName());
 		Assert.assertEquals(true, file.exists());
+	}
+	
+	public void test_getUserComparisonEntries_All() {
+		ArrayList<UserComparisonEntry> userEntries = new ArrayList<UserComparisonEntry>();
+		
+		manager.loadData();
+		userEntries = manager.getUserComparisonEntries();
+		
+		Assert.assertTrue(userEntries.size() > 0);
+	}
+	
+	public void test_getUserComparisonEntryByObjectTypeNameAndUserEntryName_Find() {
+		UserComparisonEntry userEntry = new UserComparisonEntry();
+		String objectTypeName = "cars";
+		String userEntryName = "2014 Car";
+		
+		test_saveUserComparisonEntry();
+		
+		manager.loadData();
+		
+		userEntry = manager.getUserComparisonEntryByName(objectTypeName, userEntryName);
+		
+		Assert.assertEquals(userEntryName, userEntry.getName());
+		
 	}
 }

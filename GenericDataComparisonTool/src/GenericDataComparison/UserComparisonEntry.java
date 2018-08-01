@@ -10,8 +10,7 @@ public class UserComparisonEntry {
 	private String name;
 	private String objectTypeName;
 	private ArrayList<ComparisonCharacteristic> comparisonCharacteristics;
-	private ObjectType objectType;
-	
+		
 	static final String _userDataNode = "userData";
 	static final String _userDataIdNode = "id";	//	use this to map to the object type item
 	static final String _userDataNameNode = "name";		
