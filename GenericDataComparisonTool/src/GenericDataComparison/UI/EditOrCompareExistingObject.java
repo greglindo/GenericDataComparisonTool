@@ -1,37 +1,153 @@
 package GenericDataComparison.UI;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Label;
+import java.util.ArrayList;
+
 import org.eclipse.swt.SWT;
-import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import GenericDataComparison.Characteristic;
+import GenericDataComparison.GenericComparisonManager;
+import GenericDataComparison.ObjectType;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.FormLayout;
+import org.eclipse.swt.layout.FormData;
+import org.eclipse.swt.layout.FormAttachment;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.custom.ScrolledComposite;
 
 public class EditOrCompareExistingObject {
 
-	protected Shell shell;
-
+	private ArrayList<Button> objectTypeButtons;
+	
 	/**
 	 * Launch the application.
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		try {
-			EditOrCompareExistingObject window = new EditOrCompareExistingObject();
-			window.open();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		EditOrCompareExistingObject window = new EditOrCompareExistingObject();
+		window.open();
 	}
 
 	/**
 	 * Open the window.
 	 */
 	public void open() {
+		
+		// Window properites
 		Display display = Display.getDefault();
-		createContents();
+		Shell shell = new Shell();
+		shell.setSize(512, 324);
+		shell.setText("Edit Or Compare Existing Object");
+		shell.setLayout(new FormLayout());
+		
+		// UI Header
+		Label lblEditOrCompare = new Label(shell, SWT.NONE);
+		FormData fd_lblEditOrCompare = new FormData();
+		fd_lblEditOrCompare.bottom = new FormAttachment(0, 59);
+		fd_lblEditOrCompare.right = new FormAttachment(0, 777);
+		fd_lblEditOrCompare.top = new FormAttachment(0, 10);
+		fd_lblEditOrCompare.left = new FormAttachment(0, 10);
+		lblEditOrCompare.setLayoutData(fd_lblEditOrCompare);
+		lblEditOrCompare.setFont(SWTResourceManager.getFont("Segoe UI", 24, SWT.NORMAL));
+		lblEditOrCompare.setText("Edit or Compare Existing Object");
+		
+		// Back Button
+		Button btnBack = new Button(shell, SWT.NONE);
+		FormData fd_btnBack = new FormData();
+		fd_btnBack.bottom = new FormAttachment(100, -10);
+		fd_btnBack.left = new FormAttachment(0, 26);
+		btnBack.setLayoutData(fd_btnBack);
+		btnBack.setText("Back");
+		
+		ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		FormData fd_scrolledComposite = new FormData();
+		fd_scrolledComposite.bottom = new FormAttachment(lblEditOrCompare, 163, SWT.BOTTOM);
+		fd_scrolledComposite.top = new FormAttachment(lblEditOrCompare, 25);
+		fd_scrolledComposite.left = new FormAttachment(btnBack, 3, SWT.LEFT);
+		fd_scrolledComposite.right = new FormAttachment(100, -23);
+		scrolledComposite.setLayoutData(fd_scrolledComposite);
+		scrolledComposite.setExpandHorizontal(true);
+		scrolledComposite.setExpandVertical(true);		
+		
+		// Setup a group to put all of the buttons in
+		Group group = new Group(scrolledComposite, SWT.NONE);
+		group.setLayout(new RowLayout(SWT.HORIZONTAL));
+		scrolledComposite.setContent(group);
+		scrolledComposite.setMinSize(group.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		btnBack.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseUp(MouseEvent e) {
+				Button x = (Button)e.getSource();
+				System.out.println("Go back");
+			}
+		});
+		
+		// Temporarily create object types for the UI
+		ArrayList<ObjectType> objectTypes = new ArrayList<ObjectType>();
+		objectTypes.add(new ObjectType("Car", new ArrayList<Characteristic>()));
+		objectTypes.add(new ObjectType("Cell Phone", new ArrayList<Characteristic>()));
+		objectTypes.add(new ObjectType("Desktop", new ArrayList<Characteristic>()));
+		objectTypes.add(new ObjectType("Laptop", new ArrayList<Characteristic>()));
+		
+
+		this.objectTypeButtons = new ArrayList<Button>();
+		for(ObjectType o : objectTypes) {
+			
+			Group buttonGroup = new Group(group, SWT.NONE);			
+			buttonGroup.setLayout(new FillLayout(SWT.HORIZONTAL));
+			
+			// Delete Button
+			Button delbtn = new Button(buttonGroup, SWT.NONE);
+			delbtn.setBounds(2, 16, 70, 21);
+			delbtn.setText("D");
+			delbtn.setData(o);
+			delbtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseUp(MouseEvent e) {
+					Button x = (Button)e.getSource();
+					ObjectType clickedObjectType = (ObjectType)x.getData();
+					System.out.println(clickedObjectType.getName());
+				}
+			});
+			
+			// Edit Button
+			Button editbtn = new Button(buttonGroup, SWT.NONE);
+			editbtn.setBounds(2, 16, 70, 21);
+			editbtn.setText("E");
+			editbtn.setData(o);
+			editbtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseUp(MouseEvent e) {
+					Button x = (Button)e.getSource();
+					ObjectType clickedObjectType = (ObjectType)x.getData();
+					System.out.println(clickedObjectType.getName());
+				}
+			});
+						
+			// Compare Button
+			Button comparebtn = new Button(buttonGroup, SWT.NONE);
+			comparebtn.setBounds(2, 16, 70, 21);
+			comparebtn.setText(o.getName());
+			comparebtn.setData(o);
+			comparebtn.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseUp(MouseEvent e) {
+					Button x = (Button)e.getSource();
+					ObjectType clickedObjectType = (ObjectType)x.getData();
+					System.out.println(clickedObjectType.getName());
+				}
+			});
+		
+		}
+		
+		
 		shell.open();
 		shell.layout();
 		while (!shell.isDisposed()) {
@@ -39,55 +155,5 @@ public class EditOrCompareExistingObject {
 				display.sleep();
 			}
 		}
-	}
-
-	/**
-	 * Create contents of the window.
-	 */
-	protected void createContents() {
-		shell = new Shell();
-		shell.setSize(759, 456);
-		shell.setText("SWT Application");
-		
-		Label lblNewLabel = new Label(shell, SWT.WRAP);
-		lblNewLabel.setAlignment(SWT.CENTER);
-		lblNewLabel.setFont(SWTResourceManager.getFont("Segoe UI", 14, SWT.NORMAL));
-		lblNewLabel.setBounds(10, 98, 723, 30);
-		lblNewLabel.setText("Select an object for comparison. Or, click [placeholder] to edit baseline object.");
-		
-		Button btnNewButton = new Button(shell, SWT.NONE);
-		btnNewButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnNewButton.setBounds(347, 382, 75, 25);
-		btnNewButton.setText("Back");
-		
-		Label label = new Label(shell, SWT.WRAP);
-		label.setText("Edit Or Compare Existing Object");
-		label.setFont(SWTResourceManager.getFont("Segoe UI", 32, SWT.NORMAL));
-		label.setAlignment(SWT.CENTER);
-		label.setBounds(0, 10, 723, 72);
-		
-		Button btnDelete = new Button(shell, SWT.NONE);
-		btnDelete.setImage(SWTResourceManager.getImage(EditOrCompareExistingObject.class, "/GenericDataComparison/UI/img/Delete.png"));
-		btnDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
-		btnDelete.setText("Delete");
-		btnDelete.setBounds(347, 173, 75, 25);
-		
-		Button btnEdit = new Button(shell, SWT.NONE);
-		btnEdit.setImage(SWTResourceManager.getImage(EditOrCompareExistingObject.class, "/GenericDataComparison/UI/img/List.png"));
-		btnEdit.setText("Edit");
-		btnEdit.setBounds(253, 173, 75, 25);
-		
-		Button btnCar = new Button(shell, SWT.NONE);
-		btnCar.setText("Car");
-		btnCar.setBounds(441, 173, 75, 25);
-
 	}
 }
