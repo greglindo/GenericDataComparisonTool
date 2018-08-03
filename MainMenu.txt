@@ -1,0 +1,47 @@
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class SwingTemplate {
+	public static void main(String args[]) {
+		
+		JFrame f = new JFrame("Generic Data Comparison Tool");
+		JLabel tf = new JLabel("Generic Data Comparison");
+		Font font = new Font("SansSerif", Font.BOLD, 25);
+		tf.setFont(font);
+		tf.setBounds(150, 5, 350, 30);
+
+		JButton button1 = new JButton("Edit or Compare");
+		button1.setBounds(55, 120, 200, 30);
+		
+		JButton button2 = new JButton("Add New Baseline Object");
+		button2.setBounds(300, 120, 200, 30);
+		
+		//Button One action Listener
+		button1.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Button One Clicked");
+			}
+		});
+		//Button Two action Listener
+		button2.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Button Two Clicked");
+			}
+		});
+		f.add(button1);
+		f.add(button2);
+		f.add(tf);
+		f.setSize(600, 600);
+		//
+		f.setResizable(false);
+		f.setLayout(null);
+		f.setVisible(true);
+	}
+}
