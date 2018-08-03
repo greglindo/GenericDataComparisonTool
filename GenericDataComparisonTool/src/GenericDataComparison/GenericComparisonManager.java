@@ -24,11 +24,11 @@ public class GenericComparisonManager {
 		return objectTypes;
 	}
 	
-	public ObjectType getObjectTypeByName(String name)
+	public ObjectType getObjectTypeByName(String Name)
 	{
 		for(ObjectType item : objectTypes)
 		{
-			if(item.getName().equals(name));
+			if(item.getName().equals(Name))
 			{
 				return item;
 			}

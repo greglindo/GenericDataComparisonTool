@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
@@ -46,6 +47,7 @@ public class CharacteristicPanel extends JPanel{
 	private JRadioButton rdLowest;
 	private JButton btnDelete;
 	private JCheckBox chbxDelete;
+	private boolean _panelIsValid;
 
     
 
@@ -60,8 +62,8 @@ public class CharacteristicPanel extends JPanel{
 	public CharacteristicPanel(Characteristic _char) {
 		super();
 		this._char = _char;
-		this.bind();
 		this.initialize();
+		this.bind();
 	}
 
 
@@ -82,9 +84,14 @@ public class CharacteristicPanel extends JPanel{
 			}
 			
 		}catch(Exception e){
-			//TODO exception handling
+			e.printStackTrace();
+			e.getCause();
 		}
 						
+	}
+	
+	public double getScoreWeight() {
+		return (Double.parseDouble(this.txWeight.getText()));
 	}
 	
 //	private void UpdateCharacteristics() {
@@ -95,7 +102,8 @@ public class CharacteristicPanel extends JPanel{
 		try {
 			for(Component c: this.getComponents()) {
 				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) {
-					throw new Exception("All characteristic fields are required");
+					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
+					//throw new Exception("All characteristic fields are required");
 				}
 			}
 		} catch (Exception e) {
@@ -103,11 +111,17 @@ public class CharacteristicPanel extends JPanel{
 		}
 		return true;
 	}
+	
+	public boolean PanelIsValid() {
+		_panelIsValid = fieldCheck();
+		return _panelIsValid;
+	}
 
 	private void saveCharacteristic() {
+		
 
 		try {
-			if (this.fieldCheck()) {
+			if (this.PanelIsValid()) {
 
 				// TODO add validation that all inputs are doubles
 				_char.setAverageValue(Double.parseDouble(this.txAvg.getText()));
@@ -117,6 +131,7 @@ public class CharacteristicPanel extends JPanel{
 				_char.setMedianValue(Double.parseDouble(this.txMedian.getText()));
 				_char.setThirdQuartile(Double.parseDouble(this.txThirdQuartile.getText()));
 				_char.setMaximumValue(Double.parseDouble(this.txMaximum.getText()));
+				_char.setScoreWeightValue(Double.parseDouble(this.txWeight.getText()));
 			}
 		} catch (Exception e) {
 			// TODO exception handling

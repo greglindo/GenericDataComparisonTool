@@ -18,7 +18,9 @@ public class Main {
 				try {
 					//Main window = new Main();
 					//window.frame.setVisible(true);
-					BaselineObjectWindow wd = new BaselineObjectWindow();
+					GenericComparisonManager manager = new GenericComparisonManager();
+					manager.loadData();
+					BaselineObjectWindow wd = new BaselineObjectWindow(manager, "test3");
 					wd.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
