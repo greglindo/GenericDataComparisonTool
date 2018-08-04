@@ -32,11 +32,20 @@ public class EditOrCompareExistingObject extends JPanel {
 	private ArrayList<ObjectType> objectTypes;
 	private GenericComparisonManager g;
 	private JPanel panel;
+	private Main mainWin;
 	private JScrollPane scrollPane;
+
 	private Consumer<Caller> listener;
 	
+	protected Main getMain() {
+		return this.mainWin;
+	}
+	
+	public EditOrCompareExistingObject(Main mainWin) {
 	public EditOrCompareExistingObject(Consumer<Caller> lstn) {
 		
+		this.mainWin = mainWin;
+		objectTypes = this.mainWin.getManager().getObjectTypes();
 		listener = lstn;
 					
 		g = new GenericComparisonManager();
@@ -66,6 +75,8 @@ public class EditOrCompareExistingObject extends JPanel {
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
+		for(ObjectType o : objectTypes) {
 		/*
 		for(ObjectType o : _manager.getObjectTypes()) {
 			JPanel newJpanel = new JPanel();
