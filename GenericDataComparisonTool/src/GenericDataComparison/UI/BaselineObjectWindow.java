@@ -32,16 +32,14 @@ public class BaselineObjectWindow extends JPanel
 	private JButton btnBack;
 	private JScrollPane scrollPane_1;
 	private JButton btnDelete;
-	private GenericComparisonManager _manager;
 	private JButton btnDeleteBaselineObject;
-  private Consumer<Caller> listener;
+	private Consumer<Caller> listener;
 
 	/**
 	 * @wbp.parser.constructor
 	 */
 	private BaselineObjectWindow() {
 		super();
-		_manager = new GenericComparisonManager();
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
         initialize();
@@ -53,7 +51,6 @@ public class BaselineObjectWindow extends JPanel
     public BaselineObjectWindow(Consumer<Caller> lstn)
     {
     	super();
-    	_manager = new GenericComparisonManager();
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
         listener = lstn;
@@ -63,10 +60,8 @@ public class BaselineObjectWindow extends JPanel
   //Edit existing object
     public BaselineObjectWindow(Consumer<Caller> lstn, String BaselineObjectName) throws HeadlessException {
 		super();
-		_manager = Manager;
 		this._windowType = WindowType.EDIT;
-		this._baseObj = _manager.getObjectTypeByName(BaselineObjectName);
-    listener = lstn;
+		listener = lstn;
 		this.initialize();
 	}
     
@@ -84,8 +79,8 @@ public class BaselineObjectWindow extends JPanel
     	
         this.setBounds(100, 100, 1242, 758);
         //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    	this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    	//this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
 
         // create the panel that will hold our charts
@@ -259,9 +254,7 @@ public class BaselineObjectWindow extends JPanel
     
     //Delete object
     private void deleteObject() {
-		_baseObj.deleteCharacteristics();
-		_manager.deleteObjectTypeByName(_baseObj.getName());
-		_manager.saveData();    	
+		_baseObj.deleteCharacteristics(); 	
     }
 	
     public ObjectType getObject()
