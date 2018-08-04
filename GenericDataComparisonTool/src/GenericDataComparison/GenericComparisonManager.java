@@ -62,7 +62,7 @@ public class GenericComparisonManager {
 			}
 		}
 		
-		return null;
+		//return null;
 	}
 	
 	public void loadObjectTypes(JSONArray data)
