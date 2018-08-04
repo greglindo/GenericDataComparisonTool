@@ -67,7 +67,7 @@ public class EditOrCompareExistingObject extends JPanel {
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		for(ObjectType o : objectTypes) {
+		for(ObjectType o : _manager.getObjectTypes()) {
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new FlowLayout());
 			newJpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
