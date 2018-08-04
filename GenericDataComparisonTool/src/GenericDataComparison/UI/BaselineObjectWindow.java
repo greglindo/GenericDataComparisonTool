@@ -1,19 +1,23 @@
 package GenericDataComparison.UI;
 
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.HeadlessException;
+import java.util.function.Consumer;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import GenericDataComparison.Caller;
+import GenericDataComparison.Caller.UIType;
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Characteristic;
-import GenericDataComparison.GenericComparisonManager;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class BaselineObjectWindow extends JPanel
 {
@@ -28,17 +32,19 @@ public class BaselineObjectWindow extends JPanel
 	private JButton btnBack;
 	private JScrollPane scrollPane_1;
 	private JButton btnDelete;
+	private Consumer<Caller> listener;
 
 
-    public BaselineObjectWindow(Main mainWin)
+    public BaselineObjectWindow(Consumer<Caller> lstn)
     {
     	new ObjectType();
         _windowType = WindowType.CREATE;
         initialize();
         this.addCharPanel();
+        listener = lstn;
     }
 
-    public BaselineObjectWindow(Main mainWin, ObjectType BaselineObject) throws HeadlessException 
+    public BaselineObjectWindow(Consumer<Caller> lstn, ObjectType BaselineObject) throws HeadlessException 
     {
 		super();
 		this._windowType = WindowType.EDIT;
@@ -47,6 +53,7 @@ public class BaselineObjectWindow extends JPanel
 		this.addCharPanel(_baseObj);
 		this.repaint();
 		this.validate();
+		listener = lstn;
 	}
     
     private void bind() {
@@ -55,25 +62,9 @@ public class BaselineObjectWindow extends JPanel
 
     private void initialize()
     {
-
-        // set up the main frame of the application
-    	
-    	
-        this.setBounds(100, 100, 1242, 758);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    	this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-
-
         // create the panel that will hold our charts
-        _panel = new JPanel();
-        _panel.add(addHeader());
-
-        
-
-        this.getContentPane().add(_panel);
-        
-        _panel.setVisible(true);
+        add(addHeader());        
+        setVisible(true);
         
         scrollPane_1 = new JScrollPane();
         scrollPane_1.setBounds(10, 144, 1172, 484);
@@ -92,19 +83,19 @@ public class BaselineObjectWindow extends JPanel
         	});
 
         btnAdd.setBounds(21, 76, 89, 23);
-        _panel.add(btnAdd);
+        add(btnAdd);
         
         JLabel lblAddNewCharacteristic = new JLabel("Add New Characteristic ");
         lblAddNewCharacteristic.setBounds(122, 80, 190, 14);
-        _panel.add(lblAddNewCharacteristic);
+        add(lblAddNewCharacteristic);
         
         JLabel lblBaselineObjectName = new JLabel("Name of New Baseline Object");
         lblBaselineObjectName.setBounds(334, 76, 208, 14);
-        _panel.add(lblBaselineObjectName);
+        add(lblBaselineObjectName);
         
         txBaselineObjectName = new JTextField();
         txBaselineObjectName.setBounds(552, 73, 156, 20);
-        _panel.add(txBaselineObjectName);
+        add(txBaselineObjectName);
         txBaselineObjectName.setColumns(10);
         
         
@@ -114,31 +105,31 @@ public class BaselineObjectWindow extends JPanel
         	this.saveObject();
         });
         btnSave.setBounds(619, 656, 89, 23);
-        _panel.add(btnSave);
+        add(btnSave);
         
         
         //Back Button
         btnBack = new JButton("Back");
         btnBack.addActionListener(e ->{
-        	this.closeWindow();
+        	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
         });
         btnBack.setBounds(492, 656, 89, 23);
-        _panel.add(btnBack);
+        add(btnBack);
         
         JButton btnDeleteBaselineObject = new JButton("Delete Baseline Object");
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
         });
         btnDeleteBaselineObject.setBounds(297, 656, 172, 23);
-        _panel.add(btnDeleteBaselineObject);
+        add(btnDeleteBaselineObject);
         
         btnDelete = new JButton("Delete");
         btnDelete.setBounds(21, 110, 89, 23);
-        _panel.add(btnDelete);
+        add(btnDelete);
         
         JLabel lblDeleteMarkedCharacteristic = new JLabel("Delete Marked Characteristic");
         lblDeleteMarkedCharacteristic.setBounds(122, 114, 190, 14);
-        _panel.add(lblDeleteMarkedCharacteristic);
+        add(lblDeleteMarkedCharacteristic);
         
         btnDelete.addActionListener(e->{
         	deletePanel();
@@ -197,18 +188,14 @@ public class BaselineObjectWindow extends JPanel
 		
 		
 	}
-
-	
-	private void closeWindow() {
-		setVisible(false);
-		dispose();
-	}
-	
+    
+    public ObjectType getObject()
+    {
+    	return _baseObj;
+    }
 	
 	private void saveObject() {
 		
-		GenericComparisonManager manager = new GenericComparisonManager();
-
 		try {
 
 			// Clear out characteristics
@@ -229,11 +216,8 @@ public class BaselineObjectWindow extends JPanel
 				}
 
 			}
-
-			manager.addObjectType(_baseObj);
-			manager.saveData();
-
-			JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!", 1);
+			
+			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
 
 		} catch (Exception e) {
 			// TODO error handling

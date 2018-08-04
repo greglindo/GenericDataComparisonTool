@@ -4,15 +4,15 @@ import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.function.Consumer;
 
 import javax.swing.*;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
 import GenericDataComparison.UI.EditOrCompareExistingObject;
 import GenericDataComparison.UI.OutputPane;
-import GenericDataComparison.UI.UIObject;
 
-public class Main implements ActionListener
+public class Main
 {
 	private JFrame frame;
 	private JPanel cardPanel;
@@ -51,7 +51,7 @@ public class Main implements ActionListener
 		initialize();
 		manager = new GenericComparisonManager();
 		// SET STUFF VISIBLE HERE FOR DEVELOPMENT
-		cardLayout.show(cardPanel, "outputWin");
+		cardLayout.show(cardPanel, "baselineWin");
 		// --------------------------------------
 	}
 
@@ -60,6 +60,10 @@ public class Main implements ActionListener
 	 */
 	private void initialize() 
 	{
+		Consumer<Caller> consumer = (arg) -> {
+            actionPerformed(arg);
+        };
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1280, 1024);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,21 +72,22 @@ public class Main implements ActionListener
 		cardPanel = new JPanel(cardLayout);
 		frame.add(cardPanel);
 		
-		oPane = new OutputPane(this);
+		oPane = new OutputPane(consumer);
 		cardPanel.add(oPane, "outputWin");
 		
-		boWin = new BaselineObjectWindow(this);
+		boWin = new BaselineObjectWindow(consumer);
 		cardPanel.add(boWin, "baselineWin");
 		
-		cwoWin = new CompareWithObject(this);
-		cardPanel.add(cwoWin, "compareWin");
+		//cwoWin = new CompareWithObject(consumer);
+		//cardPanel.add(cwoWin, "compareWin");
 		
-		eocWin = new EditOrCompareExistingObject(this);
+		eocWin = new EditOrCompareExistingObject(consumer);
 		cardPanel.add(eocWin, "editWin");
 	}
 	
-	public void actionPerformed(ActionEvent ae)
+	public void actionPerformed(Caller caller)
 	{
-		// switch on which button was clicked
+		System.out.println("Back clicked from main");
+		JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!", 1);
 	}
 }
