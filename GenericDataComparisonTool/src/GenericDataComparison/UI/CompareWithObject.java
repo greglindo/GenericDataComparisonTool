@@ -128,18 +128,4 @@ public class CompareWithObject extends JPanel
 	}
 	
 	
-	public void TestUi() {
-	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
-
-	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
-	 
-	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	 
-	    newCharacteristics.add(characteristic1);
-	 
-	    newCharacteristics.add(characteristic2);
-	    _baseObj = new ObjectType("test",newCharacteristics);
-	 
-		
-	}
 }
