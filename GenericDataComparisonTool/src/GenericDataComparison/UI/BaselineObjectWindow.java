@@ -1,12 +1,10 @@
 package GenericDataComparison.UI;
 
-
 import javax.swing.*;
-
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.GenericComparisonManager;
+import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -17,17 +15,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class BaselineObjectWindow extends JFrame{
-
-    /**
-	 * 
-	 */
+public class BaselineObjectWindow extends JPanel
+{
 	private static final long serialVersionUID = 1L;
-    private JPanel _panel;
     private JLabel _header;
-    private GenericDataComparison.UI.WindowType _windowType;
     private ObjectType _baseObj;
-	private JButton btnAdd;
+    private WindowType _windowType;
+    private JButton btnAdd;
 	private JPanel _subPanel;
 	private JTextField txBaselineObjectName;
 	private JButton btnSave;
@@ -36,22 +30,18 @@ public class BaselineObjectWindow extends JFrame{
 	private JButton btnDelete;
 
 
-
-    public BaselineObjectWindow()
+    public BaselineObjectWindow(Main mainWin)
     {
-    	_baseObj = new ObjectType();
+    	new ObjectType();
         _windowType = WindowType.CREATE;
         initialize();
         this.addCharPanel();
-       
     }
 
-
-
-    public BaselineObjectWindow( ObjectType BaselineObject) throws HeadlessException {
+    public BaselineObjectWindow(Main mainWin, ObjectType BaselineObject) throws HeadlessException 
+    {
 		super();
 		this._windowType = WindowType.EDIT;
-		this._baseObj = BaselineObject;
 		this.initialize();
 		this.bind();
 		this.addCharPanel(_baseObj);
@@ -63,13 +53,9 @@ public class BaselineObjectWindow extends JFrame{
     	this.txBaselineObjectName.setText(_baseObj.getName());
     }
 
-
-
-	/**
-     * Initialize the contents of the frame.
-     */
     private void initialize()
     {
+
         // set up the main frame of the application
     	
     	
@@ -91,13 +77,12 @@ public class BaselineObjectWindow extends JFrame{
         
         scrollPane_1 = new JScrollPane();
         scrollPane_1.setBounds(10, 144, 1172, 484);
-        _panel.add(scrollPane_1);
+        add(scrollPane_1);
         
         _subPanel = new JPanel();
         scrollPane_1.setViewportView(_subPanel);
         GridLayout gl = new GridLayout(0, 1, 0, 0);
         _subPanel.setLayout(gl);
-        
 
         //Mouse click event
         btnAdd = new JButton("Add");
@@ -160,9 +145,6 @@ public class BaselineObjectWindow extends JFrame{
         });
         
         //this.pack();
-
-
-
     }
     
 	private void deletePanel() {
@@ -176,39 +158,36 @@ public class BaselineObjectWindow extends JFrame{
 		
 	}
 
-	//Adds header and specifies if the user is adding a new baseline object or modifying
-    private JLabel addHeader(){
+    //Adds header and specifies if the user is adding a new baseline object or modifying
+    private JLabel addHeader()
+    {
         String headerText = "Add New Baseline Object";
         if(_windowType == WindowType.EDIT){
             headerText.replace("Add New", "Modify");
         }
-        _panel.setLayout(null);
+        setLayout(null);
         _header = new JLabel(headerText);
         _header.setBounds(418, 26, 309, 39);
         _header.setFont(new Font("Serif", Font.PLAIN, 30));
         
         return _header;
-
-    }
+    }    
     
-    
-	private void addCharPanel() {
+	private void addCharPanel() 
+	{
 		_subPanel.add(new CharacteristicPanel(), "span");
 		_subPanel.repaint();
 		_subPanel.revalidate();
-		
-	}
+  }
 	
-	
-	private void addCharPanel(ObjectType BaselineObject) {
-		for(Characteristic _char: BaselineObject.getCharacteristics()) {
+	private void addCharPanel(ObjectType BaselineObject)
+	{
+		for(Characteristic _char: BaselineObject.getCharacteristics()) 
+		{
 			_subPanel.add(new CharacteristicPanel(_char), "span");
 			_subPanel.repaint();
 			_subPanel.revalidate();
-			
-		}
-		
-		
+    }
 	}
 	
     private void deleteBaselineObject() {
