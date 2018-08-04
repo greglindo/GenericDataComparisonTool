@@ -35,6 +35,7 @@ public class BaselineObjectWindow extends JPanel
 	 * @wbp.parser.constructor
 	 */
 	private BaselineObjectWindow() {
+		super();
 		_manager = new GenericComparisonManager();
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
@@ -43,9 +44,19 @@ public class BaselineObjectWindow extends JPanel
 		
 	}
 	//Create a new object
+    public BaselineObjectWindow(Main mainWin)
+    {
+    	super();
+    	_manager = new GenericComparisonManager();
+    	_baseObj = new ObjectType();
+        _windowType = WindowType.CREATE;
+        initialize();
+        //this.addCharPanel();
+       
+    }
     public BaselineObjectWindow(GenericComparisonManager Manager)
     {
-    	
+    	super();
     	_manager = Manager;
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
@@ -77,7 +88,8 @@ public class BaselineObjectWindow extends JPanel
 	}
     
     
-    private void bind() {
+
+	private void bind() {
     	this.txBaselineObjectName.setText(_baseObj.getName());
     }
 
@@ -88,20 +100,21 @@ public class BaselineObjectWindow extends JPanel
     	
     	
         this.setBounds(100, 100, 1242, 758);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     	this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 
 
         // create the panel that will hold our charts
-        _panel = new JPanel();
+        //_panel = new JPanel();
         
 
         
 
-        this.getContentPane().add(_panel);
+        //this.getContentPane().add(_panel);
         
-        _panel.setVisible(true);
+    	//this.setLayout(getLayout());
+        this.setVisible(true);
         
         scrollPane_1 = new JScrollPane();
         scrollPane_1.setBounds(10, 144, 1172, 484);
@@ -120,19 +133,19 @@ public class BaselineObjectWindow extends JPanel
         	});
 
         btnAdd.setBounds(21, 76, 89, 23);
-        _panel.add(btnAdd);
+        this.add(btnAdd);
         
         JLabel lblAddNewCharacteristic = new JLabel("Add New Characteristic ");
         lblAddNewCharacteristic.setBounds(122, 80, 190, 14);
-        _panel.add(lblAddNewCharacteristic);
+        this.add(lblAddNewCharacteristic);
         
         JLabel lblBaselineObjectName = new JLabel("Name of New Baseline Object");
         lblBaselineObjectName.setBounds(411, 72, 172, 20);
-        _panel.add(lblBaselineObjectName);
+        this.add(lblBaselineObjectName);
         
         txBaselineObjectName = new JTextField();
         txBaselineObjectName.setBounds(615, 72, 156, 20);
-        _panel.add(txBaselineObjectName);
+        this.add(txBaselineObjectName);
         txBaselineObjectName.setColumns(10);
         
         
@@ -142,7 +155,7 @@ public class BaselineObjectWindow extends JPanel
         	this.saveObject();
         });
         btnSave.setBounds(619, 656, 89, 23);
-        _panel.add(btnSave);
+        this.add(btnSave);
         
         
         //Back Button
@@ -151,25 +164,25 @@ public class BaselineObjectWindow extends JPanel
         	this.closeWindow();
         });
         btnBack.setBounds(492, 656, 89, 23);
-        _panel.add(btnBack);
+        this.add(btnBack);
         
         btnDeleteBaselineObject = new JButton("Delete Baseline Object");
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
         });
         btnDeleteBaselineObject.setBounds(297, 656, 172, 23);
-        _panel.add(btnDeleteBaselineObject);
+        this.add(btnDeleteBaselineObject);
         btnDeleteBaselineObject.setVisible(false);
         
-        _panel.add(addHeader());
+        this.add(addHeader());
         
         btnDelete = new JButton("Delete");
         btnDelete.setBounds(21, 110, 89, 23);
-        _panel.add(btnDelete);
+        this.add(btnDelete);
         
         JLabel lblDeleteMarkedCharacteristic = new JLabel("Delete Marked Characteristic");
         lblDeleteMarkedCharacteristic.setBounds(122, 114, 190, 14);
-        _panel.add(lblDeleteMarkedCharacteristic);
+        this.add(lblDeleteMarkedCharacteristic);
         
         btnDelete.addActionListener(e->{
         	deletePanel();
@@ -275,7 +288,7 @@ public class BaselineObjectWindow extends JPanel
 	//Close form
 	private void closeWindow() {
 		setVisible(false);
-		dispose();
+		//dispose();
 	}
 	
 
