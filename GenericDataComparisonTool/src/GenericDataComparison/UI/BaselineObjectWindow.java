@@ -20,7 +20,6 @@ public class BaselineObjectWindow extends JPanel
     {
     	new ObjectType();
         _windowType = WindowType.CREATE;
-        setVisible(false);
         initialize();       
     }
 

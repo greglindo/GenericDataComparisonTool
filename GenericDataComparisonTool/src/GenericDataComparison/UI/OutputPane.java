@@ -38,9 +38,9 @@ public class OutputPane extends JScrollPane
 		LC lc = new LC();
 		lc.gridGapX("20").gridGapY("40").wrapAfter(4);
 		ml.setLayoutConstraints(lc);
-		outputPanel.setLayout(ml);		
+		outputPanel.setLayout(ml);	
 		add(outputPanel);
-		setVisible(false);
+		setVisible(true);
 	}
 	
 	public void Reset()
