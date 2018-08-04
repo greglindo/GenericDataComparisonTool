@@ -1,19 +1,23 @@
 package GenericDataComparison.UI;
 
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.HeadlessException;
+import java.util.function.Consumer;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+
+import GenericDataComparison.Caller;
+import GenericDataComparison.Caller.UIType;
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Characteristic;
-import GenericDataComparison.GenericComparisonManager;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.UUID;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class BaselineObjectWindow extends JPanel
 {
@@ -30,6 +34,7 @@ public class BaselineObjectWindow extends JPanel
 	private JButton btnDelete;
 	private GenericComparisonManager _manager;
 	private JButton btnDeleteBaselineObject;
+  private Consumer<Caller> listener;
 
 	/**
 	 * @wbp.parser.constructor
@@ -43,48 +48,26 @@ public class BaselineObjectWindow extends JPanel
         //this.addCharPanel();
 		
 	}
+  
 	//Create a new object
-    public BaselineObjectWindow(Main mainWin)
+    public BaselineObjectWindow(Consumer<Caller> lstn)
     {
     	super();
     	_manager = new GenericComparisonManager();
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
-        initialize();
-        //this.addCharPanel();
-       
-    }
-    public BaselineObjectWindow(GenericComparisonManager Manager)
-    {
-    	super();
-    	_manager = Manager;
-    	_baseObj = new ObjectType();
-        _windowType = WindowType.CREATE;
-        initialize();
-        //this.addCharPanel();
-       
+        listener = lstn;
+        initialize();       
     }
 
-
-    //Edit existing object
-    public BaselineObjectWindow(GenericComparisonManager Manager, ObjectType BaselineObject) throws HeadlessException {
-		super();
-		_manager = Manager;
-		this._windowType = WindowType.EDIT;
-		this.initialize();
-		//this.bind();
-		//this.addCharPanel(_baseObj);
-		
-	}
   //Edit existing object
-    public BaselineObjectWindow(GenericComparisonManager Manager, String BaselineObjectName) throws HeadlessException {
+    public BaselineObjectWindow(Consumer<Caller> lstn, String BaselineObjectName) throws HeadlessException {
 		super();
 		_manager = Manager;
 		this._windowType = WindowType.EDIT;
 		this._baseObj = _manager.getObjectTypeByName(BaselineObjectName);
+    listener = lstn;
 		this.initialize();
-		//this.bind();
-		//this.addCharPanel(_baseObj);
 	}
     
     
@@ -157,14 +140,14 @@ public class BaselineObjectWindow extends JPanel
         btnSave.setBounds(619, 656, 89, 23);
         this.add(btnSave);
         
-        
         //Back Button
         btnBack = new JButton("Back");
         btnBack.addActionListener(e ->{
-        	this.closeWindow();
+        	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
         });
         btnBack.setBounds(492, 656, 89, 23);
         this.add(btnBack);
+        add(btnBack);
         
         btnDeleteBaselineObject = new JButton("Delete Baseline Object");
         btnDeleteBaselineObject.addActionListener(e-> {
@@ -259,7 +242,6 @@ public class BaselineObjectWindow extends JPanel
 		
 	}
     
-    
     //Clear Form all all information
     private void clearForm() {
     	_baseObj = new ObjectType();
@@ -279,19 +261,13 @@ public class BaselineObjectWindow extends JPanel
     private void deleteObject() {
 		_baseObj.deleteCharacteristics();
 		_manager.deleteObjectTypeByName(_baseObj.getName());
-		_manager.saveData();
-		
-		
-    	
+		_manager.saveData();    	
     }
-
-	//Close form
-	private void closeWindow() {
-		setVisible(false);
-		//dispose();
-	}
 	
-
+    public ObjectType getObject()
+    {
+    	return _baseObj;
+    }
 	
 	//Save object to JSON file
 	private void saveObject() {
@@ -300,11 +276,6 @@ public class BaselineObjectWindow extends JPanel
 			return;
 		}
 		
-		if(_manager.getObjectTypeByName(_baseObj.getName()) != null) {
-			this.deleteObject();
-		}
-			
-
 		try {
 
 			// Clear out characteristics
@@ -327,14 +298,8 @@ public class BaselineObjectWindow extends JPanel
 				}
 
 			}
-
-			_manager.addObjectType(_baseObj);
-			_manager.saveData();
-			this.clearForm();
-
-			JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!", 1);
 			
-			this.closeWindow();
+			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
 
 		} catch (Exception e) {
 			// TODO error handling

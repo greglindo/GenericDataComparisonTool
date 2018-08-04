@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -16,8 +17,10 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 
+import GenericDataComparison.Caller;
+import GenericDataComparison.Caller.UIType;
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.GenericComparisonManager;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
 
 public class EditOrCompareExistingObject extends JPanel {
@@ -29,18 +32,12 @@ public class EditOrCompareExistingObject extends JPanel {
 	private ArrayList<ObjectType> objectTypes;
 	private GenericComparisonManager g;
 	private JPanel panel;
-	private Main mainWin;	
 	private JScrollPane scrollPane;
-	private GenericComparisonManager _manager;
+	private Consumer<Caller> listener;
 	
-	protected Main getMain() {
-		return this.mainWin;
-	}
-	
-	public EditOrCompareExistingObject(Main mainWin, GenericComparisonManager Manager) {
+	public EditOrCompareExistingObject(Consumer<Caller> lstn) {
 		
-		this.mainWin = mainWin;
-		_manager = Manager;
+		listener = lstn;
 					
 		g = new GenericComparisonManager();
 		g.loadData();

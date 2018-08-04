@@ -3,6 +3,8 @@ package GenericDataComparison.UI;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.function.Consumer;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
@@ -18,9 +20,11 @@ import org.jfree.chart.renderer.category.BoxAndWhiskerRenderer;
 import org.jfree.data.statistics.BoxAndWhiskerItem;
 import org.jfree.data.statistics.DefaultBoxAndWhiskerCategoryDataset;
 import org.jfree.ui.TextAnchor;
+import GenericDataComparison.Caller;
+import GenericDataComparison.Caller.UIType;
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.ComparisonCharacteristic;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import net.miginfocom.layout.LC;
@@ -30,8 +34,9 @@ public class OutputPane extends JScrollPane
 {
 	private static final long serialVersionUID = 1L;
 	private JPanel outputPanel;
+	private Consumer<Caller> listener;
 	
-	public OutputPane(Main mainWin) 
+	public OutputPane(Consumer<Caller> lstn) 
 	{
 		outputPanel = new JPanel();
 		MigLayout ml = new MigLayout("", "[300!]", "[400!]");
@@ -41,6 +46,7 @@ public class OutputPane extends JScrollPane
 		outputPanel.setLayout(ml);	
 		add(outputPanel);
 		setVisible(true);
+		listener = lstn;
 	}
 	
 	public void Reset()
