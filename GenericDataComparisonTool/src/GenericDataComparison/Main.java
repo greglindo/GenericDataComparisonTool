@@ -1,19 +1,27 @@
 package GenericDataComparison;
 
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 import GenericDataComparison.UI.BaselineObjectWindow;
+import GenericDataComparison.UI.CompareWithObject;
+import GenericDataComparison.UI.EditOrCompareExistingObject;
 import GenericDataComparison.UI.OutputPane;
+import GenericDataComparison.UI.UIObject;
 
 public class Main implements ActionListener
 {
 	private JFrame frame;
+	private JPanel cardPanel;
+	private CardLayout cardLayout;
 	private GenericComparisonManager manager;
-	private static OutputPane oPane;
-	private static BaselineObjectWindow boWin;
+	private OutputPane oPane;
+	private BaselineObjectWindow boWin;
+	private CompareWithObject cwoWin;
+	private EditOrCompareExistingObject eocWin;
 
 	/**
 	 * Launch the application.
@@ -28,10 +36,6 @@ public class Main implements ActionListener
 				{
 					Main window = new Main();
 					window.frame.setVisible(true);
-					// SET STUFF VISIBLE HERE FOR DEVELOPMENT
-					boWin.setVisible(false);
-					oPane.setVisible(false);
-					// --------------------------------------
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -46,6 +50,9 @@ public class Main implements ActionListener
 	{
 		initialize();
 		manager = new GenericComparisonManager();
+		// SET STUFF VISIBLE HERE FOR DEVELOPMENT
+		cardLayout.show(cardPanel, "outputWin");
+		// --------------------------------------
 	}
 
 	/**
@@ -57,11 +64,21 @@ public class Main implements ActionListener
 		frame.setBounds(100, 100, 1280, 1024);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		cardLayout = new CardLayout();
+		cardPanel = new JPanel(cardLayout);
+		frame.add(cardPanel);
+		
 		oPane = new OutputPane(this);
-		frame.add(oPane);
+		cardPanel.add(oPane, "outputWin");
 		
 		boWin = new BaselineObjectWindow(this);
-		frame.add(boWin);
+		cardPanel.add(boWin, "baselineWin");
+		
+		cwoWin = new CompareWithObject(this);
+		cardPanel.add(cwoWin, "compareWin");
+		
+		eocWin = new EditOrCompareExistingObject(this);
+		cardPanel.add(eocWin, "editWin");
 	}
 	
 	public void actionPerformed(ActionEvent ae)
