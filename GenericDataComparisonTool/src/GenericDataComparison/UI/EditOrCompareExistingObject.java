@@ -31,14 +31,16 @@ public class EditOrCompareExistingObject extends JPanel {
 	private JPanel panel;
 	private Main mainWin;	
 	private JScrollPane scrollPane;
+	private GenericComparisonManager _manager;
 	
 	protected Main getMain() {
 		return this.mainWin;
 	}
 	
-	public EditOrCompareExistingObject(Main mainWin) {
+	public EditOrCompareExistingObject(Main mainWin, GenericComparisonManager Manager) {
 		
 		this.mainWin = mainWin;
+		_manager = Manager;
 					
 		g = new GenericComparisonManager();
 		g.loadData();
@@ -68,7 +70,7 @@ public class EditOrCompareExistingObject extends JPanel {
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		for(ObjectType o : objectTypes) {
+		for(ObjectType o : _manager.getObjectTypes()) {
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new FlowLayout());
 			newJpanel.setAlignmentX(Component.LEFT_ALIGNMENT);

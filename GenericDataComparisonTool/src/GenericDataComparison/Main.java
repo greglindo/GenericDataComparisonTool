@@ -54,6 +54,10 @@ public class Main implements ActionListener
 		cardLayout.show(cardPanel, "outputWin");
 		// --------------------------------------
 	}
+	
+	public void TestUi() {
+		
+	}
 
 	/**
 	 * Initialize the contents of the frame.
@@ -63,6 +67,7 @@ public class Main implements ActionListener
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1280, 1024);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
@@ -77,7 +82,7 @@ public class Main implements ActionListener
 		cwoWin = new CompareWithObject(this);
 		cardPanel.add(cwoWin, "compareWin");
 		
-		eocWin = new EditOrCompareExistingObject(this);
+		eocWin = new EditOrCompareExistingObject(this, manager);
 		cardPanel.add(eocWin, "editWin");
 	}
 	
