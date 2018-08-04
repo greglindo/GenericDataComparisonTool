@@ -16,6 +16,7 @@ public class UserComparisonEntry {
 	static final String _userDataNameNode = "name";		
 	static final String _userCharacteristicNameNode = "characteristicName";
 	static final String _userCharacteristicValueNode = "characteristicValue";
+	static UUID objectID;
 	
 	
 	public UserComparisonEntry() {
