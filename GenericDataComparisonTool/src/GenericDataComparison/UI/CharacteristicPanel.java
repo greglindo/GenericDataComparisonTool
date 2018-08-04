@@ -93,6 +93,7 @@ public class CharacteristicPanel extends JPanel
 				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) {
 					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
 					//throw new Exception("All characteristic fields are required");
+					return false;
 				}
 			}
 		} catch (Exception e) {

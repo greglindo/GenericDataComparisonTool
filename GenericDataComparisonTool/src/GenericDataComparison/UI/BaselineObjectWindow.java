@@ -30,7 +30,7 @@ public class BaselineObjectWindow extends JPanel
 	private JTextField txBaselineObjectName;
 	private JButton btnSave;
 	private JButton btnBack;
-	private JScrollPane scrollPane_1;
+	private JScrollPane _scrollPane;
 	private JButton btnDelete;
 	private JButton btnDeleteBaselineObject;
 	private Consumer<Caller> listener;
@@ -58,8 +58,9 @@ public class BaselineObjectWindow extends JPanel
     }
 
   //Edit existing object
-    public BaselineObjectWindow(Consumer<Caller> lstn, String BaselineObjectName) throws HeadlessException {
+    public BaselineObjectWindow(Consumer<Caller> lstn, ObjectType ObjectType) throws HeadlessException {
 		super();
+		_baseObj = ObjectType;
 		this._windowType = WindowType.EDIT;
 		listener = lstn;
 		this.initialize();
@@ -78,28 +79,14 @@ public class BaselineObjectWindow extends JPanel
     	
     	
         this.setBounds(100, 100, 1242, 758);
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-    	//this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-
-
-        // create the panel that will hold our charts
-        //_panel = new JPanel();
-        
-
-        
-
-        //this.getContentPane().add(_panel);
-        
-    	//this.setLayout(getLayout());
         this.setVisible(true);
         
-        scrollPane_1 = new JScrollPane();
-        scrollPane_1.setBounds(10, 144, 1172, 484);
-        add(scrollPane_1);
+        _scrollPane = new JScrollPane();
+        _scrollPane.setBounds(10, 144, 1172, 484);
+        add(_scrollPane);
         
         _subPanel = new JPanel();
-        scrollPane_1.setViewportView(_subPanel);
+        _scrollPane.setViewportView(_subPanel);
         GridLayout gl = new GridLayout(0, 1, 0, 0);
         _subPanel.setLayout(gl);
 
@@ -306,13 +293,12 @@ public class BaselineObjectWindow extends JPanel
 		double maxScore = 100;
 		try {
 			for(Component c: _subPanel.getComponents())
-				//if(c instanceof CharacteristicPanel && c.isVisible() == false) {
 				if(c instanceof CharacteristicPanel) {
 					score += ((CharacteristicPanel) c).getScoreWeight();
 				}
 			if(Math.abs(maxScore) != Math.abs(score)) {
 				JOptionPane.showMessageDialog(null,"Score must add up to 100", "Error",JOptionPane.WARNING_MESSAGE);
-				//throw new Exception("Score must add up to 100");
+				return false;
 				
 			}
 			return true;
@@ -326,7 +312,6 @@ public class BaselineObjectWindow extends JPanel
 	//Check that all panels have been completely filled out
 	private boolean checkPanelsAreValid() {
 		for(Component c: _subPanel.getComponents())
-			//if(c instanceof CharacteristicPanel && c.isVisible() == false) {
 			if(c instanceof CharacteristicPanel) {
 				if(((CharacteristicPanel) c).PanelIsValid() == false){
 					return false;
