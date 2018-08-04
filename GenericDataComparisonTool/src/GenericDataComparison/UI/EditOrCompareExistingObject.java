@@ -66,7 +66,7 @@ public class EditOrCompareExistingObject extends JPanel {
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		
+		/*
 		for(ObjectType o : _manager.getObjectTypes()) {
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new FlowLayout());
@@ -99,7 +99,7 @@ public class EditOrCompareExistingObject extends JPanel {
 						
 			panel.add(newJpanel);			
 		}
-		
+		*/
 		event e = new event ();
 		backButton = new JButton("Back");
 		backButton.setBounds(265, 433, 89, 23);

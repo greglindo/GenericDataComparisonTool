@@ -2,11 +2,15 @@ package GenericDataComparison;
 
 import java.awt.CardLayout;
 import java.awt.EventQueue;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 
 import javax.swing.*;
+import GenericDataComparison.Caller;
+import GenericDataComparison.Caller.UIType;
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
 import GenericDataComparison.UI.EditOrCompareExistingObject;
@@ -92,7 +96,38 @@ public class Main
 	
 	public void actionPerformed(Caller caller)
 	{
-		System.out.println("Back clicked from main");
-		JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!", 1);
+		switch(caller.type) 
+		{
+		case BaselineObjectWindow:
+			switch(caller.function)
+			{
+			case Back:
+				//cardLayout.show(cardPanel, "MainWin");
+				break;
+				
+			case Save:
+				ObjectType oType = boWin.getObject();
+				manager.deleteObjectTypeByName(oType.getName());
+				manager.addObjectType(oType);
+				manager.saveData();
+				JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!",
+						JOptionPane.INFORMATION_MESSAGE);
+				//cardLayout.show(cardPanel, "MainWin");
+				break;
+				
+			default:
+				break;
+			}
+			break;
+			
+		case EditOrCompareWindow:
+			break;
+			
+		case OutputWindow:
+			break;
+			
+		default:
+			break;
+		}		
 	}
 }
