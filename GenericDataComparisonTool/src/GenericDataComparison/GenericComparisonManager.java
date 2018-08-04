@@ -1,24 +1,26 @@
 package GenericDataComparison;
 
+import org.jfree.chart.ChartPanel;
 import java.util.ArrayList;
-import java.util.UUID;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class GenericComparisonManager {
 	private ArrayList<ObjectType> objectTypes;
-	private UserComparisonEntry userComparisonEntry;
+	private ArrayList<UserComparisonEntry> userComparisonEntries;
 	private ComparisonChart comparisonChart;
 	private JsonFileManager jsonFileManager;
 	
 	static final String _allDataNode = "GdcData";
-	static final String _userDataNode = "userData";
+	static final String _userEntryNode = "userEntry";
 	static final String _objectTypesNode = "objectTypes";
 	
 	public GenericComparisonManager() {
 		objectTypes = new ArrayList<ObjectType>();
-		userComparisonEntry = new UserComparisonEntry();
+		userComparisonEntries = new ArrayList<UserComparisonEntry>();
 		jsonFileManager = new JsonFileManager();
 	}
 	
@@ -26,24 +28,11 @@ public class GenericComparisonManager {
 		return objectTypes;
 	}
 	
-	public ObjectType getObjectTypeByName(String Name)
+	public ObjectType getObjectTypeByName(String name)
 	{
 		for(ObjectType item : objectTypes)
 		{
-			if(item.getName().equals(Name))
-			{
-				return item;
-			}
-		}
-		
-		return null;
-	}
-	
-	public ObjectType getObjectTypeByID(UUID id)
-	{
-		for(ObjectType item : objectTypes)
-		{
-			if(item.getId().equals(id))
+			if(item.getName().equals(name))
 			{
 				return item;
 			}
@@ -72,6 +61,8 @@ public class GenericComparisonManager {
 				return;
 			}
 		}
+		
+		return null;
 	}
 	
 	public void loadObjectTypes(JSONArray data)
@@ -93,6 +84,84 @@ public class GenericComparisonManager {
 		}
 		
 		return jsonObjectTypeList;
+	}
+	
+	public ArrayList<UserComparisonEntry> getUserComparisonEntries(){
+		return this.userComparisonEntries;
+	}
+	
+	public UserComparisonEntry getUserComparisonEntryByName(String objectTypeName, String name) {
+		
+		for(UserComparisonEntry item : this.userComparisonEntries)
+		{
+			if(item.getObjectTypeName().equals(objectTypeName) && item.getName().equals(name));
+			{
+				return item;
+			}
+		}
+		
+		return null;
+	}
+	
+	public void addUserComparisonEntry(UserComparisonEntry userEntry)
+	{
+		this.userComparisonEntries.add(userEntry);
+	}
+	
+	public void deleteUserComparisonEntries()
+	{
+		this.userComparisonEntries.clear();
+	}
+	
+	public void deleteUserComparisonEntryByName(String name)
+	{
+		for(UserComparisonEntry item : this.userComparisonEntries)
+		{
+			if(item.getName() == name)
+			{
+				userComparisonEntries.remove(item);
+				return;
+			}
+		}
+	}
+	
+	public ArrayList<ComparisonCharacteristic> generateComparisonCharacteristicsFromObjectTypeCharacteristics(String objectTypeName)
+	{
+		ArrayList<ComparisonCharacteristic> items = new ArrayList<ComparisonCharacteristic>();
+		
+		this.loadData();
+		
+		ObjectType objectType = getObjectTypeByName(objectTypeName);
+		
+		if (objectType != null) {
+			for (Characteristic characteristic: objectType.getCharacteristics()) {
+				ComparisonCharacteristic item = new ComparisonCharacteristic(characteristic.getName(), 0);
+				items.add(item);
+			}
+		}
+		
+		return items;
+	}
+	
+	public void loadUserComparisonEntries(JSONArray data)
+	{
+		for (int idx = 0 ; idx < data.size(); idx++) {
+	        JSONObject item = (JSONObject)data.get(idx);
+	        UserComparisonEntry userEntry = new UserComparisonEntry();
+	        userEntry.loadUserComparisonEntry(item);
+	        this.userComparisonEntries.add(userEntry);
+		}
+	}
+	
+	public JSONArray saveUserComparisonEntries()
+	{
+		JSONArray jsonUserComparisonEntryList = new JSONArray();
+		for(UserComparisonEntry item : this.userComparisonEntries)
+		{
+			jsonUserComparisonEntryList.add(item.saveUserComparisonEntry());
+		}
+		
+		return jsonUserComparisonEntryList;
 	}
 	
 	public void loadData()
@@ -117,7 +186,11 @@ public class GenericComparisonManager {
 	        }
 	        
 	        // is this the user data array
-	        // TODO: same pattern as above but try to get array for user data
+	        JSONArray userData = (JSONArray)item.get(_userEntryNode);
+	        if (userData != null) {
+	        	this.deleteUserComparisonEntries();
+	        	this.loadUserComparisonEntries(userData);
+	        }
 		}
 	}
 	
@@ -130,21 +203,27 @@ public class GenericComparisonManager {
 		allData.add(jsonObjectTypes);
 		
 		// save user data
+		JSONObject jsonUserComparisonEntries = new JSONObject();
+		jsonUserComparisonEntries.put(_userEntryNode, this.saveUserComparisonEntries());
+		
+		allData.add(jsonUserComparisonEntries);
 		
 		JSONObject root = new JSONObject();
 		root.put(_allDataNode, allData);
 		jsonFileManager.saveDataToFile(root);
 	}
 	
-	public void generateOutput(ObjectType baselineData, UserComparisonEntry userData) {
-		//
+	public ChartPanel generateBoxAndWhiskerChart(ObjectType objectType, String characteristicName, double userValue, Boolean createLegend) {
+		comparisonChart = new ComparisonChart();
+		
+		return comparisonChart.getChartPanelWithComparisonData(objectType, characteristicName, userValue, createLegend);
 	}
 	
-	public UserComparisonEntry getUserComparisonEntry() {
-		return this.userComparisonEntry;
+	public ArrayList<UserComparisonEntry> getUserComparisonEntry() {
+		return this.userComparisonEntries;
 	}
 	
-	public void setUserComparisonEntry(UserComparisonEntry userComparisonEntry) {
-		this.userComparisonEntry = userComparisonEntry;
+	public void setUserComparisonEntry(ArrayList<UserComparisonEntry> userComparisonEntries) {
+		this.userComparisonEntries = userComparisonEntries;
 	}
 }

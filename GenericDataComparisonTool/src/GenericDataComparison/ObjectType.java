@@ -9,23 +9,24 @@ public class ObjectType
 {
 	private UUID id;
 	private String name;	
-	private ArrayList<Characteristic> characteristics;
+	private ArrayList<Characteristic> characteristics;		
 	
 	static final String _idNode = "id";	
 	static final String _nameNode = "name";
-	static final String _characteristicsNode = "characteristics";
+	static final String _characteristicsNode = "characteristics";	
+	
 		
 	public ObjectType()
 	{
 		this.setId(UUID.randomUUID());
-		characteristics = new ArrayList<Characteristic>();
+		characteristics = new ArrayList<Characteristic>();		
 	}
 	
 	public ObjectType(String name, ArrayList<Characteristic> characteristics)
 	{
 		this.setId(UUID.randomUUID());
 		this.setName(name);
-		this.setCharacteristics(characteristics);
+		this.setCharacteristics(characteristics);		
 	}
 	
 	public UUID getId() {
