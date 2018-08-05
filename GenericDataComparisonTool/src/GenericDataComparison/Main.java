@@ -4,16 +4,11 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import GenericDataComparison.Caller;
-import GenericDataComparison.Caller.UIType;
-import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
 import GenericDataComparison.UI.EditOrCompareExistingObject;
@@ -229,6 +224,8 @@ public class Main
 			switch(caller.function) 
 			{
 			case Compare:
+				UserComparisonEntry entry = cwoWin.getUserEntry();
+				outWin.generateOutput(entry,  manager.getObjectTypeByName(entry.getObjectTypeName()));
 				cardLayout.show(cardPanel, "outputWin");
 				break;
 			case Back:
@@ -242,7 +239,6 @@ public class Main
 				manager.saveData();
 				JOptionPane.showMessageDialog(null, "Your new user entry have been saved.", "Success!",
 						JOptionPane.INFORMATION_MESSAGE);
-				//cardLayout.show(cardPanel, "MainWin");
 				break;
 				
 			default:
@@ -255,7 +251,7 @@ public class Main
 			switch(caller.function)
 			{
 			case Back:
-				cardLayout.show(cardPanel, "startWin");
+				cardLayout.show(cardPanel, "compareWin");
 				break;
 				
 			default:
@@ -265,6 +261,8 @@ public class Main
 			
 		default:
 			break;
-		}		
+		}
+		
+		cardLayout.invalidateLayout(cardPanel);
 	}
 }

@@ -38,7 +38,6 @@ public class EditOrCompareExistingObject extends JPanel
 		listener = lstn;
 		
 		setLayout(null);
-		setVisible(true);		
 				
 		headerLabel = new JLabel ("Edit or Compare Existing Object");
 		headerLabel.setBounds(68, 11, 488, 45);
@@ -109,8 +108,8 @@ public class EditOrCompareExistingObject extends JPanel
 			panel.add(newJpanel);	
 		}		
 		
-		this.repaint();
-        this.validate();
+		//this.repaint();
+        //this.validate();
 	}
 	
 	private void handleEvent(String objName, UIFunction func)
