@@ -30,6 +30,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JScrollPane;
+import javax.swing.JList;
 
 public class CompareWithObject extends JPanel
 {		  
@@ -51,21 +52,23 @@ public class CompareWithObject extends JPanel
 	private JLabel lblNewLabel;
 	private JTextField txBaselineObjectType;
 	private Consumer<Caller> listener;
+	private ArrayList<UserComparisonEntry> _userComparisonEntries;
+	private JList<String> lstUserEntries;
 	
 	
 
 	/**
 	 * @wbp.parser.constructor
 	 */
-//	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
-//	{
-//		_windowType = WindowType.CREATE;
-//		_baseObj = BaseObject;
-//		_userEntry = new UserComparisonEntry();
-//		listener = consumer;
-//		initialize();
-//		
-//	}
+	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
+	{
+		_windowType = WindowType.CREATE;
+		_baseObj = BaseObject;
+		_userEntry = new UserComparisonEntry();
+		listener = consumer;
+		//Initialize();
+		
+	}
 	
 	public CompareWithObject(Consumer<Caller> consumer) 
 	{
@@ -88,33 +91,48 @@ public class CompareWithObject extends JPanel
 	
 	public void Initialize(ObjectType BaseObject)
 	{
-		
-		_baseObj = BaseObject;
 		_windowType = WindowType.CREATE;
+		_baseObj = BaseObject;
+		init();
+	}
+	
+	public void Initialize(ObjectType BaseObject, ArrayList<UserComparisonEntry> userComparisonEntries)
+	{
+		_windowType = WindowType.EDIT;
+		_userComparisonEntries = userComparisonEntries;
+		_baseObj = BaseObject;
+		init();
+		//lstUserEntries = new JList<String>(lstUserEntries);
+	}
+	
+	private void init()
+	{
+		
+		
 		//setLayout (new FlowLayout());
-		setVisible(true);
+
 		setLayout(null);
 		
 		
 		//setLayout (new FlowLayout());
 		headerLabel = new JLabel ("Compare Existing Object", JLabel.CENTER);
-		headerLabel.setBounds(160, 37, 379, 45);
+		headerLabel.setBounds(273, 31, 379, 45);
 		headerLabel.setFont(new Font (Font.SANS_SERIF, Font.PLAIN, 35));
 		add (headerLabel);	
 
 		promptLabel = new JLabel ("Please Enter the following Characterstics about your: ");
-		promptLabel.setBounds(101, 121, 347, 20);
+		promptLabel.setBounds(206, 179, 347, 20);
 		promptLabel.setFont(new Font (Font.SANS_SERIF, Font.ITALIC, 15));
 		add(promptLabel);
 		
 		txEntryName = new JTextField (10);
-		txEntryName.setBounds(453, 121, 86, 20);
+		txEntryName.setBounds(584, 181, 86, 20);
 		txEntryName.setHorizontalAlignment(0);
 		add (txEntryName);
 		
 		
 		backButton = new JButton ("Back");
-		backButton.setLocation(188, 412);
+		backButton.setLocation(243, 472);
 		backButton.setSize(64,23);
 		add (backButton);
 		backButton.addActionListener(e->
@@ -124,7 +142,7 @@ public class CompareWithObject extends JPanel
 		
 		
 		saveButton = new JButton ("Save");
-		saveButton.setBounds(255, 412, 64, 23);
+		saveButton.setBounds(317, 472, 64, 23);
 		add (saveButton);
 		saveButton.addActionListener(e->
 		{
@@ -132,14 +150,14 @@ public class CompareWithObject extends JPanel
 		});
 		
 		compareButton = new JButton ("View Comparison Result");
-		compareButton.setBounds(324, 412, 197, 23);
+		compareButton.setBounds(473, 472, 197, 23);
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
 			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(71, 151, 488, 250);
+		scrollPane.setBounds(202, 211, 488, 250);
 		add(scrollPane);
 		
 		panel = new JPanel();
@@ -152,12 +170,12 @@ public class CompareWithObject extends JPanel
 		panel.setLayout(gbl_panel);
 		
 		lblNewLabel = new JLabel("Baseline Object Type:");
-		lblNewLabel.setBounds(170, 96, 139, 14);
+		lblNewLabel.setBounds(301, 156, 139, 14);
 		add(lblNewLabel);
 		
 		txBaselineObjectType = new JTextField();
 		txBaselineObjectType.setEditable(false);
-		txBaselineObjectType.setBounds(304, 93, 86, 20);
+		txBaselineObjectType.setBounds(435, 153, 86, 20);
 		add(txBaselineObjectType);
 		txBaselineObjectType.setColumns(10);
 		
@@ -165,7 +183,16 @@ public class CompareWithObject extends JPanel
 		//Add in characteristic fields
 		this.addChar();
 		txBaselineObjectType.setText(_baseObj.getName());
-		 
+		
+				
+		JButton btnClear = new JButton("Clear");
+		btnClear.addActionListener(e->
+		{
+			this.clearForm();
+		});
+		btnClear.setBounds(391, 472, 64, 23);
+		add(btnClear);
+		
 	
 		
 		this.repaint();
@@ -174,6 +201,23 @@ public class CompareWithObject extends JPanel
 
 	}
 	
+
+	
+
+
+	private void clearForm() {
+	for(Component c: panel.getComponents())
+	{
+		if(c instanceof JTextField)
+		{
+			((JTextField) c).setText("");
+		}
+		this.txBaselineObjectType.setText("");
+		_userEntry.deleteComparisonCharcteristics();
+	}
+	
+}
+
 	private void addChar() 
 	{
 
@@ -237,14 +281,8 @@ public class CompareWithObject extends JPanel
 
 	}
 	
-	
-	
-	private void saveComparisonData()
+	private void aggData()
 	{
-		//Check to ensure all fields have been filled
-		if(this.validateFields() == false)  return;
-		
-		
 		//Iterate through all fields to get the name and value of each ComparisonCharacteristic
 		//Labels are the name and textfields are the value of the characteristic
 		boolean addField = false;
@@ -272,19 +310,21 @@ public class CompareWithObject extends JPanel
 		
 		_userEntry.setName(txEntryName.getText());
 		_userEntry.setObjectTypeName(_baseObj.getName());
-		listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Save));
+	}
 	
+	private void saveComparisonData()
+	{
+		//Check to ensure all fields have been filled
+		if(this.validateFields() == false)  return;
+
+		this.aggData();
+		listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Save));
 
 	}
 	
 	public UserComparisonEntry getUserEntry()
 	{
+		aggData();
 		return _userEntry;
 	}
-	
-	
-
-
-		
-
 }

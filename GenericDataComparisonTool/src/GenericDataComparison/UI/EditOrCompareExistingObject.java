@@ -38,7 +38,7 @@ public class EditOrCompareExistingObject extends JPanel
 		listener = lstn;
 		
 		setLayout(null);
-		setVisible(true);		
+		
 				
 		headerLabel = new JLabel ("Edit or Compare Existing Object");
 		headerLabel.setBounds(68, 11, 488, 45);
@@ -54,12 +54,10 @@ public class EditOrCompareExistingObject extends JPanel
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(127, 98, 357, 324);
 		add(scrollPane);	
-		scrollPane.setVisible(true);
 		
 		panel = new JPanel(new FlowLayout());
 		scrollPane.setViewportView(panel);
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		backButton = new JButton("Back");
@@ -80,7 +78,7 @@ public class EditOrCompareExistingObject extends JPanel
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(gridBagLayout);
 			newJpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-			newJpanel.setVisible(true);
+
 			
 			JButton d = new JButton("");
 			d.setToolTipText("Delete");

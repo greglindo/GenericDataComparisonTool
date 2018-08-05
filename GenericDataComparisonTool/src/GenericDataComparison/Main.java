@@ -265,6 +265,8 @@ public class Main
 			
 		default:
 			break;
-		}		
+		}	
+		frame.repaint();
+		frame.revalidate();
 	}
 }

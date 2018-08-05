@@ -66,7 +66,7 @@ public class BaselineObjectWindow extends JPanel
     	
     	
         this.setBounds(100, 100, 1242, 758);
-        this.setVisible(true);
+
         
         _scrollPane = new JScrollPane();
         _scrollPane.setBounds(10, 144, 1172, 484);

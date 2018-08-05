@@ -81,7 +81,7 @@ public class OutputPane extends JPanel
 		add(backBtn);
 		add(Box.createRigidArea(new Dimension(0,5)));
 		
-		setVisible(true);
+
 	}
 	
 	public void Reset()
