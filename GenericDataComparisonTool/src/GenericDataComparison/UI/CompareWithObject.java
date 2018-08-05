@@ -57,26 +57,40 @@ public class CompareWithObject extends JPanel
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
+//	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
+//	{
+//		_windowType = WindowType.CREATE;
+//		_baseObj = BaseObject;
+//		_userEntry = new UserComparisonEntry();
+//		listener = consumer;
+//		initialize();
+//		
+//	}
+	
+	public CompareWithObject(Consumer<Caller> consumer) 
 	{
-		_windowType = WindowType.CREATE;
-		_baseObj = BaseObject;
+		
+		
 		_userEntry = new UserComparisonEntry();
 		listener = consumer;
-		initialize();
 		
 	}
 	
-	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject, UserComparisonEntry userComparisonEntry) 
+//	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject, UserComparisonEntry userComparisonEntry) 
+//	{
+//		_windowType = WindowType.EDIT;
+//		_baseObj = BaseObject;
+//		_userEntry = userComparisonEntry;
+//		listener = consumer;
+//		initialize();
+//	}
+//	
+	
+	public void Initialize(ObjectType BaseObject)
 	{
-		_windowType = WindowType.EDIT;
+		
 		_baseObj = BaseObject;
-		_userEntry = userComparisonEntry;
-		listener = consumer;
-		initialize();
-	}
-	private void initialize()
-	{
+		_windowType = WindowType.CREATE;
 		//setLayout (new FlowLayout());
 		setVisible(true);
 		setLayout(null);
@@ -117,7 +131,7 @@ public class CompareWithObject extends JPanel
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
-			listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Compare));
+			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(71, 151, 488, 250);

@@ -7,7 +7,8 @@ public class Caller
 		StartWindow,
 		BaselineObjectWindow,
 		EditOrCompareWindow,
-		OutputWindow
+		OutputWindow,
+		CompareWithObject
 	}
 	
 	public enum UIFunction
