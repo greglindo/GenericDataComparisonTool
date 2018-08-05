@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
@@ -22,37 +20,22 @@ import javax.swing.border.BevelBorder;
 import GenericDataComparison.Caller;
 import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.Caller.UIFunction;
-import GenericDataComparison.GenericComparisonManager;
 import GenericDataComparison.ObjectType;
 
-public class EditOrCompareExistingObject extends JPanel {
-		
+public class EditOrCompareExistingObject extends JPanel 
+{		
 	private static final long serialVersionUID = 1L;
 	private JLabel headerLabel;
 	private JLabel promptLabel;	
 	private JButton backButton;	
-	private ArrayList<ObjectType> objectTypes;
-	private GenericComparisonManager g;
 	private JPanel panel;
-	//private Main mainWin;
 	private JScrollPane scrollPane;
-
-
 	private Consumer<Caller> listener;
+	private String selectedObjectName;
 	
-//	protected Main getMain() {
-//		return this.mainWin;
-//	}
-	
-	//public EditOrCompareExistingObject(Main mainWin) {
-	public EditOrCompareExistingObject(Consumer<Caller> lstn, ArrayList<ObjectType> BaselineObjectTypes) {
-		
-		//this.mainWin = mainWin;
-		//objectTypes = this.mainWin.getManager().getObjectTypes();
+	public EditOrCompareExistingObject(Consumer<Caller> lstn) 
+	{		
 		listener = lstn;
-					
-
-		objectTypes = BaselineObjectTypes;
 		
 		setLayout(null);
 		setVisible(true);		
@@ -79,6 +62,15 @@ public class EditOrCompareExistingObject extends JPanel {
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
+		backButton = new JButton("Back");
+		backButton.setBounds(265, 433, 89, 23);
+		add(backButton);
+		backButton.addActionListener(e->listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Back)));
+	}
+	
+	public void Initialize(ArrayList<ObjectType> objectTypes)
+	{		
+		panel.removeAll();
 		for(ObjectType o : objectTypes) 
 		{
 			GridBagLayout gridBagLayout = new GridBagLayout();
@@ -95,7 +87,7 @@ public class EditOrCompareExistingObject extends JPanel {
 			d.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
 			d.setActionCommand("Delete");
 			d.setSize(10,10);
-			d.addActionListener(new ObjectTypeListener(o, this));
+			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
 			newJpanel.add(d);			
 			
 			JButton ed = new JButton("");
@@ -103,7 +95,7 @@ public class EditOrCompareExistingObject extends JPanel {
 			ed.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Modify.png")));
 			ed.setActionCommand("Edit");
 			ed.setSize(10,10);
-			ed.addActionListener(new ObjectTypeListener(o, this));
+			ed.addActionListener(e->handleEvent(o.getName(), UIFunction.Edit));
 			newJpanel.add(ed);
 
 			JButton c = new JButton(o.getName());
@@ -111,45 +103,24 @@ public class EditOrCompareExistingObject extends JPanel {
 			c.setToolTipText("Compare " + o.getName());
 			c.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/About.png")));
 			c.setSize(10,10);
-			c.addActionListener(new ObjectTypeListener(o, this));
+			c.addActionListener(e->handleEvent(o.getName(), UIFunction.Compare));
 			newJpanel.add(c);
 						
-			panel.add(newJpanel);			
-		}
-
-		event e = new event ();
-		backButton = new JButton("Back");
-		backButton.setBounds(265, 433, 89, 23);
-		add(backButton);
-		backButton.addActionListener(e);		
+			panel.add(newJpanel);	
+		}		
+		
+		this.repaint();
+        this.validate();
 	}
 	
-	public class ObjectTypeListener implements ActionListener {
-	    private ObjectType objectType;
-	    private EditOrCompareExistingObject window;
-	    
-
-	    public ObjectTypeListener(ObjectType objectType, EditOrCompareExistingObject window) {
-	        this.objectType = objectType;
-	        this.window = window;
-	    }
-	    
-	    public void actionPerformed(ActionEvent e) {	    	
-	    	// TODO: Need to change this
-	    	// IDEALLY: window.getMain().actionPerformed(e, objectType);
-	    	System.out.println("Action: " + e.getActionCommand() + ", " + objectType.getName());
-	    }
-	}
-	
-	public class event implements ActionListener 
+	private void handleEvent(String objName, UIFunction func)
 	{
-		public void actionPerformed (ActionEvent e) 
-		{
-			String command = e.getActionCommand();	        
-	        if( command.equals( "Back" ) )  
-	        {
-	        	System.out.println("Back clicked");
-		    }
-		}
+		selectedObjectName = objName;
+		listener.accept(new Caller(UIType.EditOrCompareWindow, func));
+	}
+	
+	public String getSelectedObject()
+	{
+		return selectedObjectName;
 	}
 }

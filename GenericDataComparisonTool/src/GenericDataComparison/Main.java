@@ -18,6 +18,7 @@ import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
 import GenericDataComparison.UI.EditOrCompareExistingObject;
 import GenericDataComparison.UI.OutputPane;
+import GenericDataComparison.UI.StartPanel;
 
 public class Main
 {
@@ -25,10 +26,11 @@ public class Main
 	private JPanel cardPanel;
 	private CardLayout cardLayout;
 	private GenericComparisonManager manager;
-	private OutputPane oPane;
+	private OutputPane outWin;
 	private BaselineObjectWindow boWin;
 	private CompareWithObject cwoWin;
 	private EditOrCompareExistingObject eocWin;
+	private StartPanel startWin;
 
 	/**
 	 * Launch the application.
@@ -57,11 +59,7 @@ public class Main
 	{
 		manager = new GenericComparisonManager();
 		initialize();
-		
-		
-		// SET STUFF VISIBLE HERE FOR DEVELOPMENT
-		cardLayout.show(cardPanel, "baselineWin");
-		// --------------------------------------
+		cardLayout.show(cardPanel, "startWin");
 	}
 	
 	public void TestUi() {
@@ -84,6 +82,12 @@ public class Main
 	    ObjectType obj2 = new ObjectType("test2",newCharacteristics);
 	    ObjectType obj3 = new ObjectType("test3",newCharacteristics);
 	 
+		manager.addObjectType(obj1);
+		manager.addObjectType(obj2);
+		manager.addObjectType(obj3);
+		manager.addObjectType(obj1);
+		manager.addObjectType(obj2);
+		manager.addObjectType(obj3);
 		manager.addObjectType(obj1);
 		manager.addObjectType(obj2);
 		manager.addObjectType(obj3);
@@ -111,23 +115,25 @@ public class Main
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		
-		
+				
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
 		frame.add(cardPanel);
 		
-//		oPane = new OutputPane(consumer);
-//		cardPanel.add(oPane, "outputWin");
-//		
-		boWin = new BaselineObjectWindow(consumer,manager.getObjectTypeByName("test1"));
+		startWin = new StartPanel(consumer);
+		cardPanel.add(startWin, "startWin");
+				
+		boWin = new BaselineObjectWindow(consumer);
 		cardPanel.add(boWin, "baselineWin");
 		
-//		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"));
-//		cardPanel.add(cwoWin, "compareWin");
+		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"));
+		cardPanel.add(cwoWin, "compareWin");
 		
-//		eocWin = new EditOrCompareExistingObject(consumer,manager.getObjectTypes());
-//		cardPanel.add(eocWin, "editWin");
+		eocWin = new EditOrCompareExistingObject(consumer);
+		cardPanel.add(eocWin, "editWin");
+		
+		outWin = new OutputPane(consumer);
+		cardPanel.add(outWin, "outputWin");
 
 	}
 	
@@ -135,21 +141,47 @@ public class Main
 	{
 		switch(caller.type) 
 		{
+		case StartWindow:
+			switch(caller.function)
+			{
+			case EditCompare:
+				eocWin.Initialize(manager.getObjectTypes());
+				cardLayout.show(cardPanel, "editWin");
+				break;
+				
+			case New:
+				cardLayout.show(cardPanel, "baselineWin");
+				break;
+				
+			default:
+				break;
+			}
+			break;
+		
 		case BaselineObjectWindow:
+			ObjectType oType;
 			switch(caller.function)
 			{
 			case Back:
-				//cardLayout.show(cardPanel, "MainWin");
+				boWin.clearForm();
+				cardLayout.show(cardPanel, "startWin");
 				break;
 				
 			case Save:
-				ObjectType oType = boWin.getObject();
+				oType = boWin.getObject();
 				manager.deleteObjectTypeByName(oType.getName());
 				manager.addObjectType(oType);
 				manager.saveData();
 				JOptionPane.showMessageDialog(null, "Your new baseline model has been saved.", "Success!",
 						JOptionPane.INFORMATION_MESSAGE);
-				//cardLayout.show(cardPanel, "MainWin");
+				boWin.clearForm();
+				break;
+				
+			case Delete:
+				oType = boWin.getObject();
+				manager.deleteObjectTypeByName(oType.getName());
+				manager.saveData();
+				boWin.clearForm();
 				break;
 				
 			default:
@@ -158,6 +190,28 @@ public class Main
 			break;
 			
 		case EditOrCompareWindow:
+			switch(caller.function)
+			{
+			case Back:
+				cardLayout.show(cardPanel, "startWin");
+				break;
+				
+			case Delete:
+				manager.deleteObjectTypeByName(eocWin.getSelectedObject());
+				eocWin.Initialize(manager.getObjectTypes());
+				break;
+				
+			case Edit:
+				boWin.setObject(manager.getObjectTypeByName(eocWin.getSelectedObject()));
+				cardLayout.show(cardPanel, "baselineWin");
+				break;
+				
+			case Compare:
+				break;
+				
+			default:
+				break;
+			}
 			break;
 			
 		case OutputWindow:
