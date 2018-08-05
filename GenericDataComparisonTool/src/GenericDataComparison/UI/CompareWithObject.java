@@ -57,26 +57,40 @@ public class CompareWithObject extends JPanel
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
+//	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject) 
+//	{
+//		_windowType = WindowType.CREATE;
+//		_baseObj = BaseObject;
+//		_userEntry = new UserComparisonEntry();
+//		listener = consumer;
+//		initialize();
+//		
+//	}
+	
+	public CompareWithObject(Consumer<Caller> consumer) 
 	{
-		_windowType = WindowType.CREATE;
-		_baseObj = BaseObject;
+		
+		
 		_userEntry = new UserComparisonEntry();
 		listener = consumer;
-		initialize();
 		
 	}
 	
-	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject, UserComparisonEntry userComparisonEntry) 
+//	public CompareWithObject(Consumer<Caller> consumer, ObjectType BaseObject, UserComparisonEntry userComparisonEntry) 
+//	{
+//		_windowType = WindowType.EDIT;
+//		_baseObj = BaseObject;
+//		_userEntry = userComparisonEntry;
+//		listener = consumer;
+//		initialize();
+//	}
+//	
+	
+	public void Initialize(ObjectType BaseObject)
 	{
-		_windowType = WindowType.EDIT;
+		
 		_baseObj = BaseObject;
-		_userEntry = userComparisonEntry;
-		listener = consumer;
-		initialize();
-	}
-	private void initialize()
-	{
+		_windowType = WindowType.CREATE;
 		//setLayout (new FlowLayout());
 		setVisible(true);
 		setLayout(null);
@@ -103,6 +117,11 @@ public class CompareWithObject extends JPanel
 		backButton.setLocation(188, 412);
 		backButton.setSize(64,23);
 		add (backButton);
+		backButton.addActionListener(e->
+		{
+			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Back));
+		});
+		
 		
 		saveButton = new JButton ("Save");
 		saveButton.setBounds(255, 412, 64, 23);
@@ -117,7 +136,7 @@ public class CompareWithObject extends JPanel
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
-			listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Compare));
+			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(71, 151, 488, 250);
@@ -147,10 +166,7 @@ public class CompareWithObject extends JPanel
 		this.addChar();
 		txBaselineObjectType.setText(_baseObj.getName());
 		 
-		event e = new event ();	
-		saveButton.addActionListener(e);
-		backButton.addActionListener(e);
-		compareButton.addActionListener(e);		
+	
 		
 		this.repaint();
 		this.revalidate();
@@ -256,7 +272,7 @@ public class CompareWithObject extends JPanel
 		
 		_userEntry.setName(txEntryName.getText());
 		_userEntry.setObjectTypeName(_baseObj.getName());
-		listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Save));
+		listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Save));
 	
 
 	}
@@ -270,23 +286,5 @@ public class CompareWithObject extends JPanel
 
 
 		
-	public class event implements ActionListener 
-	{
-		public void actionPerformed (ActionEvent e) 
-		{
-			String command = e.getActionCommand();	        
-	        if  (command.equals( "Save" )) 
-	        {
-	        	//call save stuff
-	        }
-	        else if( command.equals( "Back" ) )  
-	        {
-	        	//EditorCompareExistingObject Object = new EditorCompareExistingObject(); 
-		    } 
-		    else if( command.equals( "View Comparison Result" ) )  
-		    {
-		    	//ComparisonResult Object = new ComparisonResult();  
-		    }
-		}
-	}
+
 }

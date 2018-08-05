@@ -128,7 +128,7 @@ public class Main
 		boWin = new BaselineObjectWindow(consumer);
 		cardPanel.add(boWin, "baselineWin");
 		
-		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"));
+		cwoWin = new CompareWithObject(consumer);
 		cardPanel.add(cwoWin, "compareWin");
 		
 		eocWin = new EditOrCompareExistingObject(consumer);
@@ -191,14 +191,48 @@ public class Main
 			}
 			break;
 			
-		case EditOrCompareWindow:
+		 case EditOrCompareWindow:
+			 
+		      switch(caller.function)
+		 
+		      {
+		      case Back:
+		        cardLayout.show(cardPanel, "startWin");
+		 
+		        break;		 		 
+		      case Delete:		 
+		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());		 
+		        eocWin.Initialize(manager.getObjectTypes());		 
+		        break;
+		        
+		 
+		      case Edit:		 
+		        boWin.setObject(manager.getObjectTypeByName(eocWin.getSelectedObject()));		 
+		        cardLayout.show(cardPanel, "baselineWin");
+		 
+		        break; 
+		 
+		      case Compare:		 
+		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()));
+		    	  cardLayout.show(cardPanel,"compareWin");
+		        break;
+
+		 
+		      default:
+		 
+		        break;
+		 
+		      }
+		 
+			break;
+		case CompareWithObject:
 			switch(caller.function) 
 			{
 			case Compare:
 				cardLayout.show(cardPanel, "outputWin");
 				break;
 			case Back:
-				cardLayout.show(cardPanel, "MainWin");
+				cardLayout.show(cardPanel, "editWin");
 				break;
 				
 			case Save:
