@@ -2,6 +2,7 @@ package GenericDataComparison.UI;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
@@ -103,7 +104,7 @@ public class CompareWithObject extends JPanel
 		
 		//setLayout (new FlowLayout());
 
-		_baseObj = BaseObject;
+
 		_windowType = WindowType.CREATE;
 		setLayout(null);
 		
@@ -321,6 +322,6 @@ public class CompareWithObject extends JPanel
 		aggData();
 		return _userEntry;
 	}
-	}		
+		
 
 }
