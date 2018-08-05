@@ -3,6 +3,8 @@ package GenericDataComparison.UI;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -32,16 +34,25 @@ public class EditOrCompareExistingObject extends JPanel {
 	private ArrayList<ObjectType> objectTypes;
 	private GenericComparisonManager g;
 	private JPanel panel;
+	//private Main mainWin;
 	private JScrollPane scrollPane;
+
+
 	private Consumer<Caller> listener;
 	
-	public EditOrCompareExistingObject(Consumer<Caller> lstn) {
+//	protected Main getMain() {
+//		return this.mainWin;
+//	}
+	
+	//public EditOrCompareExistingObject(Main mainWin) {
+	public EditOrCompareExistingObject(Consumer<Caller> lstn, ArrayList<ObjectType> BaselineObjectTypes) {
 		
+		//this.mainWin = mainWin;
+		//objectTypes = this.mainWin.getManager().getObjectTypes();
 		listener = lstn;
 					
-		g = new GenericComparisonManager();
-		g.loadData();
-		objectTypes = g.getObjectTypes();
+
+		objectTypes = BaselineObjectTypes;
 		
 		setLayout(null);
 		setVisible(true);		
@@ -59,17 +70,23 @@ public class EditOrCompareExistingObject extends JPanel {
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(127, 98, 357, 324);
-		add(scrollPane);		
+		add(scrollPane);	
+		scrollPane.setVisible(true);
 		
 		panel = new JPanel(new FlowLayout());
 		scrollPane.setViewportView(panel);
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setVisible(true);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		/*
-		for(ObjectType o : _manager.getObjectTypes()) {
+		
+		for(ObjectType o : objectTypes) 
+		{
+			GridBagLayout gridBagLayout = new GridBagLayout();
+			gridBagLayout.columnWidths = new int[]{0, 60, 60, 69, 60};
+			GridBagConstraints c1 = new GridBagConstraints();
+			c1.weightx = 1;
 			JPanel newJpanel = new JPanel();
-			newJpanel.setLayout(new FlowLayout());
+			newJpanel.setLayout(gridBagLayout);
 			newJpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
 			newJpanel.setVisible(true);
 			
@@ -77,7 +94,7 @@ public class EditOrCompareExistingObject extends JPanel {
 			d.setToolTipText("Delete");
 			d.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
 			d.setActionCommand("Delete");
-			d.setSize(0,0);
+			d.setSize(10,10);
 			d.addActionListener(new ObjectTypeListener(o, this));
 			newJpanel.add(d);			
 			
@@ -85,7 +102,7 @@ public class EditOrCompareExistingObject extends JPanel {
 			ed.setToolTipText("Edit");
 			ed.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Modify.png")));
 			ed.setActionCommand("Edit");
-			ed.setSize(0,0);
+			ed.setSize(10,10);
 			ed.addActionListener(new ObjectTypeListener(o, this));
 			newJpanel.add(ed);
 
@@ -93,13 +110,13 @@ public class EditOrCompareExistingObject extends JPanel {
 			c.setActionCommand("Compare");
 			c.setToolTipText("Compare " + o.getName());
 			c.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/About.png")));
-			c.setSize(0,0);
+			c.setSize(10,10);
 			c.addActionListener(new ObjectTypeListener(o, this));
 			newJpanel.add(c);
 						
 			panel.add(newJpanel);			
 		}
-		*/
+
 		event e = new event ();
 		backButton = new JButton("Back");
 		backButton.setBounds(265, 433, 89, 23);
@@ -107,7 +124,7 @@ public class EditOrCompareExistingObject extends JPanel {
 		backButton.addActionListener(e);		
 	}
 	
-	private class ObjectTypeListener implements ActionListener {
+	public class ObjectTypeListener implements ActionListener {
 	    private ObjectType objectType;
 	    private EditOrCompareExistingObject window;
 	    

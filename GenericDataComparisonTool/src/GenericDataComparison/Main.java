@@ -1,11 +1,14 @@
 package GenericDataComparison;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Toolkit;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import GenericDataComparison.Caller;
@@ -52,15 +55,44 @@ public class Main
 	 */
 	public Main() 
 	{
-		initialize();
 		manager = new GenericComparisonManager();
+		initialize();
+		
+		
 		// SET STUFF VISIBLE HERE FOR DEVELOPMENT
 		cardLayout.show(cardPanel, "baselineWin");
 		// --------------------------------------
 	}
 	
 	public void TestUi() {
+	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
+
+	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
+	 
+	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+	    Characteristic characteristic3 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+	    Characteristic characteristic4 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+	 
+	    newCharacteristics.add(characteristic1);
+	 
+	    newCharacteristics.add(characteristic2);
+	    
+	    newCharacteristics.add(characteristic3);
+	    newCharacteristics.add(characteristic4);
+	    
+	    ObjectType obj1 = new ObjectType("test1",newCharacteristics);
+	    ObjectType obj2 = new ObjectType("test2",newCharacteristics);
+	    ObjectType obj3 = new ObjectType("test3",newCharacteristics);
+	 
+		manager.addObjectType(obj1);
+		manager.addObjectType(obj2);
+		manager.addObjectType(obj3);
 		
+		
+	}
+	
+	public GenericComparisonManager getManager() {
+		return manager;
 	}
 
 	/**
@@ -72,26 +104,31 @@ public class Main
             actionPerformed(arg);
         };
 		
+		TestUi();
+		
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1280, 1024);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 		
 		
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
 		frame.add(cardPanel);
 		
-		oPane = new OutputPane(consumer);
-		cardPanel.add(oPane, "outputWin");
-		
-		boWin = new BaselineObjectWindow(consumer);
+//		oPane = new OutputPane(consumer);
+//		cardPanel.add(oPane, "outputWin");
+//		
+		boWin = new BaselineObjectWindow(consumer,manager.getObjectTypeByName("test1"));
 		cardPanel.add(boWin, "baselineWin");
 		
-		//cwoWin = new CompareWithObject(consumer);
-		//cardPanel.add(cwoWin, "compareWin");
+//		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"));
+//		cardPanel.add(cwoWin, "compareWin");
 		
-		eocWin = new EditOrCompareExistingObject(consumer);
-		cardPanel.add(eocWin, "editWin");
+//		eocWin = new EditOrCompareExistingObject(consumer,manager.getObjectTypes());
+//		cardPanel.add(eocWin, "editWin");
+
 	}
 	
 	public void actionPerformed(Caller caller)
