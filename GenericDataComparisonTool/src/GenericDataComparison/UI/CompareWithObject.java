@@ -1,27 +1,18 @@
 package GenericDataComparison.UI;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GenericDataComparison.BetterValue;
 import GenericDataComparison.Caller;
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.ComparisonCharacteristic;
-import GenericDataComparison.GenericComparisonManager;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import GenericDataComparison.Caller.UIFunction;
@@ -88,11 +79,10 @@ public class CompareWithObject extends JPanel
 	
 	public void Initialize(ObjectType BaseObject)
 	{
+		removeAll();
 		
 		_baseObj = BaseObject;
 		_windowType = WindowType.CREATE;
-		//setLayout (new FlowLayout());
-		setVisible(true);
 		setLayout(null);
 		
 		
@@ -273,18 +263,11 @@ public class CompareWithObject extends JPanel
 		_userEntry.setName(txEntryName.getText());
 		_userEntry.setObjectTypeName(_baseObj.getName());
 		listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Save));
-	
-
 	}
 	
 	public UserComparisonEntry getUserEntry()
 	{
 		return _userEntry;
-	}
-	
-	
-
-
-		
+	}		
 
 }
