@@ -20,7 +20,6 @@ import GenericDataComparison.Caller;
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
-import GenericDataComparison.UI.EditOrCompareExistingObject.ObjectTypeListener;
 
 public class CompareWithObject extends JPanel
 {		  
