@@ -233,12 +233,12 @@ public class CompareWithObject extends JPanel
 		//Labels are the name and textfields are the value of the characteristic
 		boolean addField = false;
 		GridBagLayout layout = gbl_panel;
+		String field = "";
+		double value = 0;
 		for (Component comp : panel.getComponents()) {
 			addField = false;
-			
 			GridBagConstraints gbc = layout.getConstraints(comp);
-			String field = "";
-			double value = 0;
+			
 				
 			   
 			    if (gbc.gridx == LABELPOSITION  && comp instanceof JLabel) 
