@@ -2,15 +2,16 @@ package GenericDataComparison.UI;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.function.Consumer;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -30,23 +31,57 @@ import GenericDataComparison.UserComparisonEntry;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 
-public class OutputPane extends JScrollPane 
+public class OutputPane extends JPanel 
 {
 	private static final long serialVersionUID = 1L;
+	private JPanel header;
+	private JLabel scoreTxt;
+	private JScrollPane scrollPane;
 	private JPanel outputPanel;
 	private Consumer<Caller> listener;
 	
 	public OutputPane(Consumer<Caller> lstn) 
 	{
+		listener = lstn;
+		
+		BoxLayout boxLayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
+		setLayout(boxLayout1);
+		
+		header = new JPanel();
+		BoxLayout boxLayout2 = new BoxLayout(header, BoxLayout.Y_AXIS);
+		header.setLayout(boxLayout2);
+		
+		JLabel title = new JLabel();
+		title.setText("Comparison Results");
+		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
+		header.add(title);
+		header.add(Box.createRigidArea(new Dimension(0,30)));
+		
+		scoreTxt = new JLabel();
+		scoreTxt.setText(String.format("The score for your thing is 72.4"));
+		scoreTxt.setFont(new Font("Arial", Font.PLAIN, 18));
+		header.add(scoreTxt);
+		
+		add(header);
+		add(Box.createRigidArea(new Dimension(0,15)));
+		
 		outputPanel = new JPanel();
 		MigLayout ml = new MigLayout("", "[300!]", "[400!]");
 		LC lc = new LC();
 		lc.gridGapX("20").gridGapY("40").wrapAfter(4);
 		ml.setLayoutConstraints(lc);
-		outputPanel.setLayout(ml);	
-		add(outputPanel);
+		outputPanel.setLayout(ml);
+		scrollPane = new JScrollPane(outputPanel);
+		add(scrollPane);
+		add(Box.createRigidArea(new Dimension(0,15)));
+		
+		JButton backBtn = new JButton("Back");
+		backBtn.addActionListener(e->listener.accept(new Caller(UIType.OutputWindow, UIFunction.Back)));
+		backBtn.setAlignmentX(CENTER_ALIGNMENT);
+		add(backBtn);
+		add(Box.createRigidArea(new Dimension(0,5)));
+		
 		setVisible(true);
-		listener = lstn;
 	}
 	
 	public void Reset()
@@ -61,26 +96,15 @@ public class OutputPane extends JScrollPane
 		{
 			Characteristic item = baseline.getCharacteristicByName(cc.getName());
 			score += item.calculateScore(cc.getValue());
-		}		
-		addScore(userEntry.getName(), score);		
+		}
+		scoreTxt.setText(String.format("The score for your %s is %.2f.", userEntry.getName(), score));
+		
+		outputPanel.removeAll();
 		for(ComparisonCharacteristic cc : userEntry.getComparisonCharacteristics())
 		{
 			Characteristic item = baseline.getCharacteristicByName(cc.getName());
 			addChart(item, cc.getValue());
 		}
-	}
-	
-	private void addScore(String name, double val)
-	{
-		JTextPane scorePane = new JTextPane();
-		scorePane.setEditable(false);
-		scorePane.setFont(new Font("Arial", Font.PLAIN, 20));
-		scorePane.setText(String.format("The score for your %s is %.2f.", name, val));
-		StyledDocument doc = scorePane.getStyledDocument();
-		SimpleAttributeSet center = new SimpleAttributeSet();
-		StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-		doc.setParagraphAttributes(0, doc.getLength(), center, false);
-		outputPanel.add(scorePane, "span 4");
 	}
 	
 	private void addChart(Characteristic item, double userVal)
