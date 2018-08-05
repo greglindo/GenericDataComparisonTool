@@ -80,8 +80,6 @@ public class OutputPane extends JPanel
 		backBtn.setAlignmentX(CENTER_ALIGNMENT);
 		add(backBtn);
 		add(Box.createRigidArea(new Dimension(0,5)));
-		
-
 	}
 	
 	public void Reset()

@@ -1,27 +1,18 @@
 package GenericDataComparison.UI;
 
 import java.awt.Component;
-import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.function.Consumer;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import GenericDataComparison.BetterValue;
 import GenericDataComparison.Caller;
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.ComparisonCharacteristic;
-import GenericDataComparison.GenericComparisonManager;
-import GenericDataComparison.Main;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import GenericDataComparison.Caller.UIFunction;
@@ -107,10 +98,13 @@ public class CompareWithObject extends JPanel
 	
 	private void init()
 	{
+		removeAll();
 		
 		
 		//setLayout (new FlowLayout());
 
+		_baseObj = BaseObject;
+		_windowType = WindowType.CREATE;
 		setLayout(null);
 		
 		
@@ -327,4 +321,6 @@ public class CompareWithObject extends JPanel
 		aggData();
 		return _userEntry;
 	}
+	}		
+
 }
