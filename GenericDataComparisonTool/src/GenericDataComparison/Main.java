@@ -92,6 +92,8 @@ public class Main
 		manager.addObjectType(obj2);
 		manager.addObjectType(obj3);
 		
+		manager.loadData();
+		
 		
 	}
 	
@@ -190,27 +192,28 @@ public class Main
 			break;
 			
 		case EditOrCompareWindow:
-			switch(caller.function)
+			switch(caller.function) 
 			{
-			case Back:
-				cardLayout.show(cardPanel, "startWin");
-				break;
-				
-			case Delete:
-				manager.deleteObjectTypeByName(eocWin.getSelectedObject());
-				eocWin.Initialize(manager.getObjectTypes());
-				break;
-				
-			case Edit:
-				boWin.setObject(manager.getObjectTypeByName(eocWin.getSelectedObject()));
-				cardLayout.show(cardPanel, "baselineWin");
-				break;
-				
 			case Compare:
+				cardLayout.show(cardPanel, "outputWin");
+				break;
+			case Back:
+				cardLayout.show(cardPanel, "MainWin");
+				break;
+				
+			case Save:
+				UserComparisonEntry userEntry = cwoWin.getUserEntry();
+				manager.deleteUserComparisonEntryByName((userEntry.getName()));
+				manager.addUserComparisonEntry(userEntry);
+				manager.saveData();
+				JOptionPane.showMessageDialog(null, "Your new user entry have been saved.", "Success!",
+						JOptionPane.INFORMATION_MESSAGE);
+				//cardLayout.show(cardPanel, "MainWin");
 				break;
 				
 			default:
 				break;
+			
 			}
 			break;
 			

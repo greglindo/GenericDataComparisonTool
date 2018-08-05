@@ -153,7 +153,6 @@ public class BaselineObjectWindow extends JPanel
     
 	private void deletePanel() {
 		for(Component c: _subPanel.getComponents())
-			//if(c instanceof CharacteristicPanel && c.isVisible() == false) {
 			if(((CharacteristicPanel) c).DeleteFlag()) {
 				_subPanel.remove(c);
 				this.repaint();
@@ -260,6 +259,7 @@ public class BaselineObjectWindow extends JPanel
 			}
 			
 			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
+			this.clearForm();
 
 		} catch (Exception e) {
 			// TODO error handling
