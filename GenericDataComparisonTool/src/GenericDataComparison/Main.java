@@ -113,7 +113,7 @@ public class Main
 		TestUi();
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1280, 1024);
+		frame.setBounds(100, 100, 1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
@@ -218,6 +218,15 @@ public class Main
 			break;
 			
 		case OutputWindow:
+			switch(caller.function)
+			{
+			case Back:
+				cardLayout.show(cardPanel, "startWin");
+				break;
+				
+			default:
+				break;
+			}
 			break;
 			
 		default:
