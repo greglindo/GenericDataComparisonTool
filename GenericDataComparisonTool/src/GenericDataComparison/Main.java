@@ -224,7 +224,7 @@ public class Main
 		 
 		      }
 		 
-			
+			break;
 		case CompareWithObject:
 			switch(caller.function) 
 			{
