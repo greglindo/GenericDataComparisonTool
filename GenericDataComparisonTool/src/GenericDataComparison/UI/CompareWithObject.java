@@ -26,7 +26,6 @@ import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
-import GenericDataComparison.UI.EditOrCompareExistingObject.ObjectTypeListener;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -118,7 +117,7 @@ public class CompareWithObject extends JPanel
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
-			listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Open));
+			listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(71, 151, 488, 250);

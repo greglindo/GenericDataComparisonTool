@@ -194,7 +194,7 @@ public class Main
 		case EditOrCompareWindow:
 			switch(caller.function) 
 			{
-			case Open:
+			case Compare:
 				cardLayout.show(cardPanel, "outputWin");
 				break;
 			case Back:
