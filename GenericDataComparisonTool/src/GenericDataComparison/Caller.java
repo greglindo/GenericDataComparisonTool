@@ -12,7 +12,8 @@ public class Caller
 	public enum UIFunction
 	{
 		Back,
-		Save
+		Save,
+		Open
 	}
 	
 	public UIType type;

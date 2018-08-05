@@ -150,7 +150,7 @@ public class CharacteristicPanel extends JPanel
 		setPreferredSize(new Dimension(1069, 56));
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 129, 60, 85, 60, 85, 0, 64, 55, 0};
+		gridBagLayout.columnWidths = new int[]{0, 170, 60, 85, 60, 85, 0, 64, 55, 0};
 		this.setLayout(gridBagLayout);
 		GridBagConstraints c = new GridBagConstraints();
 		c.weightx = 1;

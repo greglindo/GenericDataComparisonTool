@@ -65,11 +65,21 @@ public class UserComparisonEntry {
 		this.comparisonCharacteristics = comparisonCharacteristicsData;
 	}
 	
+	public void addComparisonCharacteristic(ComparisonCharacteristic comparisonCharacteristic) 
+	{
+		comparisonCharacteristics.add(comparisonCharacteristic);
+	}
+	
+	public void deleteComparisonCharcteristics()
+	{
+		this.comparisonCharacteristics.clear();
+	}
+	
 	public ComparisonCharacteristic getComparisonCharacteristicByName(String name)
 	{
 		for(ComparisonCharacteristic item : this.comparisonCharacteristics)
 		{
-			if(item.getName() == name)
+			if(item.getName().equals(name))
 			{
 				return item;
 			}

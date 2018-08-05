@@ -65,28 +65,30 @@ public class Main
 	}
 	
 	public void TestUi() {
-	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
-
-	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
-	 
-	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	    Characteristic characteristic3 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	    Characteristic characteristic4 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	 
-	    newCharacteristics.add(characteristic1);
-	 
-	    newCharacteristics.add(characteristic2);
-	    
-	    newCharacteristics.add(characteristic3);
-	    newCharacteristics.add(characteristic4);
-	    
-	    ObjectType obj1 = new ObjectType("test1",newCharacteristics);
-	    ObjectType obj2 = new ObjectType("test2",newCharacteristics);
-	    ObjectType obj3 = new ObjectType("test3",newCharacteristics);
-	 
-		manager.addObjectType(obj1);
-		manager.addObjectType(obj2);
-		manager.addObjectType(obj3);
+//	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
+//
+//	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
+//	 
+//	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+//	    Characteristic characteristic3 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+//	    Characteristic characteristic4 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+//	 
+//	    newCharacteristics.add(characteristic1);
+//	 
+//	    newCharacteristics.add(characteristic2);
+//	    
+//	    newCharacteristics.add(characteristic3);
+//	    newCharacteristics.add(characteristic4);
+//	    
+//	    ObjectType obj1 = new ObjectType("test1",newCharacteristics);
+//	    ObjectType obj2 = new ObjectType("test2",newCharacteristics);
+//	    ObjectType obj3 = new ObjectType("test3",newCharacteristics);
+//	 
+//		manager.addObjectType(obj1);
+//		manager.addObjectType(obj2);
+//		manager.addObjectType(obj3);
+		
+		manager.loadData();
 		
 		
 	}
@@ -120,11 +122,11 @@ public class Main
 //		oPane = new OutputPane(consumer);
 //		cardPanel.add(oPane, "outputWin");
 //		
-		boWin = new BaselineObjectWindow(consumer,manager.getObjectTypeByName("test1"));
-		cardPanel.add(boWin, "baselineWin");
+		//boWin = new BaselineObjectWindow(consumer,manager.getObjectTypeByName("test1"));
+		//cardPanel.add(boWin, "baselineWin");
 		
-//		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"));
-//		cardPanel.add(cwoWin, "compareWin");
+		cwoWin = new CompareWithObject(consumer, manager.getObjectTypeByName("test1"),manager.getUserComparisonEntryByName("test1","BCE"));
+		cardPanel.add(cwoWin, "compareWin");
 		
 //		eocWin = new EditOrCompareExistingObject(consumer,manager.getObjectTypes());
 //		cardPanel.add(eocWin, "editWin");
@@ -139,7 +141,7 @@ public class Main
 			switch(caller.function)
 			{
 			case Back:
-				//cardLayout.show(cardPanel, "MainWin");
+				cardLayout.show(cardPanel, "MainWin");
 				break;
 				
 			case Save:
@@ -158,6 +160,29 @@ public class Main
 			break;
 			
 		case EditOrCompareWindow:
+			switch(caller.function) 
+			{
+			case Open:
+				cardLayout.show(cardPanel, "outputWin");
+				break;
+			case Back:
+				cardLayout.show(cardPanel, "MainWin");
+				break;
+				
+			case Save:
+				UserComparisonEntry userEntry = cwoWin.getUserEntry();
+				manager.deleteUserComparisonEntryByName((userEntry.getName()));
+				manager.addUserComparisonEntry(userEntry);
+				manager.saveData();
+				JOptionPane.showMessageDialog(null, "Your new user entry have been saved.", "Success!",
+						JOptionPane.INFORMATION_MESSAGE);
+				//cardLayout.show(cardPanel, "MainWin");
+				break;
+				
+			default:
+				break;
+			
+			}
 			break;
 			
 		case OutputWindow:
