@@ -51,22 +51,9 @@ public class BaselineObjectWindow extends JPanel
     public BaselineObjectWindow(Consumer<Caller> lstn)
     {
     	super();
-    	_baseObj = new ObjectType();
-        _windowType = WindowType.CREATE;
         listener = lstn;
         initialize();       
-    }
-
-  //Edit existing object
-    public BaselineObjectWindow(Consumer<Caller> lstn, ObjectType ObjectType) throws HeadlessException {
-		super();
-		_baseObj = ObjectType;
-		this._windowType = WindowType.EDIT;
-		listener = lstn;
-		this.initialize();
-	}
-    
-    
+    }    
 
 	private void bind() {
     	this.txBaselineObjectName.setText(_baseObj.getName());
@@ -139,7 +126,12 @@ public class BaselineObjectWindow extends JPanel
         this.add(btnDeleteBaselineObject);
         btnDeleteBaselineObject.setVisible(false);
         
-        this.add(addHeader());
+        setLayout(null);
+        _header = new JLabel();
+        _header.setBounds(441, 22, 309, 39);
+        _header.setHorizontalAlignment(JLabel.CENTER);
+        _header.setFont(new Font("Serif", Font.PLAIN, 30));
+        this.add(_header);
         
         btnDelete = new JButton("Delete");
         btnDelete.setBounds(21, 110, 89, 23);
@@ -153,13 +145,6 @@ public class BaselineObjectWindow extends JPanel
         	deletePanel();
         });
         
-        if(this._windowType == WindowType.EDIT){
-        	this.bind();
-    		this.addCharPanel(_baseObj);
-        }else {
-        	this.addCharPanel();
-        	
-        }
         this.repaint();
         this.validate();
         
@@ -174,24 +159,7 @@ public class BaselineObjectWindow extends JPanel
 				this.validate();
 			}
 		
-	}
-
-    //Adds header and specifies if the user is adding a new baseline object or modifying
-    private JLabel addHeader()
-    {
-        String headerText = "Add New Baseline Object";
-        if(_windowType == WindowType.EDIT){
-            headerText= "Edit Baseline Object";
-            btnDeleteBaselineObject.setVisible(true);
-        }
-        setLayout(null);
-        _header = new JLabel(headerText);
-        _header.setBounds(441, 22, 309, 39);
-        _header.setHorizontalAlignment(JLabel.CENTER);
-        _header.setFont(new Font("Serif", Font.PLAIN, 30));
-        
-        return _header;
-    }    
+	}   
     
 	private void addCharPanel() 
 	{
@@ -207,7 +175,7 @@ public class BaselineObjectWindow extends JPanel
 			_subPanel.add(new CharacteristicPanel(_char), "span");
 			_subPanel.repaint();
 			_subPanel.revalidate();
-    }
+		}
 	}
 	
 	
@@ -215,16 +183,14 @@ public class BaselineObjectWindow extends JPanel
     private void deleteBaselineObject() {
 		int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this Object?","Warning!",2);
 		if(dialogResult == JOptionPane.OK_OPTION){
-			this.deleteObject();
-			this.clearForm();
-			
+			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Delete));			
 		}
 		
 		
 	}
     
     //Clear Form all all information
-    private void clearForm() {
+    public void clearForm() {
     	_baseObj = new ObjectType();
     	String baseObjName = "";
 		for(Component c: _subPanel.getComponents()) {
@@ -237,15 +203,29 @@ public class BaselineObjectWindow extends JPanel
 		this.validate();
     	
     }
-    
-    //Delete object
-    private void deleteObject() {
-		_baseObj.deleteCharacteristics(); 	
-    }
 	
     public ObjectType getObject()
     {
     	return _baseObj;
+    }
+    
+    public void setObject(ObjectType objType) 
+    {
+    	if(objType == null) 
+    	{
+    		_baseObj = new ObjectType();
+    		addCharPanel();
+            _windowType = WindowType.CREATE;
+            _header.setText("Add New Baseline Object");
+	    }
+    	else
+    	{
+    		_baseObj = objType;
+	    	addCharPanel(_baseObj);
+	    	_windowType = WindowType.EDIT;
+	    	_header.setText("Edit Baseline Object");
+	    	bind();
+    	}
     }
 	
 	//Save object to JSON file

@@ -4,6 +4,7 @@ public class Caller
 {
 	public enum UIType
 	{
+		StartWindow,
 		BaselineObjectWindow,
 		EditOrCompareWindow,
 		OutputWindow
@@ -13,7 +14,11 @@ public class Caller
 	{
 		Back,
 		Save,
-		Open
+		EditCompare,
+		New,
+		Delete,
+		Edit,
+		Compare
 	}
 	
 	public UIType type;
