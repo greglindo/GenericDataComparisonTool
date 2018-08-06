@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
@@ -184,10 +185,14 @@ public class Main
 		        setFrameSize(UIType.StartWindow);
 		        break;
  		 
-		      case Delete:		 
-		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());
-		        manager.saveData();
-		        eocWin.Initialize(manager.getObjectTypes());		 
+		      case Delete:
+		  		int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this Object?","Warning!",2);
+				if(dialogResult == JOptionPane.OK_OPTION)
+				{
+					manager.deleteObjectTypeByName(eocWin.getSelectedObject());
+			        manager.saveData();
+			        eocWin.Initialize(manager.getObjectTypes());			
+				}	
 		        break;		        
 		 
 		    case Edit:		 
