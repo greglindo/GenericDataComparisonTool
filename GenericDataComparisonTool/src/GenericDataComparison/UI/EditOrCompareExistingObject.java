@@ -79,7 +79,6 @@ public class EditOrCompareExistingObject extends JPanel
 		panel.removeAll();
 		for(ObjectType o : objectTypes) 
 		{
-			
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.X_AXIS));
 			
