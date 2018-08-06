@@ -71,6 +71,17 @@ public class CompareWithObject extends JPanel
 	/**
 	 * @wbp.parser.constructor
 	 */
+	private CompareWithObject() 
+	{
+		
+		//_baseObj = new ObjectType();
+		//_userEntry = new UserComparisonEntry();
+		//listener = consumer;
+		_userEntry = new UserComparisonEntry();
+		init();
+		
+	}
+	
 	public CompareWithObject(Consumer<Caller> consumer) 
 	{
 		
@@ -204,15 +215,27 @@ public class CompareWithObject extends JPanel
 		lstUserEntries.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				//JList lstUserEntries = (JList)evt.getSource();
-		        if (evt.getClickCount() == 2) {
-		        	addEntrySelection();
-			}
+		        //if (evt.getClickCount() == 2) {
+		        	addEntrySelection(evt);
+			//}
 			}
 		});
 		lstUserEntries.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lstUserEntries.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		lstUserEntries.setBounds(85, 210, 132, 249);
 		add(lstUserEntries);
+		
+		JButton btnDeleteEntry = new JButton("Delete Entry");
+		btnDeleteEntry.addActionListener(e->{
+			int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this User Entry?","Warning!",2);
+			if(dialogResult == JOptionPane.OK_OPTION){
+				listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Delete));
+				this.clearForm();			
+			}
+			
+		});
+		btnDeleteEntry.setBounds(94, 178, 107, 23);
+		add(btnDeleteEntry);
 		
 		_windowType = WindowType.EDIT;
 		bindList();
@@ -232,8 +255,9 @@ public class CompareWithObject extends JPanel
 		}
 	}
 	
-	private void addEntrySelection() {
+	private void addEntrySelection(MouseEvent e) {
 		_userEntry = _userComparisonEntries.get(this.lstUserEntries.getSelectedIndex());
+		//_userEntry = (this.lstUserEntries.getModel().getElementAt(lstUserEntries.locationToIndex(e.getPoint())));
 		_windowType = WindowType.EDIT;
 		init();
 	}

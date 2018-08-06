@@ -245,6 +245,11 @@ public class Main
 						JOptionPane.INFORMATION_MESSAGE);
 				break;
 				
+			case Delete:
+				UserComparisonEntry _entry = cwoWin.getUserEntry();
+				manager.deleteUserComparisonEntryByName((_entry.getName()));
+				cwoWin.UpdateUserEntries(manager.getUserComparisonEntries(manager.getObjectTypeByName(_entry.getObjectTypeName())));
+				
 			default:
 				break;
 			
