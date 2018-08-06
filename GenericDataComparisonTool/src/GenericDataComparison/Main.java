@@ -147,6 +147,7 @@ public class Main
 				break;
 				
 			case New:
+				boWin.setObject(null);
 				cardLayout.show(cardPanel, "baselineWin");
 				break;
 				
