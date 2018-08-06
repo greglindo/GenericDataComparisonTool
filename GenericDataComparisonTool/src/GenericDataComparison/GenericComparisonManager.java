@@ -86,7 +86,19 @@ public class GenericComparisonManager {
 		return jsonObjectTypeList;
 	}
 	
-	public ArrayList<UserComparisonEntry> getUserComparisonEntries(){
+	public ArrayList<UserComparisonEntry> getUserComparisonEntries(ObjectType BaseObject){
+		ArrayList<UserComparisonEntry> userCompList = new ArrayList<UserComparisonEntry>();
+		 for(UserComparisonEntry  e: userComparisonEntries)
+		 {
+			 if(e.getObjectTypeName().equals(BaseObject.getName()))
+			 {
+		 		userCompList.add(e);
+			 }
+		 }
+		 return userCompList;
+	}
+	
+	public ArrayList<UserComparisonEntry> getUserComparisonEntriesByObject(){
 		return this.userComparisonEntries;
 	}
 	

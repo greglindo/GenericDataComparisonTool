@@ -10,6 +10,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import java.awt.Insets;
 import java.awt.Dimension;
+
+
 import GenericDataComparison.BetterValue;
 import GenericDataComparison.Characteristic;
 import java.awt.Color;
@@ -17,9 +19,11 @@ import java.awt.Component;
 
 import javax.swing.ButtonGroup;
 import javax.swing.border.MatteBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 import javax.swing.JCheckBox;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
+
 
 public class CharacteristicPanel extends JPanel 
 {
@@ -27,13 +31,13 @@ public class CharacteristicPanel extends JPanel
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private final Characteristic  _char;
 	private JTextField txCharacteristicName;
-	private JTextField txMinimum;
-	private JTextField txFirstQuartile;
-	private JTextField txMedian;
-	private JTextField txThirdQuartile;
-	private JTextField txMaximum;
-	private JTextField txAvg;
-	private JTextField txWeight;
+	private JSpinner txMinimum;
+	private JSpinner txFirstQuartile;
+	private JSpinner txMedian;
+	private JSpinner txThirdQuartile;
+	private JSpinner txMaximum;
+	private JSpinner txAvg;
+	private JSpinner txWeight;
 	private JRadioButton rdHighest;
 	private JRadioButton rdLowest;
 	private JButton btnDelete;
@@ -60,13 +64,13 @@ public class CharacteristicPanel extends JPanel
 		
 		try {
 			txCharacteristicName.setText(_char.getName());
-			txMinimum.setText(_char.getMinimumValue()+"");
-			txFirstQuartile.setText(_char.getFirstQuartile()+"");
-			txMedian.setText(_char.getMedianValue()+"");
-			txThirdQuartile.setText(_char.getThirdQuartile()+"");
-			txMaximum.setText(_char.getMaximumValue()+"");
-			txAvg.setText(_char.getAverageValue()+"");
-			txWeight.setText(_char.getScoreWeightValue()+"");
+			txMinimum.setValue(_char.getMinimumValue());
+			txFirstQuartile.setValue(_char.getFirstQuartile());
+			txMedian.setValue(_char.getMedianValue());
+			txThirdQuartile.setValue(_char.getThirdQuartile());
+			txMaximum.setValue(_char.getMaximumValue());
+			txAvg.setValue(_char.getAverageValue());
+			txWeight.setValue(_char.getScoreWeightValue());
 			if(_char.getBetterValue() == BetterValue.LOWEST) {
 				this.rdHighest.setSelected(false);
 		        this.rdLowest.setSelected(true);
@@ -80,7 +84,7 @@ public class CharacteristicPanel extends JPanel
 	}
 	
 	public double getScoreWeight() {
-		return (Double.parseDouble(this.txWeight.getText()));
+		return (double) (this.txWeight.getValue());
 	}
 	
 //	private void UpdateCharacteristics() {
@@ -90,9 +94,20 @@ public class CharacteristicPanel extends JPanel
 	private boolean fieldCheck() {
 		try {
 			for(Component c: this.getComponents()) {
-				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) {
+				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) 
+				{
 					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
 					//throw new Exception("All characteristic fields are required");
+					return false;
+				}
+				if((double)txMinimum.getValue() > (double)txMaximum.getValue() || (double)txMinimum.getValue() > (double)txMedian.getValue() ) 
+				{
+					JOptionPane.showMessageDialog(null, "Minimum value is set too high.","Error",JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+				if((double)txMedian.getValue() > (double)txMaximum.getValue() || (double)txMedian.getValue() < (double)txMinimum.getValue() ) 
+				{
+					JOptionPane.showMessageDialog(null, "Median value should equal to or between the min and max","Error",JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 			}
@@ -114,14 +129,14 @@ public class CharacteristicPanel extends JPanel
 			if (this.PanelIsValid()) {
 
 				// TODO add validation that all inputs are doubles
-				_char.setAverageValue(Double.parseDouble(this.txAvg.getText()));
-				_char.setName(this.txCharacteristicName.getText());
-				_char.setMinimumValue(Double.parseDouble(this.txMinimum.getText()));
-				_char.setFirstQuartile(Double.parseDouble(this.txFirstQuartile.getText()));
-				_char.setMedianValue(Double.parseDouble(this.txMedian.getText()));
-				_char.setThirdQuartile(Double.parseDouble(this.txThirdQuartile.getText()));
-				_char.setMaximumValue(Double.parseDouble(this.txMaximum.getText()));
-				_char.setScoreWeightValue(Double.parseDouble(this.txWeight.getText()));
+				_char.setAverageValue((Double)(this.txAvg.getValue()));
+				_char.setName((this.txCharacteristicName.getText()));
+				_char.setMinimumValue((Double)(this.txMinimum.getValue()));
+				_char.setFirstQuartile((Double)(this.txFirstQuartile.getValue()));
+				_char.setMedianValue((Double)(this.txMedian.getValue()));
+				_char.setThirdQuartile((Double)(this.txThirdQuartile.getValue()));
+				_char.setMaximumValue((Double)(this.txMaximum.getValue()));
+				_char.setScoreWeightValue((Double)(this.txWeight.getValue()));
 			}
 		} catch (Exception e) {
 			// TODO exception handling
@@ -259,8 +274,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txCharacteristicName.gridy = 1;
         this.add(txCharacteristicName, gbc_txCharacteristicName);
         
-        txMinimum = new JTextField();
-        txMinimum.setColumns(10);
+        txMinimum = new JSpinner();
+        txMinimum.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txMinimum = new GridBagConstraints();
         gbc_txMinimum.fill = GridBagConstraints.HORIZONTAL;
         gbc_txMinimum.weightx = 0.5;
@@ -269,8 +284,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txMinimum.gridy = 1;
         this.add(txMinimum, gbc_txMinimum);
         
-        txFirstQuartile = new JTextField();
-        txFirstQuartile.setColumns(10);
+        txFirstQuartile = new JSpinner();
+        txFirstQuartile.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txFirstQuartile = new GridBagConstraints();
         gbc_txFirstQuartile.fill = GridBagConstraints.HORIZONTAL;
         gbc_txFirstQuartile.weightx = 0.5;
@@ -279,8 +294,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txFirstQuartile.gridy = 1;
         this.add(txFirstQuartile, gbc_txFirstQuartile);
         
-        txMedian = new JTextField();
-        txMedian.setColumns(10);
+        txMedian = new JSpinner();
+        txMedian.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txMedian = new GridBagConstraints();
         gbc_txMedian.fill = GridBagConstraints.HORIZONTAL;
         gbc_txMedian.weightx = 0.5;
@@ -289,8 +304,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txMedian.gridy = 1;
         this.add(txMedian, gbc_txMedian);
         
-        txThirdQuartile = new JTextField();
-        txThirdQuartile.setColumns(10);
+        txThirdQuartile = new JSpinner();
+        txThirdQuartile.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txThirdQuartile = new GridBagConstraints();
         gbc_txThirdQuartile.fill = GridBagConstraints.HORIZONTAL;
         gbc_txThirdQuartile.weightx = 0.5;
@@ -299,8 +314,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txThirdQuartile.gridy = 1;
         this.add(txThirdQuartile, gbc_txThirdQuartile);
         
-        txMaximum = new JTextField();
-        txMaximum.setColumns(10);
+        txMaximum = new JSpinner();
+        txMaximum.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txMaximum = new GridBagConstraints();
         gbc_txMaximum.fill = GridBagConstraints.HORIZONTAL;
         gbc_txMaximum.weightx = 0.5;
@@ -309,8 +324,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txMaximum.gridy = 1;
         this.add(txMaximum, gbc_txMaximum);
         
-        txAvg = new JTextField();
-        txAvg.setColumns(10);
+        txAvg = new JSpinner();
+        txAvg.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txAvg = new GridBagConstraints();
         gbc_txAvg.fill = GridBagConstraints.HORIZONTAL;
         gbc_txAvg.weightx = 0.5;
@@ -319,8 +334,8 @@ public class CharacteristicPanel extends JPanel
         gbc_txAvg.gridy = 1;
         this.add(txAvg, gbc_txAvg);
         
-        txWeight = new JTextField();
-        txWeight.setColumns(10);
+        txWeight = new JSpinner();
+        txWeight.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txWeight = new GridBagConstraints();
         gbc_txWeight.fill = GridBagConstraints.HORIZONTAL;
         gbc_txWeight.weightx = 0.5;
@@ -336,4 +351,5 @@ public class CharacteristicPanel extends JPanel
         this.rdHighest.setSelected(true);
         this.rdLowest.setSelected(false);
     }
+	
 }

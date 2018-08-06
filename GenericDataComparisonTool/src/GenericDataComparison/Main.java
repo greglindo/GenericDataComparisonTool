@@ -197,7 +197,8 @@ public class Main
 		 
 		        break;		 		 
 		      case Delete:		 
-		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());		 
+		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());
+		        manager.saveData();
 		        eocWin.Initialize(manager.getObjectTypes());		 
 		        break;
 		        
@@ -209,7 +210,8 @@ public class Main
 		        break; 
 		 
 		      case Compare:		 
-		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()));
+		    	  ArrayList<UserComparisonEntry> userEntries = manager.getUserComparisonEntries(manager.getObjectTypeByName(eocWin.getSelectedObject()));
+		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()),userEntries);
 		    	  cardLayout.show(cardPanel,"compareWin");
 		        break;
 
@@ -238,6 +240,7 @@ public class Main
 				manager.deleteUserComparisonEntryByName((userEntry.getName()));
 				manager.addUserComparisonEntry(userEntry);
 				manager.saveData();
+				cwoWin.UpdateUserEntries(manager.getUserComparisonEntries(manager.getObjectTypeByName(userEntry.getObjectTypeName())));
 				JOptionPane.showMessageDialog(null, "Your new user entry have been saved.", "Success!",
 						JOptionPane.INFORMATION_MESSAGE);
 				break;

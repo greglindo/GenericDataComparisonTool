@@ -85,6 +85,10 @@ public class EditOrCompareExistingObject extends JPanel
 			d.setActionCommand("Delete");
 			d.setSize(10,10);
 			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
+			d.addActionListener(e-> {
+				this.repaint();
+				this.revalidate();
+			});
 			newJpanel.add(d);			
 			
 			JButton ed = new JButton("");
