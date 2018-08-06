@@ -21,9 +21,7 @@ import GenericDataComparison.Caller.UIType;
 import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import GenericDataComparison.ObjectType;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.ComponentOrientation;
+
 
 public class EditOrCompareExistingObject extends JPanel 
 {		
@@ -35,9 +33,7 @@ public class EditOrCompareExistingObject extends JPanel
 	private JScrollPane scrollPane;
 	private Consumer<Caller> listener;
 	private String selectedObjectName;
-	private final static int DELETEPOSITION = 1;
-	private final static int EDITPOSITION = 2;
-	private final static int COMPAREPOSITION = 3;
+
 	
 	public EditOrCompareExistingObject(Consumer<Caller> lstn) 
 	{		
@@ -81,9 +77,9 @@ public class EditOrCompareExistingObject extends JPanel
 	public void Initialize(ArrayList<ObjectType> objectTypes)
 	{		
 		panel.removeAll();
-		int gridy = 1;
 		for(ObjectType o : objectTypes) 
 		{
+			
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.X_AXIS));
 			
@@ -91,22 +87,20 @@ public class EditOrCompareExistingObject extends JPanel
 			d.setToolTipText("Delete");
 			d.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
 			d.setActionCommand("Delete");
-			d.setPreferredSize(new Dimension(75,30));
+			d.setSize(10,10);
 			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
-			newJpanel.add(d);
-			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
 			d.addActionListener(e-> {
 				this.repaint();
 				this.revalidate();
 			});
-
-	
+			newJpanel.add(d);
+			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
 			
 			JButton ed = new JButton("");
 			ed.setToolTipText("Edit");
 			ed.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Modify.png")));
 			ed.setActionCommand("Edit");
-			ed.setPreferredSize(new Dimension(75,30));
+			ed.setSize(10,10);
 			ed.addActionListener(e->handleEvent(o.getName(), UIFunction.Edit));
 			newJpanel.add(ed);
 			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -115,17 +109,11 @@ public class EditOrCompareExistingObject extends JPanel
 			c.setActionCommand("Compare");
 			c.setToolTipText("Compare " + o.getName());
 			c.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/About.png")));
-			c.setPreferredSize(new Dimension(120,30));
+			c.setSize(10,10);
 			c.addActionListener(e->handleEvent(o.getName(), UIFunction.Compare));
-			GridBagConstraints gbc_Compare = new GridBagConstraints();
-			gbc_Compare.insets = new Insets(0, 0, 5, 5);
-			gbc_Compare.anchor = GridBagConstraints.WEST;
-			gbc_Compare.gridx = COMPAREPOSITION;
-			gbc_Compare.gridy = gridy;
-			panel.add(c, gbc_Compare);
+			newJpanel.add(c);
 						
-			
-			gridy +=1;
+			panel.add(newJpanel);	
 		}		
 		
 		this.repaint();
