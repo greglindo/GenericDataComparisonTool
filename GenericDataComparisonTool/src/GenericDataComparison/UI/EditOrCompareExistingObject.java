@@ -1,13 +1,11 @@
 package GenericDataComparison.UI;
 
-import java.awt.Component;
-import java.awt.FlowLayout;
+import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,15 +16,17 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.BevelBorder;
 
 import GenericDataComparison.Caller;
-import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.Caller.UIFunction;
+import GenericDataComparison.Caller.UIType;
+import net.miginfocom.layout.LC;
+import net.miginfocom.swing.MigLayout;
 import GenericDataComparison.ObjectType;
 
 public class EditOrCompareExistingObject extends JPanel 
 {		
 	private static final long serialVersionUID = 1L;
 	private JLabel headerLabel;
-	private JLabel promptLabel;	
+	private JLabel headerLabel2;
 	private JButton backButton;	
 	private JPanel panel;
 	private JScrollPane scrollPane;
@@ -37,31 +37,38 @@ public class EditOrCompareExistingObject extends JPanel
 	{		
 		listener = lstn;
 		
-		setLayout(null);
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 				
-		headerLabel = new JLabel ("Edit or Compare Existing Object");
-		headerLabel.setBounds(68, 11, 488, 45);
-		headerLabel.setFont(new Font (Font.SANS_SERIF, Font.PLAIN, 35));
-		add (headerLabel);	
+		add(Box.createRigidArea(new Dimension(0, 20)));
+		headerLabel = new JLabel ("Edit or Compare");
+		headerLabel.setFont(new Font (Font.SANS_SERIF, Font.PLAIN, 30));
+		headerLabel.setAlignmentX(CENTER_ALIGNMENT);		
+		add (headerLabel);
+		headerLabel2 = new JLabel ("Existing Object");
+		headerLabel2.setFont(new Font (Font.SANS_SERIF, Font.PLAIN, 30));
+		headerLabel2.setAlignmentX(CENTER_ALIGNMENT);		
+		add (headerLabel2);
+		add(Box.createRigidArea(new Dimension(0, 20)));
 
-		promptLabel = new JLabel ("Select an Object for Comparison. Or, click \"Edit\" to edit a baseline object.");
-		promptLabel.setBounds(78, 67, 475, 20);
-		promptLabel.setFont(new Font (Font.SANS_SERIF, Font.ITALIC, 15));
-		add(promptLabel);
-		
 		scrollPane = new JScrollPane();
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBounds(127, 98, 357, 324);
+		scrollPane.setMaximumSize(new Dimension(300, 200));
 		add(scrollPane);	
 		
-		panel = new JPanel(new FlowLayout());
+		panel = new JPanel();
 		scrollPane.setViewportView(panel);
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		MigLayout ml = new MigLayout("", "[300!]", "[40!]");
+		LC lc = new LC();
+		lc.wrapAfter(1);
+		ml.setLayoutConstraints(lc);
+		panel.setLayout(ml);
 		
 		backButton = new JButton("Back");
-		backButton.setBounds(265, 433, 89, 23);
+		backButton.setAlignmentX(CENTER_ALIGNMENT);
+		add(Box.createRigidArea(new Dimension(0, 20)));
 		add(backButton);
+		add(Box.createRigidArea(new Dimension(0, 20)));
 		backButton.addActionListener(e->listener.accept(new Caller(UIType.EditOrCompareWindow, UIFunction.Back)));
 	}
 	
@@ -70,14 +77,8 @@ public class EditOrCompareExistingObject extends JPanel
 		panel.removeAll();
 		for(ObjectType o : objectTypes) 
 		{
-			GridBagLayout gridBagLayout = new GridBagLayout();
-			gridBagLayout.columnWidths = new int[]{0, 60, 60, 69, 60};
-			GridBagConstraints c1 = new GridBagConstraints();
-			c1.weightx = 1;
 			JPanel newJpanel = new JPanel();
-			newJpanel.setLayout(gridBagLayout);
-			newJpanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-
+			newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.X_AXIS));
 			
 			JButton d = new JButton("");
 			d.setToolTipText("Delete");
@@ -85,7 +86,8 @@ public class EditOrCompareExistingObject extends JPanel
 			d.setActionCommand("Delete");
 			d.setSize(10,10);
 			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
-			newJpanel.add(d);			
+			newJpanel.add(d);
+			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
 			
 			JButton ed = new JButton("");
 			ed.setToolTipText("Edit");
@@ -94,6 +96,7 @@ public class EditOrCompareExistingObject extends JPanel
 			ed.setSize(10,10);
 			ed.addActionListener(e->handleEvent(o.getName(), UIFunction.Edit));
 			newJpanel.add(ed);
+			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
 
 			JButton c = new JButton(o.getName());
 			c.setActionCommand("Compare");
@@ -106,8 +109,8 @@ public class EditOrCompareExistingObject extends JPanel
 			panel.add(newJpanel);	
 		}		
 		
-		//this.repaint();
-        //this.validate();
+		this.repaint();
+        this.validate();
 	}
 	
 	private void handleEvent(String objName, UIFunction func)
