@@ -2,8 +2,6 @@ package GenericDataComparison.UI;
 
 import java.awt.Component;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.util.function.Consumer;
 
 import javax.swing.JButton;
@@ -14,8 +12,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import GenericDataComparison.Caller;
-import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.Caller.UIFunction;
+import GenericDataComparison.Caller.UIType;
+import net.miginfocom.layout.LC;
+import net.miginfocom.swing.MigLayout;
 import GenericDataComparison.Characteristic;
 import GenericDataComparison.ObjectType;
 
@@ -38,13 +38,12 @@ public class BaselineObjectWindow extends JPanel
 	/**
 	 * @wbp.parser.constructor
 	 */
-	private BaselineObjectWindow() {
+	private BaselineObjectWindow() 
+	{
 		super();
     	_baseObj = new ObjectType();
         _windowType = WindowType.CREATE;
         initialize();
-        //this.addCharPanel();
-		
 	}
   
 	//Create a new object
@@ -55,36 +54,31 @@ public class BaselineObjectWindow extends JPanel
         initialize();       
     }    
 
-	private void bind() {
+	private void bind() 
+	{
     	this.txBaselineObjectName.setText(_baseObj.getName());
     }
 
     private void initialize()
     {
-
-        // set up the main frame of the application
-    	
-    	
-        //this.setBounds(100, 100, 1242, 758);
-
-
-        _scrollPane = new JScrollPane();
-        _scrollPane.setBounds(10, 144, 1172, 484);
+    	_scrollPane = new JScrollPane();
+        _scrollPane.setBounds(20, 144, 1100, 270);
         add(_scrollPane);
         
         _subPanel = new JPanel();
         _scrollPane.setViewportView(_subPanel);
-        GridLayout gl = new GridLayout(0, 1, 0, 0);
-        _subPanel.setLayout(gl);
+        MigLayout ml = new MigLayout("", "[1060!]", "[56!]");
+		LC lc = new LC();
+		lc.wrapAfter(1);
+		ml.setLayoutConstraints(lc);
+        _subPanel.setLayout(ml);
 
-        //Mouse click event
         btnAdd = new JButton("Add");
         btnAdd.addActionListener(e ->{
-        		addCharPanel();
+    		addCharPanel();
+    	});
 
-        	});
-
-        btnAdd.setBounds(21, 76, 89, 23);
+        btnAdd.setBounds(20, 76, 89, 23);
         this.add(btnAdd);
         
         JLabel lblAddNewCharacteristic = new JLabel("Add New Characteristic ");
@@ -96,25 +90,22 @@ public class BaselineObjectWindow extends JPanel
         this.add(lblBaselineObjectName);
         
         txBaselineObjectName = new JTextField();
-        txBaselineObjectName.setBounds(615, 72, 156, 20);
+        txBaselineObjectName.setBounds(585, 72, 190, 20);
         this.add(txBaselineObjectName);
-        txBaselineObjectName.setColumns(10);
+        txBaselineObjectName.setColumns(10);        
         
-        
-        //Save Button
         btnSave = new JButton("Save");
         btnSave.addActionListener(e ->{
         	this.saveObject();
         });
-        btnSave.setBounds(619, 656, 89, 23);
+        btnSave.setBounds(607, 440, 89, 23);
         this.add(btnSave);
         
-        //Back Button
         btnBack = new JButton("Back");
         btnBack.addActionListener(e ->{
         	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
         });
-        btnBack.setBounds(492, 656, 89, 23);
+        btnBack.setBounds(480, 440, 89, 23);
         this.add(btnBack);
         add(btnBack);
         
@@ -130,11 +121,11 @@ public class BaselineObjectWindow extends JPanel
         _header = new JLabel();
         _header.setBounds(441, 22, 309, 39);
         _header.setHorizontalAlignment(JLabel.CENTER);
-        _header.setFont(new Font("Serif", Font.PLAIN, 30));
+        _header.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
         this.add(_header);
         
         btnDelete = new JButton("Delete");
-        btnDelete.setBounds(21, 110, 89, 23);
+        btnDelete.setBounds(20, 110, 89, 23);
         this.add(btnDelete);
         
         JLabel lblDeleteMarkedCharacteristic = new JLabel("Delete Marked Characteristic");
@@ -147,18 +138,19 @@ public class BaselineObjectWindow extends JPanel
         
         this.repaint();
         this.validate();
-        
-        //this.pack();
     }
     
-	private void deletePanel() {
+	private void deletePanel() 
+	{
 		for(Component c: _subPanel.getComponents())
-			if(((CharacteristicPanel) c).DeleteFlag()) {
+		{
+			if(((CharacteristicPanel) c).DeleteFlag()) 
+			{
 				_subPanel.remove(c);
 				this.repaint();
 				this.validate();
 			}
-		
+		}		
 	}   
     
 	private void addCharPanel() 
@@ -166,7 +158,7 @@ public class BaselineObjectWindow extends JPanel
 		_subPanel.add(new CharacteristicPanel(), "span");
 		_subPanel.repaint();
 		_subPanel.revalidate();
-  }
+	}
 	
 	private void addCharPanel(ObjectType BaselineObject)
 	{
@@ -178,30 +170,28 @@ public class BaselineObjectWindow extends JPanel
 		}
 	}
 	
-	
-	//Call delete object to clear form and clear out object
-    private void deleteBaselineObject() {
+    private void deleteBaselineObject() 
+    {
 		int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this Object?","Warning!",2);
-		if(dialogResult == JOptionPane.OK_OPTION){
+		if(dialogResult == JOptionPane.OK_OPTION)
+		{
 			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Delete));			
-		}
-		
-		
+		}		
 	}
     
-    //Clear Form all all information
-    public void clearForm() {
+    public void clearForm() 
+    {
     	_baseObj = new ObjectType();
     	String baseObjName = "";
-		for(Component c: _subPanel.getComponents()) {
+		for(Component c: _subPanel.getComponents()) 
+		{
 			_subPanel.remove(c);
 		}
 		_baseObj.setName(baseObjName);
 		
 		this.txBaselineObjectName.setText(baseObjName);
 		this.repaint();
-		this.validate();
-    	
+		this.validate();    	
     }
 	
     public ObjectType getObject()
@@ -228,75 +218,73 @@ public class BaselineObjectWindow extends JPanel
     	}
     }
 	
-	//Save object to JSON file
-	private void saveObject() {
-
-		if(this.checkPanelsAreValid() == false  || this.validateScore() == false ) {
+	private void saveObject() 
+	{
+		if (this.checkPanelsAreValid() == false  || this.validateScore() == false ) 
+		{
 			return;
 		}
 		
-		try {
-
-			// Clear out characteristics
-			if (_windowType == WindowType.EDIT || _baseObj.getCharacteristics() != null) {
-				_baseObj.deleteCharacteristics();
-			}
-			// Get Base Object Name
-			if (this.txBaselineObjectName.getText().equals("")) {
-				JOptionPane.showMessageDialog(null,"Baseline Object must have a name","Error",JOptionPane.WARNING_MESSAGE);
-				//throw new Exception("Baseline Object must have a name");
-			}
-			_baseObj.setName(this.txBaselineObjectName.getText());
-
-
-			
-			// Get all characteristics from panels
-			for (Component c : _subPanel.getComponents()) {
-				if (c instanceof CharacteristicPanel) {
-					_baseObj.addCharacteristic(((CharacteristicPanel) c).getCharacteristic());
-				}
-
-			}
-			
-			listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
-			this.clearForm();
-
-		} catch (Exception e) {
-			// TODO error handling
+		// Clear out characteristics
+		if (_windowType == WindowType.EDIT || _baseObj.getCharacteristics() != null) 
+		{
+			_baseObj.deleteCharacteristics();
 		}
-
+		// Get Base Object Name
+		if (this.txBaselineObjectName.getText().equals("")) 
+		{
+			JOptionPane.showMessageDialog(null,"Baseline Object must have a name","Error",JOptionPane.WARNING_MESSAGE);
+		}
+		_baseObj.setName(this.txBaselineObjectName.getText());
+		
+		// Get all characteristics from panels
+		for (Component c : _subPanel.getComponents()) 
+		{
+			if (c instanceof CharacteristicPanel) 
+			{
+				_baseObj.addCharacteristic(((CharacteristicPanel) c).getCharacteristic());
+			}
+		}
+		
+		listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
+		this.clearForm();
 	}
 	
 	//Validate that the score adds up to 100
-	private boolean validateScore() {
+	private boolean validateScore() 
+	{
 		double score = 0;
 		double maxScore = 100;
-		try {
-			for(Component c: _subPanel.getComponents())
-				if(c instanceof CharacteristicPanel) {
-					score += ((CharacteristicPanel) c).getScoreWeight();
-				}
-			if(Math.abs(maxScore) != Math.abs(score)) {
-				JOptionPane.showMessageDialog(null,"Score must add up to 100", "Error",JOptionPane.WARNING_MESSAGE);
-				return false;
-				
+
+		for(Component c: _subPanel.getComponents())
+		{
+			if(c instanceof CharacteristicPanel) 
+			{
+				score += ((CharacteristicPanel) c).getScoreWeight();
 			}
-			return true;
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
 		}
-		return false;
+		if(Math.abs(maxScore) != Math.abs(score)) 
+		{
+			JOptionPane.showMessageDialog(null,"Score must add up to 100", "Error",JOptionPane.WARNING_MESSAGE);
+			return false;				
+		}
+		
+		return true;
 	}
 	
 	//Check that all panels have been completely filled out
-	private boolean checkPanelsAreValid() {
+	private boolean checkPanelsAreValid() 
+	{
 		for(Component c: _subPanel.getComponents())
-			if(c instanceof CharacteristicPanel) {
-				if(((CharacteristicPanel) c).PanelIsValid() == false){
+		{
+			if(c instanceof CharacteristicPanel) 
+			{
+				if(((CharacteristicPanel) c).PanelIsValid() == false)
+				{
 					return false;
 				}
 			}
+		}
 		
 		return true;
 	}

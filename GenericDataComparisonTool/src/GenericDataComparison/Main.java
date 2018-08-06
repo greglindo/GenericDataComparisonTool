@@ -4,11 +4,14 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Toolkit;
-import java.util.function.Consumer;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
-import javax.swing.*;
-import GenericDataComparison.Caller;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
 import GenericDataComparison.UI.EditOrCompareExistingObject;
@@ -27,9 +30,6 @@ public class Main
 	private EditOrCompareExistingObject eocWin;
 	private StartPanel startWin;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) 
 	{
 		EventQueue.invokeLater(new Runnable() 
@@ -47,29 +47,25 @@ public class Main
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Main() 
 	{
 		manager = new GenericComparisonManager();
 		initialize();
 		cardLayout.show(cardPanel, "startWin");
+		setFrameSize(UIType.StartWindow);
 	}
 	
-	public void TestUi() {
+	public void TestUi() 
+	{
 	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
 
-	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
-	 
+	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);	 
 	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
 	    Characteristic characteristic3 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
 	    Characteristic characteristic4 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
 	 
-	    newCharacteristics.add(characteristic1);
-	 
-	    newCharacteristics.add(characteristic2);
-	    
+	    newCharacteristics.add(characteristic1);	 
+	    newCharacteristics.add(characteristic2);	    
 	    newCharacteristics.add(characteristic3);
 	    newCharacteristics.add(characteristic4);
 	    
@@ -87,18 +83,9 @@ public class Main
 		manager.addObjectType(obj2);
 		manager.addObjectType(obj3);
 		
-		manager.loadData();
-		
-		
-	}
-	
-	public GenericComparisonManager getManager() {
-		return manager;
+		manager.loadData();		
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() 
 	{
 		Consumer<Caller> consumer = (arg) -> {
@@ -110,9 +97,6 @@ public class Main
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
-		frame.getContentPane().setLayout(null);
 				
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
@@ -146,11 +130,13 @@ public class Main
 			case EditCompare:
 				eocWin.Initialize(manager.getObjectTypes());
 				cardLayout.show(cardPanel, "editWin");
+				setFrameSize(UIType.EditOrCompareWindow);
 				break;
 				
 			case New:
 				boWin.setObject(null);
 				cardLayout.show(cardPanel, "baselineWin");
+				setFrameSize(UIType.BaselineObjectWindow);
 				break;
 				
 			default:
@@ -165,6 +151,7 @@ public class Main
 			case Back:
 				boWin.clearForm();
 				cardLayout.show(cardPanel, "startWin");
+				setFrameSize(UIType.StartWindow);
 				break;
 				
 			case Save:
@@ -189,26 +176,24 @@ public class Main
 			}
 			break;
 			
-		 case EditOrCompareWindow:
-			 
-		      switch(caller.function)
-		 
-		      {
-		      case Back:
+		case EditOrCompareWindow:			 
+			switch(caller.function)		 
+		    {
+		    case Back:
 		        cardLayout.show(cardPanel, "startWin");
-		 
-		        break;		 		 
+		        setFrameSize(UIType.StartWindow);
+		        break;
+ 		 
 		      case Delete:		 
 		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());
 		        manager.saveData();
 		        eocWin.Initialize(manager.getObjectTypes());		 
-		        break;
-		        
+		        break;		        
 		 
-		      case Edit:		 
+		    case Edit:		 
 		        boWin.setObject(manager.getObjectTypeByName(eocWin.getSelectedObject()));		 
-		        cardLayout.show(cardPanel, "baselineWin");
-		 
+		        cardLayout.show(cardPanel, "baselineWin");	
+		        setFrameSize(UIType.BaselineObjectWindow);
 		        break; 
 		 
 		      case Compare:		 
@@ -216,15 +201,12 @@ public class Main
 		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()),userEntries);
 		    	  cardLayout.show(cardPanel,"compareWin");
 		        break;
-
 		 
-		      default:
-		 
-		        break;
-		 
-		      }
-		 
+		    default:		 
+		        break;		 
+		    }		 
 			break;
+			
 		case CompareWithObject:
 			switch(caller.function) 
 			{
@@ -235,6 +217,7 @@ public class Main
 				break;
 			case Back:
 				cardLayout.show(cardPanel, "editWin");
+				setFrameSize(UIType.EditOrCompareWindow);
 				break;
 				
 			case Save:
@@ -275,5 +258,29 @@ public class Main
 		}
 		
 		cardLayout.invalidateLayout(cardPanel);
+	}
+	
+	private void setFrameSize(UIType winType)
+	{
+		switch(winType)
+		{
+		case StartWindow:
+			frame.setSize(490, 190);
+			break;
+			
+		case BaselineObjectWindow:
+			frame.setSize(1155, 525);
+			break;
+			
+		case EditOrCompareWindow:
+			frame.setSize(400, 450);
+			break;
+			
+		default:
+			break;
+		}
+		
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
 	}
 }

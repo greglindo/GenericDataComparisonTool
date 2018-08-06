@@ -26,6 +26,12 @@ public class StartPanel extends JPanel
 
 	private StartPanel() 
 	{
+		title = new JLabel("Generic Comparison Tool");
+		title.setBounds(30, 20, 405, 50);
+		editOrCompareBtn = new JButton("Edit or Compare Object");
+		editOrCompareBtn.setBounds(40, 95, 180, 30);
+		addNewBtn = new JButton("Add New Baseline Object");
+		addNewBtn.setBounds(240, 95, 180, 30);
 		initialize();
 	}
 	
