@@ -12,6 +12,9 @@ import javax.swing.JPanel;
 import GenericDataComparison.Caller;
 import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
+import java.awt.BorderLayout;
+import javax.swing.BoxLayout;
+import java.awt.Component;
 
 public class StartPanel extends JPanel 
 {
@@ -23,12 +26,6 @@ public class StartPanel extends JPanel
 
 	private StartPanel() 
 	{
-		title = new JLabel("Generic Comparison Tool");
-		title.setBounds(22, 5, 405, 47);
-		editOrCompareBtn = new JButton("Edit or Compare Object");
-		editOrCompareBtn.setBounds(32, 136, 190, 23);
-		addNewBtn = new JButton("Add New Baseline Object");
-		addNewBtn.setBounds(232, 136, 195, 23);
 		initialize();
 	}
 	
@@ -41,32 +38,34 @@ public class StartPanel extends JPanel
 	private void initialize()
 	{
 		setLayout(null);
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(305, 86, 451, 350);
+		panel.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		add(panel);
+		panel.setLayout(null);
+		editOrCompareBtn = new JButton("Edit or Compare Object");
+		editOrCompareBtn.setBounds(10, 135, 190, 23);
+		panel.add(editOrCompareBtn);
+		addNewBtn = new JButton("Add New Baseline Object");
+		addNewBtn.setBounds(233, 135, 195, 23);
+		panel.add(addNewBtn);
+		title = new JLabel("Generic Comparison Tool");
+		title.setBounds(10, 11, 405, 47);
+		panel.add(title);
 		//GridBagLayout gbLayout = new GridBagLayout();
 		//setLayout(new Layout(a));
 		//GridBagConstraints gbc = new GridBagConstraints();
 		
 		title.setHorizontalAlignment(JLabel.CENTER);
 		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 36));
-		//gbc.gridx = 0;
-		//gbc.gridy = 0;
-		//add(title, gbc);
-		add(title);
-		
-		editOrCompareBtn.addActionListener(e->{
-			listener.accept(new Caller(UIType.StartWindow, UIFunction.EditCompare));
-        });
-//		gbc.gridx = 0;
-//		gbc.gridy = 1;
-//		add(editOrCompareBtn, gbc);
-		add(editOrCompareBtn);
 		
 		addNewBtn.addActionListener(e->{
 			listener.accept(new Caller(UIType.StartWindow, UIFunction.New));
         });
-//		gbc.gridx = 1;
-//		gbc.gridy = 1;
-//		add(addNewBtn, gbc);
-		add(addNewBtn);
+		
+		editOrCompareBtn.addActionListener(e->{
+			listener.accept(new Caller(UIType.StartWindow, UIFunction.EditCompare));
+        });
 	}
-
 }

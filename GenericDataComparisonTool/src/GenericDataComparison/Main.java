@@ -112,10 +112,12 @@ public class Main
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		frame.setLocation(dim.width/2-frame.getSize().width/2, dim.height/2-frame.getSize().height/2);
+		frame.getContentPane().setLayout(null);
 				
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
-		frame.add(cardPanel);
+		cardPanel.setBounds(0, 0, 1184, 761);
+		frame.getContentPane().add(cardPanel);
 		
 		startWin = new StartPanel(consumer);
 		cardPanel.add(startWin, "startWin");
