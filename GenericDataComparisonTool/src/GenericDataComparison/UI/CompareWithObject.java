@@ -214,10 +214,7 @@ public class CompareWithObject extends JPanel
 		lstUserEntries = new JList<String>(listModel);
 		lstUserEntries.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
-				//JList lstUserEntries = (JList)evt.getSource();
-		        //if (evt.getClickCount() == 2) {
 		        	addEntrySelection(evt);
-			//}
 			}
 		});
 		lstUserEntries.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

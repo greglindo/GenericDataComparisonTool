@@ -88,7 +88,7 @@ public class CharacteristicPanel extends JPanel
 	
 	public double getScoreWeight() 
 	{
-		return (Double.parseDouble(this.txWeight.getText()));
+		return (double) this.txWeight.getValue();
 	}
 	
 	private boolean fieldCheck() 
