@@ -22,6 +22,7 @@ import net.miginfocom.layout.LC;
 import net.miginfocom.swing.MigLayout;
 import GenericDataComparison.ObjectType;
 
+
 public class EditOrCompareExistingObject extends JPanel 
 {		
 	private static final long serialVersionUID = 1L;
@@ -32,6 +33,7 @@ public class EditOrCompareExistingObject extends JPanel
 	private JScrollPane scrollPane;
 	private Consumer<Caller> listener;
 	private String selectedObjectName;
+
 	
 	public EditOrCompareExistingObject(Consumer<Caller> lstn) 
 	{		
@@ -86,6 +88,10 @@ public class EditOrCompareExistingObject extends JPanel
 			d.setActionCommand("Delete");
 			d.setSize(10,10);
 			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
+			d.addActionListener(e-> {
+				this.repaint();
+				this.revalidate();
+			});
 			newJpanel.add(d);
 			newJpanel.add(Box.createRigidArea(new Dimension(5, 0)));
 			

@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
@@ -100,7 +101,8 @@ public class Main
 				
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
-		frame.add(cardPanel);
+		cardPanel.setBounds(0, 0, 1184, 761);
+		frame.getContentPane().add(cardPanel);
 		
 		startWin = new StartPanel(consumer);
 		cardPanel.add(startWin, "startWin");
@@ -182,10 +184,15 @@ public class Main
 		        cardLayout.show(cardPanel, "startWin");
 		        setFrameSize(UIType.StartWindow);
 		        break;
-		      
-		    case Delete:		 
-		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());		 
-		        eocWin.Initialize(manager.getObjectTypes());		 
+ 		 
+		      case Delete:
+		  		int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this Object?","Warning!",2);
+				if(dialogResult == JOptionPane.OK_OPTION)
+				{
+					manager.deleteObjectTypeByName(eocWin.getSelectedObject());
+			        manager.saveData();
+			        eocWin.Initialize(manager.getObjectTypes());			
+				}	
 		        break;		        
 		 
 		    case Edit:		 
@@ -194,9 +201,10 @@ public class Main
 		        setFrameSize(UIType.BaselineObjectWindow);
 		        break; 
 		 
-		    case Compare:		 
-		    	cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()));
-		    	cardLayout.show(cardPanel,"compareWin");
+		      case Compare:		 
+		    	  ArrayList<UserComparisonEntry> userEntries = manager.getUserComparisonEntries(manager.getObjectTypeByName(eocWin.getSelectedObject()));
+		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()),userEntries);
+		    	  cardLayout.show(cardPanel,"compareWin");
 		        break;
 		 
 		    default:		 
@@ -222,9 +230,15 @@ public class Main
 				manager.deleteUserComparisonEntryByName((userEntry.getName()));
 				manager.addUserComparisonEntry(userEntry);
 				manager.saveData();
+				cwoWin.UpdateUserEntries(manager.getUserComparisonEntries(manager.getObjectTypeByName(userEntry.getObjectTypeName())));
 				JOptionPane.showMessageDialog(null, "Your new user entry have been saved.", "Success!",
 						JOptionPane.INFORMATION_MESSAGE);
 				break;
+				
+			case Delete:
+				UserComparisonEntry _entry = cwoWin.getUserEntry();
+				manager.deleteUserComparisonEntryByName((_entry.getName()));
+				cwoWin.UpdateUserEntries(manager.getUserComparisonEntries(manager.getObjectTypeByName(_entry.getObjectTypeName())));
 				
 			default:
 				break;
