@@ -119,7 +119,7 @@ public class BaselineObjectWindow extends JPanel
         
         setLayout(null);
         _header = new JLabel();
-        _header.setBounds(441, 22, 309, 39);
+        _header.setBounds(415, 22, 350, 39);
         _header.setHorizontalAlignment(JLabel.CENTER);
         _header.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
         this.add(_header);
