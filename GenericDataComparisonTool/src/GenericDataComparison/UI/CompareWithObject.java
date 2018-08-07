@@ -103,17 +103,17 @@ public class CompareWithObject extends JPanel
 		add (headerLabel);	
 
 		promptLabel = new JLabel ("Enter the characterstics for your: ");
-		promptLabel.setBounds(200, 61, 347, 22);
+		promptLabel.setBounds(210, 72, 347, 22);
 		promptLabel.setFont(new Font (Font.SANS_SERIF, Font.ITALIC, 15));
 		add(promptLabel);
 		
 		txEntryName = new JTextField (10);
-		txEntryName.setBounds(420, 61, 95, 20);
+		txEntryName.setBounds(430, 72, 95, 20);
 		//txEntryName.setHorizontalAlignment(0);
 		add (txEntryName);		
 		
 		backButton = new JButton ("Back");
-		backButton.setLocation(180, 447);
+		backButton.setLocation(155, 458);
 		backButton.setSize(64,23);
 		add (backButton);
 		backButton.addActionListener(e->
@@ -122,7 +122,7 @@ public class CompareWithObject extends JPanel
 		});		
 		
 		saveButton = new JButton ("Save");
-		saveButton.setBounds(255, 447, 64, 23);
+		saveButton.setBounds(229, 458, 64, 23);
 		add (saveButton);
 		saveButton.addActionListener(e->
 		{
@@ -130,14 +130,14 @@ public class CompareWithObject extends JPanel
 		});
 		
 		compareButton = new JButton ("View Comparison Result");
-		compareButton.setBounds(330, 447, 197, 23);
+		compareButton.setBounds(303, 458, 197, 23);
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
 			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(135, 86, 451, 350);
+		scrollPane.setBounds(145, 97, 451, 350);
 		add(scrollPane);
 		
 		panel = new JPanel();
@@ -151,12 +151,13 @@ public class CompareWithObject extends JPanel
 		panel.setLayout(gbl_panel);
 		
 		lblNewLabel = new JLabel("Baseline Object Type:");
-		lblNewLabel.setBounds(326, 154, 139, 14);
+		lblNewLabel.setBounds(217, 55, 139, 14);
 		add(lblNewLabel);
 		
 		txBaselineObjectType = new JTextField();
+		txBaselineObjectType.setBorder(null);
 		txBaselineObjectType.setEditable(false);
-		txBaselineObjectType.setBounds(460, 151, 86, 20);
+		txBaselineObjectType.setBounds(354, 52, 86, 20);
 		add(txBaselineObjectType);
 		txBaselineObjectType.setColumns(10);		
 		
@@ -169,7 +170,7 @@ public class CompareWithObject extends JPanel
 		{
 			this.clearForm();
 		});
-		btnClear.setBounds(463, 447, 64, 23);
+		btnClear.setBounds(532, 458, 64, 23);
 		add(btnClear);
 		
 		listModel = new DefaultListModel<String>();
@@ -181,7 +182,7 @@ public class CompareWithObject extends JPanel
 		});
 		lstUserEntries.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lstUserEntries.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		lstUserEntries.setBounds(20, 120, 105, 316);
+		lstUserEntries.setBounds(30, 131, 105, 316);
 		add(lstUserEntries);
 		
 		JButton btnDeleteEntry = new JButton("Delete Entry");
@@ -193,7 +194,7 @@ public class CompareWithObject extends JPanel
 			}
 			
 		});
-		btnDeleteEntry.setBounds(20, 86, 105, 23);
+		btnDeleteEntry.setBounds(30, 97, 105, 23);
 		add(btnDeleteEntry);
 		
 		_windowType = WindowType.EDIT;

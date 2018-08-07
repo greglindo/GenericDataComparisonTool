@@ -219,6 +219,7 @@ public class Main
 				UserComparisonEntry entry = cwoWin.getUserEntry();
 				outWin.generateOutput(entry,  manager.getObjectTypeByName(entry.getObjectTypeName()));
 				cardLayout.show(cardPanel, "outputWin");
+				setFrameSize(UIType.OutputWindow);
 				break;
 			case Back:
 				cardLayout.show(cardPanel, "editWin");
@@ -283,11 +284,11 @@ public class Main
 			break;
 			
 		case CompareWithObject:
-			frame.setSize(620, 520);
+			frame.setSize(645, 535);
 			break;
 			
 		case OutputWindow:
-			frame.setSize(1200, 800);
+			frame.setSize(1350, 1050);
 			break;
 			
 		default:
