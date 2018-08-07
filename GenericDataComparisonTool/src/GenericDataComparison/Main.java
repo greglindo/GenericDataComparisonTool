@@ -118,7 +118,6 @@ public class Main
 		
 		outWin = new OutputPane(consumer);
 		cardPanel.add(outWin, "outputWin");
-
 	}
 	
 	public void actionPerformed(Caller caller)
@@ -205,6 +204,7 @@ public class Main
 		    	  ArrayList<UserComparisonEntry> userEntries = manager.getUserComparisonEntries(manager.getObjectTypeByName(eocWin.getSelectedObject()));
 		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()),userEntries);
 		    	  cardLayout.show(cardPanel,"compareWin");
+		    	  setFrameSize(UIType.CompareWithObject);
 		        break;
 		 
 		    default:		 
@@ -251,6 +251,7 @@ public class Main
 			{
 			case Back:
 				cardLayout.show(cardPanel, "compareWin");
+				setFrameSize(UIType.CompareWithObject);
 				break;
 				
 			default:
@@ -278,7 +279,15 @@ public class Main
 			break;
 			
 		case EditOrCompareWindow:
-			frame.setSize(400, 450);
+			frame.setSize(380, 425);
+			break;
+			
+		case CompareWithObject:
+			frame.setSize(620, 520);
+			break;
+			
+		case OutputWindow:
+			frame.setSize(1200, 800);
 			break;
 			
 		default:
