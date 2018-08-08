@@ -11,7 +11,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
 import GenericDataComparison.UI.BaselineObjectWindow;
 import GenericDataComparison.UI.CompareWithObject;
@@ -288,7 +287,7 @@ public class Main
 			break;
 			
 		case OutputWindow:
-			frame.setSize(1350, 1050);
+			frame.setSize(1330, 700);
 			break;
 			
 		default:

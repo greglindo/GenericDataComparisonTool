@@ -15,15 +15,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import java.awt.Insets;
-import java.awt.Dimension;
-
 import GenericDataComparison.BetterValue;
 import GenericDataComparison.Characteristic;
 
-import javax.swing.ButtonGroup;
 import javax.swing.border.MatteBorder;
-import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
@@ -164,6 +159,8 @@ public class CharacteristicPanel extends JPanel
 	
 	private void initialize()
 	{		
+		setBackground(new Color(145, 163, 193));
+		
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
 		setPreferredSize(new Dimension(1060, 56));
 		
@@ -174,6 +171,7 @@ public class CharacteristicPanel extends JPanel
 		c.weightx = 1;
 		
         rdHighest = new JRadioButton("Highest is Best");
+        rdHighest.setBackground(new Color(145, 163, 193));
         buttonGroup.add(rdHighest);
         
         btnDelete = new JButton("Delete"); //TODO add trash can image
@@ -247,6 +245,7 @@ public class CharacteristicPanel extends JPanel
         add(lblNewLabel_7, gbc_lblNewLabel_7);        
         
         rdLowest = new JRadioButton("Lowest is Best");
+        rdLowest.setBackground(new Color(145, 163, 193));
         buttonGroup.add(rdLowest);
         GridBagConstraints gbc_rdLowest_1 = new GridBagConstraints();
         gbc_rdLowest_1.insets = new Insets(0, 0, 5, 0);
@@ -255,6 +254,7 @@ public class CharacteristicPanel extends JPanel
         this.add(rdLowest, gbc_rdLowest_1);
         
         chbxDelete = new JCheckBox("");
+        chbxDelete.setBackground(new Color(145, 163, 193));
         GridBagConstraints gbc_chbxDelete = new GridBagConstraints();
         gbc_chbxDelete.insets = new Insets(0, 0, 0, 5);
         gbc_chbxDelete.gridx = 0;
