@@ -29,6 +29,7 @@ import GenericDataComparison.Characteristic;
 import GenericDataComparison.ComparisonCharacteristic;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
+import javax.swing.SwingConstants;
 
 public class CompareWithObject extends JPanel
 {		  
@@ -46,12 +47,16 @@ public class CompareWithObject extends JPanel
 	private GridBagLayout gbl_panel;
 	private final static int LABELPOSITION = 1;
 	private final static int TEXTLOCATION = 3;
+	private final static int MINMAXLOCATION = 4;
 	private JLabel lblNewLabel;
 	private JTextField txBaselineObjectType;
 	private Consumer<Caller> listener;
 	private ArrayList<UserComparisonEntry> _userComparisonEntries;
 	private JList<String> lstUserEntries;
 	private DefaultListModel<String> listModel;
+	private JLabel lblNewLabel_1;
+	private JLabel lblCharacteristic;
+	private JLabel lblMinmax;
 	
 	/**
 	 * @wbp.parser.constructor
@@ -145,10 +150,33 @@ public class CompareWithObject extends JPanel
 		scrollPane.setViewportView(panel);
 		gbl_panel = new GridBagLayout();
 		gbl_panel.columnWidths = new int[] {24, 108, 30, 180, 73, 20};
-		gbl_panel.rowHeights = new int[] {12, 12, 12, 12, 12, 12, 12, 12, 12, 12};
+		gbl_panel.rowHeights = new int[] {0, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12};
 		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		panel.setLayout(gbl_panel);
+		
+		lblCharacteristic = new JLabel("Characteristic");
+		GridBagConstraints gbc_lblCharacteristic = new GridBagConstraints();
+		gbc_lblCharacteristic.anchor = GridBagConstraints.EAST;
+		gbc_lblCharacteristic.insets = new Insets(0, 0, 5, 5);
+		gbc_lblCharacteristic.gridx = 1;
+		gbc_lblCharacteristic.gridy = 0;
+		panel.add(lblCharacteristic, gbc_lblCharacteristic);
+		
+		lblNewLabel_1 = new JLabel("Value");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
+		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_1.gridx = 3;
+		gbc_lblNewLabel_1.gridy = 0;
+		panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
+		
+		lblMinmax = new JLabel("Min/Max");
+		GridBagConstraints gbc_lblMinmax = new GridBagConstraints();
+		gbc_lblMinmax.insets = new Insets(0, 0, 5, 0);
+		gbc_lblMinmax.gridx = 4;
+		gbc_lblMinmax.gridy = 0;
+		panel.add(lblMinmax, gbc_lblMinmax);
 		
 		lblNewLabel = new JLabel("Baseline Object Type:");
 		lblNewLabel.setBounds(217, 55, 139, 14);
@@ -229,7 +257,7 @@ public class CompareWithObject extends JPanel
 
 	private void addChar() 
 	{
-		int gridy = 0;
+		int gridy = 1;
 		for(Characteristic c : _baseObj.getCharacteristics()) 
 		{		
 			JLabel d = new JLabel(c.getName());
@@ -251,6 +279,20 @@ public class CompareWithObject extends JPanel
 			gbc_textField.gridy = gridy;
 			panel.add(ed, gbc_textField);
 			ed.setColumns(10);
+			
+			
+			double minValue = _baseObj.getCharacteristicByName(c.getName()).getMinimumValue();
+			double maxValue = _baseObj.getCharacteristicByName(c.getName()).getMaximumValue();
+			String minmax = Double.toString(minValue) + "/" + Double.toString(maxValue);
+			JLabel lblMinMax = new JLabel(minmax);
+			d.setName(c.getName());
+			d.setToolTipText("Delete");
+			GridBagConstraints gbc_lblMinMax = new GridBagConstraints();
+			gbc_lblMinMax.insets = new Insets(0, 0, 0, 5);
+			gbc_lblMinMax.anchor = GridBagConstraints.CENTER;
+			gbc_lblMinMax.gridx = MINMAXLOCATION;
+			gbc_lblMinMax.gridy = gridy;
+			panel.add(lblMinMax, gbc_lblMinMax);
 			
 			gridy +=1;
 		}
@@ -298,7 +340,7 @@ public class CompareWithObject extends JPanel
 			addField = false;
 			GridBagConstraints gbc = layout.getConstraints(comp);			
 
-		    if (gbc.gridx == LABELPOSITION  && comp instanceof JLabel) 
+		    if (gbc.gridx == LABELPOSITION  && comp instanceof JLabel  && gbc.gridy != 0) 
 		    {
 		    	field =(comp.getName());
 		    	addField = false;
