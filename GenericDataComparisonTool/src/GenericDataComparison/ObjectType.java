@@ -56,7 +56,7 @@ public class ObjectType
 	{
 		for(Characteristic item : characteristics)
 		{
-			if(item.getName() == name)
+			if(item.getName().equals(name))
 			{
 				return item;
 			}
@@ -84,7 +84,7 @@ public class ObjectType
 	{
 		for(Characteristic item : characteristics)
 		{
-			if(item.getName() == name)
+			if(item.getName().equals(name))
 			{
 				characteristics.remove(item);
 				return;
