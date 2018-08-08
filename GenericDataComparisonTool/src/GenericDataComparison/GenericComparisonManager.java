@@ -2,6 +2,10 @@ package GenericDataComparison;
 
 import org.jfree.chart.ChartPanel;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -44,6 +48,17 @@ public class GenericComparisonManager {
 	public void addObjectType(ObjectType objType)
 	{
 		objectTypes.add(objType);
+		sortObjectTypes();
+	}
+	
+	private void sortObjectTypes()
+	{
+		Collections.sort(objectTypes, new Comparator<ObjectType>() {
+			@Override
+		    public int compare(ObjectType obj1, ObjectType obj2) {
+		        return obj1.getName().compareTo(obj2.getName());
+			}
+		});
 	}
 	
 	public void deleteObjectTypes()
@@ -118,6 +133,17 @@ public class GenericComparisonManager {
 	public void addUserComparisonEntry(UserComparisonEntry userEntry)
 	{
 		this.userComparisonEntries.add(userEntry);
+		sortUserComparisonEntries();
+	}
+	
+	private void sortUserComparisonEntries()
+	{
+		Collections.sort(userComparisonEntries, new Comparator<UserComparisonEntry>() {
+			@Override
+		    public int compare(UserComparisonEntry entry1, UserComparisonEntry entry2) {
+		        return entry1.getName().compareTo(entry2.getName());
+			}
+		});
 	}
 	
 	public void deleteUserComparisonEntries()
@@ -163,6 +189,7 @@ public class GenericComparisonManager {
 	        userEntry.loadUserComparisonEntry(item);
 	        this.userComparisonEntries.add(userEntry);
 		}
+		
 	}
 	
 	public JSONArray saveUserComparisonEntries()
@@ -204,6 +231,8 @@ public class GenericComparisonManager {
 	        	this.loadUserComparisonEntries(userData);
 	        }
 		}
+		sortUserComparisonEntries();
+		sortObjectTypes();
 	}
 	
 	public void saveData()

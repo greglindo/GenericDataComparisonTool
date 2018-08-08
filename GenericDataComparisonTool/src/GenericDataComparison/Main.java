@@ -288,7 +288,7 @@ public class Main
 			break;
 			
 		case OutputWindow:
-			frame.setSize(1350, 1050);
+			frame.setSize(1350, 1025);
 			break;
 			
 		default:

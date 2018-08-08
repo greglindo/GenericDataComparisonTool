@@ -15,15 +15,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import java.awt.Insets;
-import java.awt.Dimension;
 
 import GenericDataComparison.BetterValue;
 import GenericDataComparison.Characteristic;
 
-import javax.swing.ButtonGroup;
 import javax.swing.border.MatteBorder;
-import javax.swing.JCheckBox;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
