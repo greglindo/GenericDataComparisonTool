@@ -6,8 +6,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -45,48 +47,49 @@ public class OutputPane extends JPanel
 	public OutputPane(Consumer<Caller> lstn) 
 	{
 		listener = lstn;
-		
+		setBackground(new Color(145, 163, 193));
 		BoxLayout boxLayout1 = new BoxLayout(this, BoxLayout.Y_AXIS);
 		setLayout(boxLayout1);
 		
 		header = new JPanel();
+		header.setBackground(new Color(145, 163, 193));
 		BoxLayout boxLayout2 = new BoxLayout(header, BoxLayout.Y_AXIS);
 		header.setLayout(boxLayout2);
 		
 		JLabel title = new JLabel();
 		title.setText("Comparison Results");
-		title.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 26));
+		title.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
+		header.add(Box.createRigidArea(new Dimension(0,20)));
 		header.add(title);
-		header.add(Box.createRigidArea(new Dimension(0,30)));
+		header.add(Box.createRigidArea(new Dimension(0,15)));
 		
 		scoreTxt = new JLabel();
-		scoreTxt.setText(String.format("The score for your thing is 72.4"));
-		scoreTxt.setFont(new Font("Arial", Font.PLAIN, 18));
+		scoreTxt.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 18));
 		header.add(scoreTxt);
 		
+		header.setAlignmentX(CENTER_ALIGNMENT);
 		add(header);
 		add(Box.createRigidArea(new Dimension(0,15)));
 		
 		outputPanel = new JPanel();
+		outputPanel.setBackground(new Color(145, 163, 193));
 		MigLayout ml = new MigLayout("", "[300!]", "[400!]");
 		LC lc = new LC();
 		lc.gridGapX("20").gridGapY("40").wrapAfter(4);
 		ml.setLayoutConstraints(lc);
 		outputPanel.setLayout(ml);
 		scrollPane = new JScrollPane(outputPanel);
+		scrollPane.setSize(new Dimension(1300, 550));
 		add(scrollPane);
 		add(Box.createRigidArea(new Dimension(0,15)));
 		
 		JButton backBtn = new JButton("Back");
+		backBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+		backBtn.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
 		backBtn.addActionListener(e->listener.accept(new Caller(UIType.OutputWindow, UIFunction.Back)));
 		backBtn.setAlignmentX(CENTER_ALIGNMENT);
 		add(backBtn);
-		add(Box.createRigidArea(new Dimension(0,5)));
-	}
-	
-	public void Reset()
-	{
-		outputPanel.removeAll();
+		add(Box.createRigidArea(new Dimension(0,15)));
 	}
 	
 	public void generateOutput(UserComparisonEntry userEntry, ObjectType baseline)
@@ -113,6 +116,7 @@ public class OutputPane extends JPanel
 		ds.add(new BoxAndWhiskerItem(item.getAverageValue(), item.getMedianValue(), item.getFirstQuartile(), item.getThirdQuartile(), 
 				item.getMinimumValue(), item.getMaximumValue(), null, null, null), "", "");
 		JFreeChart chart = ChartFactory.createBoxAndWhiskerChart(item.getName(), null, null, ds, false);
+		chart.setBackgroundPaint(new Color(232, 232, 232));
 		CategoryPlot plot = chart.getCategoryPlot();
 		ValueMarker mrk = new ValueMarker(userVal);
 		mrk.setStroke(new BasicStroke(2));

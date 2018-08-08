@@ -1,9 +1,12 @@
 package GenericDataComparison.UI;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -61,8 +64,10 @@ public class BaselineObjectWindow extends JPanel
 
     private void initialize()
     {
+    	setBackground(new Color(145, 163, 193));
+    	
     	_scrollPane = new JScrollPane();
-        _scrollPane.setBounds(20, 144, 1100, 270);
+        _scrollPane.setBounds(20, 139, 1100, 270);
         add(_scrollPane);
         
         _subPanel = new JPanel();
@@ -72,17 +77,20 @@ public class BaselineObjectWindow extends JPanel
 		lc.wrapAfter(1);
 		ml.setLayoutConstraints(lc);
         _subPanel.setLayout(ml);
+        _subPanel.setBackground(new Color(145, 163, 193));
 
         btnAdd = new JButton("Add");
+        btnAdd.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Add.png")));
+        btnAdd.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnAdd.addActionListener(e ->{
     		addCharPanel();
     	});
 
-        btnAdd.setBounds(20, 76, 89, 23);
+        btnAdd.setBounds(20, 61, 89, 32);
         this.add(btnAdd);
         
         JLabel lblAddNewCharacteristic = new JLabel("Add New Characteristic ");
-        lblAddNewCharacteristic.setBounds(122, 80, 190, 14);
+        lblAddNewCharacteristic.setBounds(122, 70, 190, 14);
         this.add(lblAddNewCharacteristic);
         
         JLabel lblBaselineObjectName = new JLabel("Name of New Baseline Object");
@@ -95,41 +103,49 @@ public class BaselineObjectWindow extends JPanel
         txBaselineObjectName.setColumns(10);        
         
         btnSave = new JButton("Save");
+        btnSave.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Save.png")));
+        btnSave.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnSave.addActionListener(e ->{
         	this.saveObject();
         });
-        btnSave.setBounds(607, 440, 89, 23);
+        btnSave.setBounds(600, 435, 89, 32);
         this.add(btnSave);
         
         btnBack = new JButton("Back");
+        btnBack.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+        btnBack.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnBack.addActionListener(e ->{
         	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
         });
-        btnBack.setBounds(480, 440, 89, 23);
+        btnBack.setBounds(480, 435, 89, 32);
         this.add(btnBack);
         add(btnBack);
         
         btnDeleteBaselineObject = new JButton("Delete Baseline Object");
+        btnDeleteBaselineObject.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
+        btnDeleteBaselineObject.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
         });
-        btnDeleteBaselineObject.setBounds(297, 656, 172, 23);
+        btnDeleteBaselineObject.setBounds(297, 651, 172, 32);
         this.add(btnDeleteBaselineObject);
         btnDeleteBaselineObject.setVisible(false);
         
         setLayout(null);
         _header = new JLabel();
-        _header.setBounds(441, 22, 309, 39);
+        _header.setBounds(415, 22, 350, 39);
         _header.setHorizontalAlignment(JLabel.CENTER);
         _header.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 30));
         this.add(_header);
         
         btnDelete = new JButton("Delete");
-        btnDelete.setBounds(20, 110, 89, 23);
+        btnDelete.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
+        btnDelete.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        btnDelete.setBounds(20, 100, 89, 32);
         this.add(btnDelete);
         
         JLabel lblDeleteMarkedCharacteristic = new JLabel("Delete Marked Characteristic");
-        lblDeleteMarkedCharacteristic.setBounds(122, 114, 190, 14);
+        lblDeleteMarkedCharacteristic.setBounds(122, 109, 190, 14);
         this.add(lblDeleteMarkedCharacteristic);
         
         btnDelete.addActionListener(e->{

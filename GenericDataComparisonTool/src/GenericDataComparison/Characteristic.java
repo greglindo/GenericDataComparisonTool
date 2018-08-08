@@ -187,6 +187,6 @@ public class Characteristic
 			rawScore = maximumValue - userValue;
 		}
 		
-		return rawScore * increment * scoreWeightValue;
+		return rawScore * increment * (scoreWeightValue / 100);
 	}
 }

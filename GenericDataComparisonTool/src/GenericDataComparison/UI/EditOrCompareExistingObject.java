@@ -1,10 +1,13 @@
 package GenericDataComparison.UI;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -40,6 +43,7 @@ public class EditOrCompareExistingObject extends JPanel
 		listener = lstn;
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(new Color(145, 163, 193));
 				
 		add(Box.createRigidArea(new Dimension(0, 20)));
 		headerLabel = new JLabel ("Edit or Compare");
@@ -60,6 +64,7 @@ public class EditOrCompareExistingObject extends JPanel
 		panel = new JPanel();
 		scrollPane.setViewportView(panel);
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel.setBackground(new Color(145, 163, 193));
 		MigLayout ml = new MigLayout("", "[300!]", "[40!]");
 		LC lc = new LC();
 		lc.wrapAfter(1);
@@ -67,6 +72,8 @@ public class EditOrCompareExistingObject extends JPanel
 		panel.setLayout(ml);
 		
 		backButton = new JButton("Back");
+		backButton.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+		backButton.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
 		backButton.setAlignmentX(CENTER_ALIGNMENT);
 		add(Box.createRigidArea(new Dimension(0, 20)));
 		add(backButton);
@@ -79,9 +86,9 @@ public class EditOrCompareExistingObject extends JPanel
 		panel.removeAll();
 		for(ObjectType o : objectTypes) 
 		{
-			
 			JPanel newJpanel = new JPanel();
 			newJpanel.setLayout(new BoxLayout(newJpanel, BoxLayout.X_AXIS));
+			newJpanel.setBackground(new Color(145, 163, 193));
 			
 			JButton d = new JButton("");
 			d.setToolTipText("Delete");

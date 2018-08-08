@@ -117,7 +117,6 @@ public class Main
 		
 		outWin = new OutputPane(consumer);
 		cardPanel.add(outWin, "outputWin");
-
 	}
 	
 	public void actionPerformed(Caller caller)
@@ -184,10 +183,14 @@ public class Main
 		        setFrameSize(UIType.StartWindow);
 		        break;
  		 
-		      case Delete:		 
-		        manager.deleteObjectTypeByName(eocWin.getSelectedObject());
-		        manager.saveData();
-		        eocWin.Initialize(manager.getObjectTypes());		 
+		      case Delete:
+		  		int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this Object?","Warning!",2);
+				if(dialogResult == JOptionPane.OK_OPTION)
+				{
+					manager.deleteObjectTypeByName(eocWin.getSelectedObject());
+			        manager.saveData();
+			        eocWin.Initialize(manager.getObjectTypes());			
+				}	
 		        break;		        
 		 
 		    case Edit:		 
@@ -200,6 +203,7 @@ public class Main
 		    	  ArrayList<UserComparisonEntry> userEntries = manager.getUserComparisonEntries(manager.getObjectTypeByName(eocWin.getSelectedObject()));
 		    	  cwoWin.Initialize(manager.getObjectTypeByName(eocWin.getSelectedObject()),userEntries);
 		    	  cardLayout.show(cardPanel,"compareWin");
+		    	  setFrameSize(UIType.CompareWithObject);
 		        break;
 		 
 		    default:		 
@@ -214,6 +218,7 @@ public class Main
 				UserComparisonEntry entry = cwoWin.getUserEntry();
 				outWin.generateOutput(entry,  manager.getObjectTypeByName(entry.getObjectTypeName()));
 				cardLayout.show(cardPanel, "outputWin");
+				setFrameSize(UIType.OutputWindow);
 				break;
 			case Back:
 				cardLayout.show(cardPanel, "editWin");
@@ -246,6 +251,7 @@ public class Main
 			{
 			case Back:
 				cardLayout.show(cardPanel, "compareWin");
+				setFrameSize(UIType.CompareWithObject);
 				break;
 				
 			default:
@@ -273,7 +279,15 @@ public class Main
 			break;
 			
 		case EditOrCompareWindow:
-			frame.setSize(400, 450);
+			frame.setSize(380, 425);
+			break;
+			
+		case CompareWithObject:
+			frame.setSize(645, 535);
+			break;
+			
+		case OutputWindow:
+			frame.setSize(1330, 700);
 			break;
 			
 		default:
