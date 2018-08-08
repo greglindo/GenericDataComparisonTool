@@ -96,19 +96,24 @@ public class CharacteristicPanel extends JPanel
 			{
 				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) 
 				{
+					java.awt.Toolkit.getDefaultToolkit().beep();
 					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
-				if((double)txMinimum.getValue() > (double)txMaximum.getValue() || (double)txMinimum.getValue() > (double)txMedian.getValue() ) 
+				else if((double)txMinimum.getValue() > (double)txFirstQuartile.getValue() || (double)txFirstQuartile.getValue() > (double)txMedian.getValue() 
+						|| (double)txMedian.getValue() > (double)txThirdQuartile.getValue() || (double)txThirdQuartile.getValue() > (double)txMaximum.getValue()) 
 				{
-					JOptionPane.showMessageDialog(null, "Minimum value is set too high.","Error",JOptionPane.WARNING_MESSAGE);
+					java.awt.Toolkit.getDefaultToolkit().beep();
+					JOptionPane.showMessageDialog(null, "Entry Error: The data entries must follow this logic: \r\n \r\n Min <= 1st Quartile <= Median <= 3rd Quartile <= Max","Error",JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
-				if((double)txMedian.getValue() > (double)txMaximum.getValue() || (double)txMedian.getValue() < (double)txMinimum.getValue() ) 
+				else if ((double)txMinimum.getValue() > (double)txAvg.getValue())
 				{
-					JOptionPane.showMessageDialog(null, "Median value should equal to or between the min and max","Error",JOptionPane.WARNING_MESSAGE);
+					java.awt.Toolkit.getDefaultToolkit().beep();
+					JOptionPane.showMessageDialog(null, "Entry Error: Minmum must be < Average","Error",JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
