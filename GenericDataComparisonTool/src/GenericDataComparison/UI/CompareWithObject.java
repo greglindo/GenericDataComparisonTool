@@ -272,6 +272,7 @@ public class CompareWithObject extends JPanel
 			
 			JTextField ed = new JTextField();
 			this.bindEntry(ed,c.getName());
+			ed.setName(c.getName());
 			GridBagConstraints gbc_textField = new GridBagConstraints();
 			gbc_textField.insets = new Insets(0, 0, 0, 5);
 			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -311,17 +312,32 @@ public class CompareWithObject extends JPanel
 	}
 	
 	private boolean validateFields() {
+		
 		for(Component c: panel.getComponents()) 
 		{
-			if(c instanceof JTextField && ((JTextField) c).getText().equals(""))
+			if(c instanceof JTextField)
 			{
-				JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
-				return false;
+			double minValue = Math.abs(_baseObj.getCharacteristicByName(c.getName()).getMinimumValue());
+			double maxValue = Math.abs(_baseObj.getCharacteristicByName(c.getName()).getMaximumValue());
+			String entryValue = ((JTextField)c).getText();
+
+				if(entryValue.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+				else if(Math.abs(Double.parseDouble(entryValue)) > maxValue || Math.abs(Double.parseDouble(entryValue)) < minValue)
+				{
+					JOptionPane.showMessageDialog(null, "Characteristic '" + c.getName() + "' is outside of the min/max values","Error",JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
 			}
 			
 		}
 		return true;
 	}	
+	
+
 	
 	private void saveComparisonData()
 	{

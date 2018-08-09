@@ -83,7 +83,13 @@ public class BaselineObjectWindow extends JPanel
         btnAdd.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Add.png")));
         btnAdd.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnAdd.addActionListener(e ->{
-    		addCharPanel();
+        	if(!this.checkPanelsAreValid()) 
+        	{
+        		
+        		return;
+        	}
+        	
+        	addCharPanel();
     	});
 
         btnAdd.setBounds(20, 61, 89, 32);
@@ -126,6 +132,7 @@ public class BaselineObjectWindow extends JPanel
         btnDeleteBaselineObject.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
+
         });
         btnDeleteBaselineObject.setBounds(297, 651, 172, 32);
         this.add(btnDeleteBaselineObject);
@@ -149,7 +156,11 @@ public class BaselineObjectWindow extends JPanel
         this.add(lblDeleteMarkedCharacteristic);
         
         btnDelete.addActionListener(e->{
-        	deletePanel();
+        	int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this characteristic?","Warning!",2);
+			if(dialogResult == JOptionPane.OK_OPTION)
+			{
+				deletePanel();
+			}
         });
         
         this.repaint();
