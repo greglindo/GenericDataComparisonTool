@@ -72,7 +72,7 @@ public class EditOrCompareExistingObject extends JPanel
 		panel.setLayout(ml);
 		
 		backButton = new JButton("Back");
-		backButton.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+		backButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
 		backButton.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
 		backButton.setAlignmentX(CENTER_ALIGNMENT);
 		add(Box.createRigidArea(new Dimension(0, 20)));
@@ -92,7 +92,7 @@ public class EditOrCompareExistingObject extends JPanel
 			
 			JButton d = new JButton("");
 			d.setToolTipText("Delete");
-			d.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
+			d.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Delete.png")));
 			d.setActionCommand("Delete");
 			d.setSize(10,10);
 			d.addActionListener(e->handleEvent(o.getName(), UIFunction.Delete));
@@ -105,7 +105,7 @@ public class EditOrCompareExistingObject extends JPanel
 			
 			JButton ed = new JButton("");
 			ed.setToolTipText("Edit");
-			ed.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Modify.png")));
+			ed.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Modify.png")));
 			ed.setActionCommand("Edit");
 			ed.setSize(10,10);
 			ed.addActionListener(e->handleEvent(o.getName(), UIFunction.Edit));
@@ -115,7 +115,7 @@ public class EditOrCompareExistingObject extends JPanel
 			JButton c = new JButton(o.getName());
 			c.setActionCommand("Compare");
 			c.setToolTipText("Compare " + o.getName());
-			c.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/About.png")));
+			c.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/About.png")));
 			c.setSize(10,10);
 			c.addActionListener(e->handleEvent(o.getName(), UIFunction.Compare));
 			newJpanel.add(c);

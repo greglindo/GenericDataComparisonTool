@@ -32,12 +32,12 @@ public class StartPanel extends JPanel
 		title.setBounds(30, 20, 405, 50);
 		
 		editOrCompareBtn = new JButton("Edit or Compare Object");
-		editOrCompareBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Go.png")));
+		editOrCompareBtn.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Go.png")));
 		editOrCompareBtn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		editOrCompareBtn.setBounds(40, 95, 180, 32);
 		
 		addNewBtn = new JButton("Add New Baseline Object");
-		addNewBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Add.png")));
+		addNewBtn.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Add.png")));
 		addNewBtn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		addNewBtn.setBounds(240, 95, 180, 32);
 		

@@ -84,7 +84,7 @@ public class OutputPane extends JPanel
 		add(Box.createRigidArea(new Dimension(0,15)));
 		
 		JButton backBtn = new JButton("Back");
-		backBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+		backBtn.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
 		backBtn.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
 		backBtn.addActionListener(e->listener.accept(new Caller(UIType.OutputWindow, UIFunction.Back)));
 		backBtn.setAlignmentX(CENTER_ALIGNMENT);
