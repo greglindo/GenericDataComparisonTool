@@ -80,7 +80,7 @@ public class BaselineObjectWindow extends JPanel
         _subPanel.setBackground(new Color(145, 163, 193));
 
         btnAdd = new JButton("Add");
-        btnAdd.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Add.png")));
+        btnAdd.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Add.png")));
         btnAdd.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnAdd.addActionListener(e ->{
         	if(!this.checkPanelsAreValid()) 
@@ -109,7 +109,7 @@ public class BaselineObjectWindow extends JPanel
         txBaselineObjectName.setColumns(10);        
         
         btnSave = new JButton("Save");
-        btnSave.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Save.png")));
+        btnSave.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Save.png")));
         btnSave.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnSave.addActionListener(e ->{
         	this.saveObject();
@@ -118,7 +118,7 @@ public class BaselineObjectWindow extends JPanel
         this.add(btnSave);
         
         btnBack = new JButton("Back");
-        btnBack.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Back.png")));
+        btnBack.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
         btnBack.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnBack.addActionListener(e ->{
         	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
@@ -128,7 +128,7 @@ public class BaselineObjectWindow extends JPanel
         add(btnBack);
         
         btnDeleteBaselineObject = new JButton("Delete Baseline Object");
-        btnDeleteBaselineObject.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
+        btnDeleteBaselineObject.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Delete.png")));
         btnDeleteBaselineObject.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
@@ -146,7 +146,7 @@ public class BaselineObjectWindow extends JPanel
         this.add(_header);
         
         btnDelete = new JButton("Delete");
-        btnDelete.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Delete.png")));
+        btnDelete.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Delete.png")));
         btnDelete.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDelete.setBounds(20, 100, 89, 32);
         this.add(btnDelete);

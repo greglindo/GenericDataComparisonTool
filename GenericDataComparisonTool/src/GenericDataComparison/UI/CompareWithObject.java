@@ -11,7 +11,9 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -36,6 +38,7 @@ public class CompareWithObject extends JPanel
 	private static final long serialVersionUID = 1L;
 	private JLabel headerLabel;
 	private JLabel promptLabel;
+	private JLabel objLabel;
 	private JTextField txEntryName;
 	private JButton backButton;
 	private JButton saveButton;
@@ -47,9 +50,7 @@ public class CompareWithObject extends JPanel
 	private GridBagLayout gbl_panel;
 	private final static int LABELPOSITION = 1;
 	private final static int TEXTLOCATION = 3;
-	private final static int MINMAXLOCATION = 4;
-	private JLabel lblNewLabel;
-	private JTextField txBaselineObjectType;
+	private final static int MINMAXLOCATION = 5;
 	private Consumer<Caller> listener;
 	private ArrayList<UserComparisonEntry> _userComparisonEntries;
 	private JList<String> lstUserEntries;
@@ -70,9 +71,9 @@ public class CompareWithObject extends JPanel
 	public CompareWithObject(Consumer<Caller> consumer) 
 	{
 		listener = consumer;
-		_userEntry = new UserComparisonEntry();		
-	}
-	
+		_userEntry = new UserComparisonEntry();	
+		setBackground(new Color(145, 163, 193));
+	}	
 	
 	public void Initialize(ObjectType BaseObject)
 	{
@@ -103,7 +104,7 @@ public class CompareWithObject extends JPanel
 		setLayout(null);
 		
 		headerLabel = new JLabel ("Compare Existing Object", JLabel.CENTER);
-		headerLabel.setBounds(165, 5, 379, 50);
+		headerLabel.setBounds(120, 5, 379, 50);
 		headerLabel.setFont(new Font (Font.SANS_SERIF, Font.PLAIN, 30));
 		add (headerLabel);	
 
@@ -112,14 +113,21 @@ public class CompareWithObject extends JPanel
 		promptLabel.setFont(new Font (Font.SANS_SERIF, Font.ITALIC, 15));
 		add(promptLabel);
 		
+		objLabel = new JLabel ();
+		objLabel.setText(String.format("(%s)",_baseObj.getName()));
+		objLabel.setBounds(530, 72, 100, 22);
+		objLabel.setFont(new Font (Font.SANS_SERIF, Font.ITALIC, 10));
+		add(objLabel);
+		
 		txEntryName = new JTextField (10);
 		txEntryName.setBounds(430, 72, 95, 20);
-		//txEntryName.setHorizontalAlignment(0);
 		add (txEntryName);		
 		
 		backButton = new JButton ("Back");
-		backButton.setLocation(155, 458);
-		backButton.setSize(64,23);
+		backButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
+		backButton.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		backButton.setLocation(50, 265);
+		backButton.setSize(64,32);
 		add (backButton);
 		backButton.addActionListener(e->
 		{
@@ -127,7 +135,9 @@ public class CompareWithObject extends JPanel
 		});		
 		
 		saveButton = new JButton ("Save");
-		saveButton.setBounds(229, 458, 64, 23);
+		saveButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Save.png")));
+		saveButton.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		saveButton.setBounds(245, 265, 64, 32);
 		add (saveButton);
 		saveButton.addActionListener(e->
 		{
@@ -135,25 +145,25 @@ public class CompareWithObject extends JPanel
 		});
 		
 		compareButton = new JButton ("View Comparison Result");
-		compareButton.setBounds(303, 458, 197, 23);
+		compareButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/OK.png")));
+		compareButton.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		compareButton.setBounds(395, 265, 197, 32);
 		add (compareButton);
 		compareButton.addActionListener(e->
 		{
 			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Compare));
 		});
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(145, 97, 451, 350);
+		scrollPane.setBounds(155, 97, 451, 158);
 		add(scrollPane);
 		
 		panel = new JPanel();
-		panel.setAutoscrolls(true);
+		panel.setBackground(new Color(145, 163, 193));
 		scrollPane.setViewportView(panel);
 		gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[] {24, 108, 30, 180, 73, 20};
-		gbl_panel.rowHeights = new int[] {0, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12};
-		gbl_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		gbl_panel.columnWidths = new int[] {20, 120, 15, 120, 15, 60, 20};
 		panel.setLayout(gbl_panel);
+		panel.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
 		
 		lblCharacteristic = new JLabel("Characteristic");
 		GridBagConstraints gbc_lblCharacteristic = new GridBagConstraints();
@@ -171,34 +181,24 @@ public class CompareWithObject extends JPanel
 		gbc_lblNewLabel_1.gridy = 0;
 		panel.add(lblNewLabel_1, gbc_lblNewLabel_1);
 		
-		lblMinmax = new JLabel("Min/Max");
+		lblMinmax = new JLabel("Min / Max");
 		GridBagConstraints gbc_lblMinmax = new GridBagConstraints();
 		gbc_lblMinmax.insets = new Insets(0, 0, 5, 0);
-		gbc_lblMinmax.gridx = 4;
+		gbc_lblMinmax.gridx = 5;
 		gbc_lblMinmax.gridy = 0;
-		panel.add(lblMinmax, gbc_lblMinmax);
-		
-		lblNewLabel = new JLabel("Baseline Object Type:");
-		lblNewLabel.setBounds(217, 55, 139, 14);
-		add(lblNewLabel);
-		
-		txBaselineObjectType = new JTextField();
-		txBaselineObjectType.setBorder(null);
-		txBaselineObjectType.setEditable(false);
-		txBaselineObjectType.setBounds(354, 52, 86, 20);
-		add(txBaselineObjectType);
-		txBaselineObjectType.setColumns(10);		
+		panel.add(lblMinmax, gbc_lblMinmax);		
 		
 		//Add in characteristic fields
 		this.addChar();
-		txBaselineObjectType.setText(_baseObj.getName());
 						
 		JButton btnClear = new JButton("Clear");
+		btnClear.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Target.png")));
+		btnClear.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		btnClear.addActionListener(e->
 		{
 			this.clearForm();
 		});
-		btnClear.setBounds(532, 458, 64, 23);
+		btnClear.setBounds(165, 265, 64, 32);
 		add(btnClear);
 		
 		listModel = new DefaultListModel<String>();
@@ -210,10 +210,13 @@ public class CompareWithObject extends JPanel
 		});
 		lstUserEntries.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		lstUserEntries.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		lstUserEntries.setBounds(30, 131, 105, 316);
+		lstUserEntries.setBounds(30, 136, 105, 120);
+		lstUserEntries.setBackground(new Color(232, 232, 232));
 		add(lstUserEntries);
 		
 		JButton btnDeleteEntry = new JButton("Delete Entry");
+		btnDeleteEntry.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Delete.png")));
+		btnDeleteEntry.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		btnDeleteEntry.addActionListener(e->{
 			int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this User Entry?","Warning!",2);
 			if(dialogResult == JOptionPane.OK_OPTION){
@@ -222,7 +225,7 @@ public class CompareWithObject extends JPanel
 			}
 			
 		});
-		btnDeleteEntry.setBounds(30, 97, 105, 23);
+		btnDeleteEntry.setBounds(30, 97, 105, 32);
 		add(btnDeleteEntry);
 		
 		_windowType = WindowType.EDIT;
@@ -262,9 +265,8 @@ public class CompareWithObject extends JPanel
 		{		
 			JLabel d = new JLabel(c.getName());
 			d.setName(c.getName());
-			d.setToolTipText("Delete");
 			GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-			gbc_lblNewLabel.insets = new Insets(0, 0, 0, 5);
+			gbc_lblNewLabel.insets = new Insets(5, 0, 0, 5);
 			gbc_lblNewLabel.anchor = GridBagConstraints.EAST;
 			gbc_lblNewLabel.gridx = LABELPOSITION;
 			gbc_lblNewLabel.gridy = gridy;
@@ -274,22 +276,20 @@ public class CompareWithObject extends JPanel
 			this.bindEntry(ed,c.getName());
 			ed.setName(c.getName());
 			GridBagConstraints gbc_textField = new GridBagConstraints();
-			gbc_textField.insets = new Insets(0, 0, 0, 5);
+			gbc_textField.insets = new Insets(5, 0, 0, 5);
 			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 			gbc_textField.gridx = TEXTLOCATION;
 			gbc_textField.gridy = gridy;
 			panel.add(ed, gbc_textField);
-			ed.setColumns(10);
-			
+			ed.setColumns(10);			
 			
 			double minValue = _baseObj.getCharacteristicByName(c.getName()).getMinimumValue();
 			double maxValue = _baseObj.getCharacteristicByName(c.getName()).getMaximumValue();
-			String minmax = Double.toString(minValue) + "/" + Double.toString(maxValue);
+			String minmax = Double.toString(minValue) + " / " + Double.toString(maxValue);
 			JLabel lblMinMax = new JLabel(minmax);
 			d.setName(c.getName());
-			d.setToolTipText("Delete");
 			GridBagConstraints gbc_lblMinMax = new GridBagConstraints();
-			gbc_lblMinMax.insets = new Insets(0, 0, 0, 5);
+			gbc_lblMinMax.insets = new Insets(5, 0, 0, 5);
 			gbc_lblMinMax.anchor = GridBagConstraints.CENTER;
 			gbc_lblMinMax.gridx = MINMAXLOCATION;
 			gbc_lblMinMax.gridy = gridy;
@@ -297,6 +297,22 @@ public class CompareWithObject extends JPanel
 			
 			gridy +=1;
 		}
+		JLabel lblMinMax = new JLabel("");
+		GridBagConstraints gbc_lblMinMax = new GridBagConstraints();
+		gbc_lblMinMax.insets = new Insets(0, 0, 0, 5);
+		gbc_lblMinMax.anchor = GridBagConstraints.CENTER;
+		gbc_lblMinMax.gridx = MINMAXLOCATION;
+		gbc_lblMinMax.gridy = gridy;
+		panel.add(lblMinMax, gbc_lblMinMax);
+		gridy += 1;
+		
+		double[] weights = new double[gridy];
+		for(int rowx = 0; rowx < gridy; ++rowx)
+		{
+			if(rowx < gridy - 1) weights[rowx] = 0.0;
+			else weights[rowx] = 1.0;
+		}
+		gbl_panel.rowWeights = weights;
 	}
 	
 	//If editing then load the user entry for the text field
@@ -304,7 +320,6 @@ public class CompareWithObject extends JPanel
 	{
 		ComparisonCharacteristic entryChar = new ComparisonCharacteristic();
 		if(_windowType == WindowType.CREATE) return;
-		//if(_userEntry == null) return;
 		entryChar = _userEntry.getComparisonCharacteristicByName(EntryName);
 		String value = (entryChar != null) ? entryChar.getValue()+"" :"";
 		jtext.setText(value);
