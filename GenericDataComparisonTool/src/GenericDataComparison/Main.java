@@ -283,7 +283,7 @@ public class Main
 			break;
 			
 		case CompareWithObject:
-			frame.setSize(645, 535);
+			frame.setSize(650, 350);
 			break;
 			
 		case OutputWindow:
