@@ -50,40 +50,10 @@ public class Main
 	public Main() 
 	{
 		manager = new GenericComparisonManager();
+		manager.loadData();
 		initialize();
 		cardLayout.show(cardPanel, "startWin");
 		setFrameSize(UIType.StartWindow);
-	}
-	
-	public void TestUi() 
-	{
-	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
-
-	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);	 
-	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	    Characteristic characteristic3 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	    Characteristic characteristic4 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-	 
-	    newCharacteristics.add(characteristic1);	 
-	    newCharacteristics.add(characteristic2);	    
-	    newCharacteristics.add(characteristic3);
-	    newCharacteristics.add(characteristic4);
-	    
-	    ObjectType obj1 = new ObjectType("test1",newCharacteristics);
-	    ObjectType obj2 = new ObjectType("test2",newCharacteristics);
-	    ObjectType obj3 = new ObjectType("test3",newCharacteristics);
-	 
-		manager.addObjectType(obj1);
-		manager.addObjectType(obj2);
-		manager.addObjectType(obj3);
-		manager.addObjectType(obj1);
-		manager.addObjectType(obj2);
-		manager.addObjectType(obj3);
-		manager.addObjectType(obj1);
-		manager.addObjectType(obj2);
-		manager.addObjectType(obj3);
-		
-		manager.loadData();		
 	}
 
 	private void initialize() 
@@ -91,12 +61,11 @@ public class Main
 		Consumer<Caller> consumer = (arg) -> {
             actionPerformed(arg);
         };
-		
-		TestUi();
-		
+				
 		frame = new JFrame();
 		frame.setBounds(100, 100, 1200, 800);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 				
 		cardLayout = new CardLayout();
 		cardPanel = new JPanel(cardLayout);
