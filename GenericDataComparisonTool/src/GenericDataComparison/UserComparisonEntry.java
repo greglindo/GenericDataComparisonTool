@@ -10,6 +10,7 @@ public class UserComparisonEntry {
 	private String name;
 	private String objectTypeName;
 	private ArrayList<ComparisonCharacteristic> comparisonCharacteristics;
+	private UUID userComparisonEntryID;
 		
 	static final String _userDataNode = "userData";
 	static final String _userDataIdNode = "id";	//	use this to map to the object type item
@@ -19,11 +20,14 @@ public class UserComparisonEntry {
 	static UUID objectID;
 	
 	
+	
 	public UserComparisonEntry() {
 		comparisonCharacteristics = new ArrayList<ComparisonCharacteristic>();
+		userComparisonEntryID = (UUID.randomUUID());
 	}
 	
 	public UserComparisonEntry(String name, String objectTypeName, ArrayList<ComparisonCharacteristic> comparisonCharacteristics) {
+		userComparisonEntryID = (UUID.randomUUID());
 		this.setName(name);
 		this.setObjectTypeName(objectTypeName);
 		this.setComparisonCharacteristics(comparisonCharacteristics);		
@@ -50,6 +54,11 @@ public class UserComparisonEntry {
 	public void setObjectID(UUID id)
 	{
 		objectID = id;
+	}
+	
+	public UUID getUserComparisonEntryID() 
+	{
+		return this.userComparisonEntryID;
 	}
 	
 	public void setName(String name) 
@@ -80,6 +89,19 @@ public class UserComparisonEntry {
 		for(ComparisonCharacteristic item : this.comparisonCharacteristics)
 		{
 			if(item.getName().equals(name))
+			{
+				return item;
+			}
+		}
+		
+		return null;
+	}
+	
+	public ComparisonCharacteristic getComparisonCharacteristicByID(UUID ComparisonCharacteristicByID)
+	{
+		for(ComparisonCharacteristic item : this.comparisonCharacteristics)
+		{
+			if(item.getComparisonCharacteristicID() == ComparisonCharacteristicByID)
 			{
 				return item;
 			}

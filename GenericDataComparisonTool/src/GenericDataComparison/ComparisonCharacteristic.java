@@ -1,19 +1,25 @@
 package GenericDataComparison;
 
+import java.util.UUID;
+
 import org.json.simple.JSONObject;
 
 public class ComparisonCharacteristic {
 	private String name;
 	private double value;
+	private UUID comparisonCharacteristicID;
 	
 	static final String _comparisonName = "characteristicName";
 	static final String _comparisonValue = "characteristicValue";
+
 	
 	public ComparisonCharacteristic() {
+		comparisonCharacteristicID = (UUID.randomUUID());
 		
 	}
 	
 	public ComparisonCharacteristic(String name, double val) {
+		this();
 		this.name = name;
 		this.value = val;
 	}
@@ -32,6 +38,11 @@ public class ComparisonCharacteristic {
 	
 	public String getName() {
 		return this.name;
+	}
+	
+	public UUID getComparisonCharacteristicID()
+	{
+		return comparisonCharacteristicID;
 	}
 	
 	public double getValue() {

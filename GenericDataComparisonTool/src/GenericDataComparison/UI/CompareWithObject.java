@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 
+
 import GenericDataComparison.Caller;
 import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
@@ -32,6 +33,7 @@ import GenericDataComparison.ComparisonCharacteristic;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import javax.swing.SwingConstants;
+
 
 public class CompareWithObject extends JPanel
 {		  
@@ -58,6 +60,7 @@ public class CompareWithObject extends JPanel
 	private JLabel lblNewLabel_1;
 	private JLabel lblCharacteristic;
 	private JLabel lblMinmax;
+	private boolean hasChangedData;
 	
 	/**
 	 * @wbp.parser.constructor
@@ -100,6 +103,8 @@ public class CompareWithObject extends JPanel
 	
 	private void init()
 	{
+		
+		
 		removeAll();		
 		setLayout(null);
 		
@@ -121,7 +126,8 @@ public class CompareWithObject extends JPanel
 		
 		txEntryName = new JTextField (10);
 		txEntryName.setBounds(430, 72, 95, 20);
-		add (txEntryName);		
+		add (txEntryName);	
+
 		
 		backButton = new JButton ("Back");
 		backButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
@@ -131,7 +137,9 @@ public class CompareWithObject extends JPanel
 		add (backButton);
 		backButton.addActionListener(e->
 		{
+			if(!this.HasChangedData())
 			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Back));
+			
 		});		
 		
 		saveButton = new JButton ("Save");
@@ -229,9 +237,11 @@ public class CompareWithObject extends JPanel
 		add(btnDeleteEntry);
 		
 		_windowType = WindowType.EDIT;
+		
 		bindList();
 		this.repaint();
 		this.revalidate();
+		hasChangedData = false;
 	}
 	
 	//Insert all 
@@ -247,9 +257,22 @@ public class CompareWithObject extends JPanel
 	
 	private void addEntrySelection(MouseEvent e) 
 	{
+		if(HasChangedData()) return;
 		_userEntry = _userComparisonEntries.get(this.lstUserEntries.getSelectedIndex());
 		_windowType = WindowType.EDIT;
 		init();
+	}
+	
+	private boolean HasChangedData() {
+		if(hasChangedData)
+		{
+			int dialogResult = JOptionPane.showConfirmDialog (null, "Changes have not been saved.  Do you want to continue?","Warning!",2);
+			if(dialogResult == JOptionPane.CANCEL_OPTION)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void clearForm() 
@@ -392,6 +415,7 @@ public class CompareWithObject extends JPanel
 		
 		_userEntry.setName(txEntryName.getText());
 		_userEntry.setObjectTypeName(_baseObj.getName());
+		hasChangedData = false;
 	}
 	
 	public UserComparisonEntry getUserEntry()
@@ -400,4 +424,6 @@ public class CompareWithObject extends JPanel
 		saveComparisonData();
 		return _userEntry;
 	}
+	
+
 }
