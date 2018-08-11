@@ -17,6 +17,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import GenericDataComparison.BetterValue;
+import GenericDataComparison.Caller;
 import GenericDataComparison.Characteristic;
 
 import javax.swing.border.MatteBorder;
@@ -41,6 +42,7 @@ public class CharacteristicPanel extends JPanel
 	private JButton btnDelete;
 	private JCheckBox chbxDelete;
 	private boolean _panelIsValid;
+	private boolean hasChangedData;
     
     public CharacteristicPanel() 
     {
@@ -76,7 +78,12 @@ public class CharacteristicPanel extends JPanel
 		} catch(Exception e) {
 			e.printStackTrace();
 			e.getCause();
-		}						
+		}	
+		hasChangedData = false;
+	}
+	
+	public boolean HasChangedData() {
+		return hasChangedData;
 	}
 	
 	public double getScoreWeight() 
@@ -90,6 +97,9 @@ public class CharacteristicPanel extends JPanel
 		{
 			for(Component c: this.getComponents()) 
 			{
+				String characteristicName = txCharacteristicName.getText();
+				String charascteristic = c.getName();
+				
 				if (c instanceof JTextField && ((JTextField) c).getText().equals("")) 
 				{
 					java.awt.Toolkit.getDefaultToolkit().beep();
@@ -100,13 +110,7 @@ public class CharacteristicPanel extends JPanel
 						|| (double)txMedian.getValue() > (double)txThirdQuartile.getValue() || (double)txThirdQuartile.getValue() > (double)txMaximum.getValue()) 
 				{
 					java.awt.Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, "Entry Error: The data entries must follow this logic: \r\n \r\n Min <= 1st Quartile <= Median <= 3rd Quartile <= Max","Error",JOptionPane.WARNING_MESSAGE);
-					return false;
-				}
-				else if ((double)txMinimum.getValue() > (double)txAvg.getValue())
-				{
-					java.awt.Toolkit.getDefaultToolkit().beep();
-					JOptionPane.showMessageDialog(null, "Entry Error: Minmum must be < Average","Error",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Entry Error: The data entries for '" + characteristicName + "' must follow this logic: \r\n \r\n Min <= 1st Quartile <= Median <= 3rd Quartile <= Max","Error",JOptionPane.WARNING_MESSAGE);
 					return false;
 				}
 
@@ -160,6 +164,7 @@ public class CharacteristicPanel extends JPanel
 	
 	private void initialize()
 	{		
+		
 		setBackground(new Color(145, 163, 193));
 		
 		setBorder(new MatteBorder(0, 0, 1, 0, (Color) new Color(0, 0, 0)));
@@ -271,7 +276,7 @@ public class CharacteristicPanel extends JPanel
         gbc_txCharacteristicName.gridx = 1;
         gbc_txCharacteristicName.gridy = 1;
         this.add(txCharacteristicName, gbc_txCharacteristicName);
-        
+
         txMinimum = new JSpinner();
         txMinimum.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
         GridBagConstraints gbc_txMinimum = new GridBagConstraints();
@@ -281,6 +286,9 @@ public class CharacteristicPanel extends JPanel
         gbc_txMinimum.gridx = 2;
         gbc_txMinimum.gridy = 1;
         this.add(txMinimum, gbc_txMinimum);
+        txMinimum.addChangeListener(e->{
+        	//JOptionPane.showMessageDialog(null, "Test","test",JOptionPane.WARNING_MESSAGE);
+        });
         
         txFirstQuartile = new JSpinner();
         txFirstQuartile.setModel(new SpinnerNumberModel(new Double(0), null, null, new Double(1)));
@@ -348,6 +356,7 @@ public class CharacteristicPanel extends JPanel
         
         this.rdHighest.setSelected(true);
         this.rdLowest.setSelected(false);
+        hasChangedData = false;
     }
 	
 }

@@ -1,11 +1,9 @@
 package GenericDataComparison.UI;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.util.function.Consumer;
-
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -15,6 +13,9 @@ import javax.swing.JPanel;
 import GenericDataComparison.Caller;
 import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class StartPanel extends JPanel 
 {
@@ -32,12 +33,12 @@ public class StartPanel extends JPanel
 		title.setBounds(30, 20, 405, 50);
 		
 		editOrCompareBtn = new JButton("Edit or Compare Object");
-		editOrCompareBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Go.png")));
+		editOrCompareBtn.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Go.png")));
 		editOrCompareBtn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		editOrCompareBtn.setBounds(40, 95, 180, 32);
 		
 		addNewBtn = new JButton("Add New Baseline Object");
-		addNewBtn.setIcon(new ImageIcon(EditOrCompareExistingObject.class.getResource("/GenericDataComparison/UI/img/Add.png")));
+		addNewBtn.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Add.png")));
 		addNewBtn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
 		addNewBtn.setBounds(240, 95, 180, 32);
 		
@@ -67,6 +68,30 @@ public class StartPanel extends JPanel
 			listener.accept(new Caller(UIType.StartWindow, UIFunction.New));
         });
 		add(addNewBtn);
-	}
+		
+		JButton btnHelpHowTo = new JButton("How To Video");
+		btnHelpHowTo.addActionListener(e->
+		{
+			try {
+			     String url ="http://www.stackoverflow.com";
+			     Desktop dt = Desktop.getDesktop();
+			     URI uri = new URI(url);
+			     dt.browse(uri.resolve(uri));
+			 } 
+			catch (URISyntaxException ex) 
+			{
+			     ex.printStackTrace();
+			 } 
+			catch (IOException ex) 
+			{
+				 ex.printStackTrace();
+			 }
 
+		});
+		btnHelpHowTo.setSelectedIcon(new ImageIcon(StartPanel.class.getResource("/GenericDataComparison/UI/img/Help book.png")));
+		btnHelpHowTo.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+		btnHelpHowTo.setBounds(149, 166, 151, 32);
+		btnHelpHowTo.setIcon(new ImageIcon(StartPanel.class.getResource("/GenericDataComparison/UI/img/Help book.png")));
+		add(btnHelpHowTo);
+	}
 }
