@@ -1,317 +1,177 @@
-<<<<<<< HEAD:GenericDataComparisonTool/Test/GenericDataComparisonTests.java
-
- 
-
- 
-import GenericDataComparison.*;
- 
-
- 
-import java.io.File;
- 
-import java.util.ArrayList;
- 
-import org.junit.Assert;
- 
-import junit.framework.TestCase;
- 
-
- 
-public class GenericDataComparisonTests extends TestCase {
- 
-
- 
-  protected void setUp() throws Exception {
- 
-    super.setUp();
- 
-    
- 
-    manager = new GenericComparisonManager();
- 
-    objectTypeData = new ObjectType();
- 
-    userEntry = new UserComparisonEntry();
- 
-    fileManager = new JsonFileManager();
- 
-  }
- 
-
- 
-  private GenericComparisonManager manager;
- 
-  private ObjectType objectTypeData;
- 
-  private UserComparisonEntry userEntry;
- 
-  private JsonFileManager fileManager;
- 
-  
- 
-  private ArrayList<Characteristic> CreateCharacteristics()
- 
-  {
- 
-    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
- 
-    
- 
-    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
- 
-    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
- 
-    newCharacteristics.add(characteristic1);
- 
-    newCharacteristics.add(characteristic2);
- 
-    
- 
-    return newCharacteristics;
- 
-  }
- 
-  
- 
-  private ObjectType CreateObjectType()
- 
-  {
- 
-    ObjectType newObjectType = new ObjectType("cars", CreateCharacteristics());
- 
-    
- 
-    return newObjectType;
- 
-  }
- 
-  
- 
-  public void test_CreateCarObject()
- 
-  {
- 
-    manager.addObjectType(CreateObjectType());
- 
-    
- 
-    Assert.assertEquals(1, manager.getObjectTypes().size());
- 
-  }
- 
-  
- 
-  public void test_SaveCarObject()
- 
-  {
- 
-    test_CreateCarObject();
- 
-    manager.saveData();
- 
-    
- 
-    File file = new File(fileManager.getFileName());
- 
-    Assert.assertEquals(true, file.exists());
- 
-  }
- 
-  
- 
-  public void test_LoadCarObject()
- 
-  {
- 
-    test_SaveCarObject();
- 
-    manager.loadData();
- 
-    
- 
-    Assert.assertEquals(1, manager.getObjectTypes().size());
- 
-  }
- 
-  
- 
-  public void test_ReadAllObjectTypes_Get() 
- 
-  {
- 
-    test_LoadCarObject();
- 
-    ArrayList<ObjectType> types = new ArrayList<ObjectType>();    
- 
-    types = manager.getObjectTypes();
- 
-    
- 
-    Assert.assertTrue(types.size() > 0);
- 
-  }
- 
-  
- 
-  public void test_GetObjectTypeByName_Get() {
- 
-    test_LoadCarObject();
- 
-    objectTypeData = manager.getObjectTypeByName("cars");
- 
-    
- 
-    Assert.assertEquals("cars", objectTypeData.getName());
- 
-  }  
- 
-}
- 
-=======
-package UnitTests;
-
-import GenericDataComparison.*;
-
 import java.io.File;
 import java.util.ArrayList;
+
 import org.junit.Assert;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import GenericDataComparison.BetterValue;
+import GenericDataComparison.Characteristic;
+import GenericDataComparison.ComparisonCharacteristic;
+import GenericDataComparison.GenericComparisonManager;
+import GenericDataComparison.JsonFileManager;
+import GenericDataComparison.ObjectType;
+import GenericDataComparison.UserComparisonEntry;
 import junit.framework.TestCase;
-
-public class GenericDataComparisonTests extends TestCase {
-
-	protected void setUp() throws Exception {
-		super.setUp();
-		
-		manager = new GenericComparisonManager();
-		objectTypeData = new ObjectType();
-		userEntry = new UserComparisonEntry();
-		comparisonCharacteristics = new ArrayList<ComparisonCharacteristic>();
-		fileManager = new JsonFileManager();
-	}
-
-	private GenericComparisonManager manager;
-	private ObjectType objectTypeData;
-	private UserComparisonEntry userEntry;
+ 
+public class GenericDataComparisonTests extends TestCase 
+{ 
+	private GenericComparisonManager manager;	 
+	private ObjectType objectTypeData;	 
+	private UserComparisonEntry userEntry;	 
 	private JsonFileManager fileManager;
-	private ArrayList<ComparisonCharacteristic> comparisonCharacteristics; 
+	private ArrayList<ComparisonCharacteristic> comparisonCharacteristics;
 	
+	@BeforeEach
+	protected void setUp() throws Exception 
+	{ 
+	    super.setUp(); 
+	    manager = new GenericComparisonManager(); 
+	    objectTypeData = new ObjectType(); 
+	    userEntry = new UserComparisonEntry(); 
+	    fileManager = new JsonFileManager(); 
+	    comparisonCharacteristics = new ArrayList<ComparisonCharacteristic>();
+	}
+	
+	private ObjectType CreateObjectType()
+	{
+		ObjectType newObjectType = new ObjectType("cars", CreateCharacteristics());
+    	return newObjectType; 
+	}
+ 
 	private ArrayList<Characteristic> CreateCharacteristics()
 	{
-		ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
-		
-		Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
-		Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
-		newCharacteristics.add(characteristic1);
-		newCharacteristics.add(characteristic2);
-		
-		return newCharacteristics;
+	    ArrayList<Characteristic> newCharacteristics = new ArrayList<Characteristic>();
+	    Characteristic characteristic1 = new Characteristic("No of wheels", 4, 10, 5, 6, 100, 4, 5, BetterValue.HIGHEST);
+	    Characteristic characteristic2 = new Characteristic("HorsePower", 190, 510, 350, 400, 100, 230, 500, BetterValue.LOWEST);
+	    newCharacteristics.add(characteristic1);
+	    newCharacteristics.add(characteristic2);
+	    return newCharacteristics;
 	}
 	
 	private ArrayList<ComparisonCharacteristic> CreateComparisonCharacteristics()
 	{
-		ArrayList<ComparisonCharacteristic> comparisonCharacteristics = new ArrayList<ComparisonCharacteristic>();
-		
+		ArrayList<ComparisonCharacteristic> comparisonCharacteristics = new ArrayList<ComparisonCharacteristic>();		
 		ComparisonCharacteristic item1 = new ComparisonCharacteristic("No of wheels", 4);
-		ComparisonCharacteristic item2 = new ComparisonCharacteristic("HorsePower", 200);
-		
+		ComparisonCharacteristic item2 = new ComparisonCharacteristic("HorsePower", 200);		
 		comparisonCharacteristics.add(item1);
-		comparisonCharacteristics.add(item2);
-		
+		comparisonCharacteristics.add(item2);		
 		return comparisonCharacteristics;
 	}
 	
-	private UserComparisonEntry CreateUserComparisonEntry(){		
+	private UserComparisonEntry CreateTestUserComparisonEntry()
+	{		
+		String name = "2014 Car"; 
+		String objectTypeName = "cars";
+		UserComparisonEntry newUserEntry = new UserComparisonEntry(name, objectTypeName, CreateComparisonCharacteristics());				
+		return newUserEntry;
+	}
+	
+	private UserComparisonEntry CreateUserComparisonEntry()
+	{		
 		String name = "2014 Car"; 
 		String objectTypeName = "cars";
 		UserComparisonEntry newUserEntry = new UserComparisonEntry(name, objectTypeName, GetComparisonCharacteristcsForLoadonUI());				
 		return newUserEntry;
 	}
 	
-	private ObjectType CreateObjectType()
+	private ArrayList<ComparisonCharacteristic> GetComparisonCharacteristcsForLoadonUI() 
 	{
-		ObjectType newObjectType = new ObjectType("cars", CreateCharacteristics());
-		
-		return newObjectType;
-	}
-	
-	private ArrayList<ComparisonCharacteristic> GetComparisonCharacteristcsForLoadonUI() {
 		String objectTypeName = "cars";
 		comparisonCharacteristics = manager.generateComparisonCharacteristicsFromObjectTypeCharacteristics(objectTypeName);	
 		return comparisonCharacteristics;
 	}
-	
-	/*public void test_CreateCarObject()
+ 
+	@Test
+	public void test_CreateCarObject()
 	{
 		manager.addObjectType(CreateObjectType());
 		
-		Assert.assertEquals(1, manager.getObjectTypes().size());
-	}
-	
+    	Assert.assertEquals(1, manager.getObjectTypes().size());
+	} 
+ 
+	@Test
 	public void test_SaveCarObject()
 	{
 		test_CreateCarObject();
 		manager.saveData();
-		
 		File file = new File(fileManager.getFileName());
+		
 		Assert.assertEquals(true, file.exists());
-	}
-	
+	}  
+ 
+	@Test
 	public void test_LoadCarObject()
 	{
 		test_SaveCarObject();
 		manager.loadData();
-		
-		Assert.assertEquals(1, manager.getObjectTypes().size());
-	}
-	
+ 
+    	Assert.assertEquals(1, manager.getObjectTypes().size());
+	}  
+ 
+	@Test
 	public void test_ReadAllObjectTypes_Get() 
 	{
-		test_LoadCarObject();
-		ArrayList<ObjectType> types = new ArrayList<ObjectType>();		
-		types = manager.getObjectTypes();
-		
-		Assert.assertTrue(types.size() > 0);
+	    test_LoadCarObject();
+	    ArrayList<ObjectType> types = new ArrayList<ObjectType>();    
+	    types = manager.getObjectTypes();
+	    
+	    Assert.assertTrue(types.size() > 0);
+	}
+ 
+	@Test
+	public void test_GetObjectTypeByName_Get() 
+	{
+	    test_LoadCarObject();
+	    objectTypeData = manager.getObjectTypeByName("cars");
+    
+	    Assert.assertEquals("cars", objectTypeData.getName());
 	}
 	
-	public void test_GetObjectTypeByName_Get() {
-		test_LoadCarObject();
-		objectTypeData = manager.getObjectTypeByName("cars");
+	@Test
+	public void test_calculateScore()
+	{
+		userEntry = CreateTestUserComparisonEntry();
+		objectTypeData = CreateObjectType();
 		
-		Assert.assertEquals("cars", objectTypeData.getName());
-	}*/
-	
+		Characteristic baselineChar = objectTypeData.getCharacteristicByName("No of wheels");
+		ComparisonCharacteristic userChar = userEntry.getComparisonCharacteristicByName("No of wheels");
+		Assert.assertEquals(0, baselineChar.calculateScore(userChar.getValue()), 0.00001);
+		
+		baselineChar = objectTypeData.getCharacteristicByName("HorsePower");
+		userChar = userEntry.getComparisonCharacteristicByName("HorsePower");
+		Assert.assertEquals(96.875, baselineChar.calculateScore(userChar.getValue()), 0.00001);
+	}
+  
+	@Test
 	public void test_saveUserComparisonEntry()
 	{
-		this.userEntry = CreateUserComparisonEntry();
+		userEntry = CreateUserComparisonEntry();
 		manager.addUserComparisonEntry(this.userEntry);	
-		manager.saveData();
-		
+		manager.saveData();		
 		File file = new File(fileManager.getFileName());
+		
 		Assert.assertEquals(true, file.exists());
 	}
 	
-	public void test_getUserComparisonEntries_All() {
-		ArrayList<UserComparisonEntry> userEntries = new ArrayList<UserComparisonEntry>();
-		
+	@Test
+	public void test_getUserComparisonEntries_All() 
+	{
+		ArrayList<UserComparisonEntry> userEntries = new ArrayList<UserComparisonEntry>();		
+		test_saveUserComparisonEntry();
 		manager.loadData();
-		userEntries = manager.getUserComparisonEntries();
+		userEntries = manager.getUserComparisonEntry();
 		
 		Assert.assertTrue(userEntries.size() > 0);
 	}
 	
-	public void test_getUserComparisonEntryByObjectTypeNameAndUserEntryName_Find() {
-		UserComparisonEntry userEntry = new UserComparisonEntry();
-		String objectTypeName = "cars";
-		String userEntryName = "2014 Car";
+	@Test
+	public void test_getUserComparisonEntryByObjectTypeNameAndUserEntryName_Find() 
+	{
+		test_saveUserComparisonEntry();		
+		manager.loadData();		
+		userEntry = manager.getUserComparisonEntryByName("cars", "2014 Car");
 		
-		test_saveUserComparisonEntry();
-		
-		manager.loadData();
-		
-		userEntry = manager.getUserComparisonEntryByName(objectTypeName, userEntryName);
-		
-		Assert.assertEquals(userEntryName, userEntry.getName());
-		
-	}
+		Assert.assertEquals("2014 Car", userEntry.getName());		
+	}	
 }
->>>>>>> dev_shaunavon:GenericDataComparisonTool/src/UnitTests/GenericDataComparisonTests.java
