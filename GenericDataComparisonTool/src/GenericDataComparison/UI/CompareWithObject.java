@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.MatteBorder;
 
+
 import GenericDataComparison.Caller;
 import GenericDataComparison.Caller.UIFunction;
 import GenericDataComparison.Caller.UIType;
@@ -32,6 +33,7 @@ import GenericDataComparison.ComparisonCharacteristic;
 import GenericDataComparison.ObjectType;
 import GenericDataComparison.UserComparisonEntry;
 import javax.swing.SwingConstants;
+
 
 public class CompareWithObject extends JPanel
 {		  
@@ -58,6 +60,7 @@ public class CompareWithObject extends JPanel
 	private JLabel lblNewLabel_1;
 	private JLabel lblCharacteristic;
 	private JLabel lblMinmax;
+	private boolean hasChangedData;
 	
 	/**
 	 * @wbp.parser.constructor
@@ -100,6 +103,8 @@ public class CompareWithObject extends JPanel
 	
 	private void init()
 	{
+		
+		
 		removeAll();		
 		setLayout(null);
 		
@@ -121,7 +126,8 @@ public class CompareWithObject extends JPanel
 		
 		txEntryName = new JTextField (10);
 		txEntryName.setBounds(430, 72, 95, 20);
-		add (txEntryName);		
+		add (txEntryName);	
+
 		
 		backButton = new JButton ("Back");
 		backButton.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
@@ -131,7 +137,9 @@ public class CompareWithObject extends JPanel
 		add (backButton);
 		backButton.addActionListener(e->
 		{
+			if(!this.HasChangedData())
 			listener.accept(new Caller(UIType.CompareWithObject, UIFunction.Back));
+			
 		});		
 		
 		saveButton = new JButton ("Save");
@@ -229,9 +237,11 @@ public class CompareWithObject extends JPanel
 		add(btnDeleteEntry);
 		
 		_windowType = WindowType.EDIT;
+		
 		bindList();
 		this.repaint();
 		this.revalidate();
+		hasChangedData = false;
 	}
 	
 	//Insert all 
@@ -247,9 +257,22 @@ public class CompareWithObject extends JPanel
 	
 	private void addEntrySelection(MouseEvent e) 
 	{
+		if(HasChangedData()) return;
 		_userEntry = _userComparisonEntries.get(this.lstUserEntries.getSelectedIndex());
 		_windowType = WindowType.EDIT;
 		init();
+	}
+	
+	private boolean HasChangedData() {
+		if(hasChangedData)
+		{
+			int dialogResult = JOptionPane.showConfirmDialog (null, "Changes have not been saved.  Do you want to continue?","Warning!",2);
+			if(dialogResult == JOptionPane.CANCEL_OPTION)
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void clearForm() 
@@ -274,6 +297,7 @@ public class CompareWithObject extends JPanel
 			
 			JTextField ed = new JTextField();
 			this.bindEntry(ed,c.getName());
+			ed.setName(c.getName());
 			GridBagConstraints gbc_textField = new GridBagConstraints();
 			gbc_textField.insets = new Insets(5, 0, 0, 5);
 			gbc_textField.fill = GridBagConstraints.HORIZONTAL;
@@ -326,16 +350,32 @@ public class CompareWithObject extends JPanel
 	}
 	
 	private boolean validateFields() {
+		
 		for(Component c: panel.getComponents()) 
 		{
-			if(c instanceof JTextField && ((JTextField) c).getText().equals(""))
+			if(c instanceof JTextField)
 			{
-				JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
-				return false;
-			}			
+			double minValue = Math.abs(_baseObj.getCharacteristicByName(c.getName()).getMinimumValue());
+			double maxValue = Math.abs(_baseObj.getCharacteristicByName(c.getName()).getMaximumValue());
+			String entryValue = ((JTextField)c).getText();
+
+				if(entryValue.equals(""))
+				{
+					JOptionPane.showMessageDialog(null, "All fields must be completed","Error",JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+				else if(Math.abs(Double.parseDouble(entryValue)) > maxValue || Math.abs(Double.parseDouble(entryValue)) < minValue)
+				{
+					JOptionPane.showMessageDialog(null, "Characteristic '" + c.getName() + "' is outside of the min/max values","Error",JOptionPane.WARNING_MESSAGE);
+					return false;
+				}
+			}
+			
 		}
 		return true;
 	}	
+	
+
 	
 	private void saveComparisonData()
 	{
@@ -375,6 +415,7 @@ public class CompareWithObject extends JPanel
 		
 		_userEntry.setName(txEntryName.getText());
 		_userEntry.setObjectTypeName(_baseObj.getName());
+		hasChangedData = false;
 	}
 	
 	public UserComparisonEntry getUserEntry()
@@ -383,4 +424,6 @@ public class CompareWithObject extends JPanel
 		saveComparisonData();
 		return _userEntry;
 	}
+	
+
 }

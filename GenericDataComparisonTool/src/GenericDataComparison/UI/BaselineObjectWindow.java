@@ -38,6 +38,7 @@ public class BaselineObjectWindow extends JPanel
 	private JButton btnDeleteBaselineObject;
 	private Consumer<Caller> listener;
 
+
 	/**
 	 * @wbp.parser.constructor
 	 */
@@ -60,10 +61,12 @@ public class BaselineObjectWindow extends JPanel
 	private void bind() 
 	{
     	this.txBaselineObjectName.setText(_baseObj.getName());
+
     }
 
     private void initialize()
     {
+    	
     	setBackground(new Color(145, 163, 193));
     	
     	_scrollPane = new JScrollPane();
@@ -83,7 +86,13 @@ public class BaselineObjectWindow extends JPanel
         btnAdd.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Add.png")));
         btnAdd.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnAdd.addActionListener(e ->{
-    		addCharPanel();
+        	if(!this.checkPanelsAreValid()) 
+        	{
+        		
+        		return;
+        	}
+        	
+        	addCharPanel();
     	});
 
         btnAdd.setBounds(20, 61, 89, 32);
@@ -100,8 +109,8 @@ public class BaselineObjectWindow extends JPanel
         txBaselineObjectName = new JTextField();
         txBaselineObjectName.setBounds(585, 72, 190, 20);
         this.add(txBaselineObjectName);
-        txBaselineObjectName.setColumns(10);        
-        
+        txBaselineObjectName.setColumns(10);
+
         btnSave = new JButton("Save");
         btnSave.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Save.png")));
         btnSave.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -115,6 +124,14 @@ public class BaselineObjectWindow extends JPanel
         btnBack.setIcon(new ImageIcon(this.getClass().getResource("/GenericDataComparison/UI/img/Back.png")));
         btnBack.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnBack.addActionListener(e ->{
+        	if(hasChandedData())
+			{
+				int dialogResult = JOptionPane.showConfirmDialog (null, "Changes have not been saved.  Do you want to continue?","Warning!",2);
+				if(dialogResult == JOptionPane.CANCEL_OPTION)
+				{
+					return;
+				}
+			}
         	listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Back));
         });
         btnBack.setBounds(480, 435, 89, 32);
@@ -126,6 +143,7 @@ public class BaselineObjectWindow extends JPanel
         btnDeleteBaselineObject.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
         btnDeleteBaselineObject.addActionListener(e-> {
         	this.deleteBaselineObject();
+
         });
         btnDeleteBaselineObject.setBounds(297, 651, 172, 32);
         this.add(btnDeleteBaselineObject);
@@ -149,11 +167,16 @@ public class BaselineObjectWindow extends JPanel
         this.add(lblDeleteMarkedCharacteristic);
         
         btnDelete.addActionListener(e->{
-        	deletePanel();
+        	int dialogResult = JOptionPane.showConfirmDialog (null, "Are you sure you want to delete this characteristic?","Warning!",2);
+			if(dialogResult == JOptionPane.OK_OPTION)
+			{
+				deletePanel();
+			}
         });
         
         this.repaint();
         this.validate();
+
     }
     
 	private void deletePanel() 
@@ -168,6 +191,11 @@ public class BaselineObjectWindow extends JPanel
 			}
 		}		
 	}   
+	
+	private boolean hasChandedData()
+	{
+		return false; //TODO make work
+	}
     
 	private void addCharPanel() 
 	{
@@ -208,6 +236,7 @@ public class BaselineObjectWindow extends JPanel
 		this.txBaselineObjectName.setText(baseObjName);
 		this.repaint();
 		this.validate();    	
+		
     }
 	
     public ObjectType getObject()
@@ -232,6 +261,7 @@ public class BaselineObjectWindow extends JPanel
 	    	_header.setText("Edit Baseline Object");
 	    	bind();
     	}
+
     }
 	
 	private void saveObject() 
@@ -264,6 +294,7 @@ public class BaselineObjectWindow extends JPanel
 		
 		listener.accept(new Caller(UIType.BaselineObjectWindow, UIFunction.Save));
 		this.clearForm();
+
 	}
 	
 	//Validate that the score adds up to 100

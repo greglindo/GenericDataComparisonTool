@@ -133,10 +133,10 @@ public class Main
 				break;
 				
 			case Delete:
-				oType = boWin.getObject();
-				manager.deleteObjectTypeByName(oType.getName());
-				manager.saveData();
-				boWin.clearForm();
+					oType = boWin.getObject();
+					manager.deleteObjectTypeByName(oType.getName());
+					manager.saveData();
+					boWin.clearForm();							
 				break;
 				
 			default:
@@ -185,6 +185,7 @@ public class Main
 			{
 			case Compare:
 				UserComparisonEntry entry = cwoWin.getUserEntry();
+				if(entry == null) break;
 				outWin.generateOutput(entry,  manager.getObjectTypeByName(entry.getObjectTypeName()));
 				cardLayout.show(cardPanel, "outputWin");
 				setFrameSize(UIType.OutputWindow);
@@ -196,6 +197,7 @@ public class Main
 				
 			case Save:
 				UserComparisonEntry userEntry = cwoWin.getUserEntry();
+				if(userEntry == null) break;
 				manager.deleteUserComparisonEntryByName((userEntry.getName()));
 				manager.addUserComparisonEntry(userEntry);
 				manager.saveData();
@@ -240,7 +242,7 @@ public class Main
 		switch(winType)
 		{
 		case StartWindow:
-			frame.setSize(490, 190);
+			frame.setSize(490, 250);
 			break;
 			
 		case BaselineObjectWindow:

@@ -1,5 +1,7 @@
 package GenericDataComparison;
 
+import java.util.Random;
+
 import org.json.simple.JSONObject;
 
 public class Characteristic 
@@ -26,11 +28,14 @@ public class Characteristic
 	static final String _betterValueNode = "betterValue";
 	
 	public Characteristic() 
-	{}
+	{
+		id = new Random().nextLong();
+	}
 	
 	public Characteristic(String name, double minValue, double maxValue, double avgValue, 
 			double medianValue, double scoreWgtValue, double firstQrtile, double thirdQrtile, BetterValue betterValue)
 	{
+		this();
 		this.name = name;
 		this.minimumValue = minValue;
 		this.maximumValue = maxValue;
