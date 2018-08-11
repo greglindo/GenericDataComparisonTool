@@ -73,7 +73,7 @@ public class StartPanel extends JPanel
 		btnHelpHowTo.addActionListener(e->
 		{
 			try {
-			     String url ="http://www.stackoverflow.com";
+			     String url ="https://youtu.be/iBMa-uBL8S8";
 			     Desktop dt = Desktop.getDesktop();
 			     URI uri = new URI(url);
 			     dt.browse(uri.resolve(uri));
